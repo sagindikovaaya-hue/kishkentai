@@ -259,8 +259,8 @@ function pebbles(n){return c=>{const col=DIGIT_COLS[n-1];
 
 const CATS=[
  {id:"animals",en:"Animals",kz:"Жануарлар",items:[
-  ["giraffe","керік","джираф"],["fox","түлкі","фокс"],["cat","мысық","кэт"],["rabbit","қоян","рэбит"],["bear","аю","бэа"],["elephant","піл","элифант"],
-  ["sheep","қой","шип"],["horse","жылқы","хорс"],["owl","үкі","аул"],["duck","үйрек","дак"]]
+  ["giraffe","керік","джираф"],["fox","түлкі","фокс"],["cat","мысық","кәт"],["rabbit","қоян","рәбит"],["bear","аю","беә"],["elephant","піл","элифәнт"],
+  ["sheep","қой","шип"],["horse","жылқы","хорс"],["owl","үкі","аул"],["duck","үйрек","дақ"]]
   .map(([en,kz,tr])=>({en,kz,tr,art:()=>PAINTED[en]}))},
  {id:"fruit",en:"Fruit",kz:"Жемістер",items:[
   ["apple","алма","эпл"],["pear","алмұрт","пэа"],["orange","апельсин","ориндж"],["lemon","лимон","лемон"],
@@ -270,7 +270,15 @@ const CATS=[
   art:()=>PAINTED["c-"+en]}))},
  {id:"numbers",en:"Numbers",kz:"Сандар",items:NUMS.map((en,i)=>({en,kz:NUMS_KZ[i],tr:NUMS_TR[i],n:i+1,art:()=>DIGITS[i+1]||""}))}
 ];
-const SOUNDS={cat:["meow meow","мияу"],sheep:["baa baa","мәә"],horse:["neigh","иһаһа"],owl:["hoot hoot","ухуу"],duck:["quack quack","барқ-барқ"],bear:["grrr","ырр"],elephant:["toot toot","ту-ту"]};
+/* sound: what the speech voice reads (spelled so English voices pronounce it well), what the screen shows, Kazakh line */
+const SOUNDS={
+ cat:{say:"meow, meow",show:"meow",kz:"Мысық «мияу» дейді"},
+ sheep:{say:"baaa, baaa",show:"baa",kz:"Қой «мә-ә» дейді"},
+ horse:{say:"neigh",show:"neigh",kz:"Жылқы кісінейді: «иһа-һа»"},
+ owl:{say:"hoo, hoo",show:"hoo hoo",kz:"Үкі «у-һу» дейді"},
+ duck:{say:"quack, quack",show:"quack",kz:"Үйрек «барқ-барқ» дейді"},
+ bear:{say:"roar",show:"roar",kz:"Аю ақырады: «ырр»"},
+ elephant:{say:"toot, toot",show:"toot",kz:"Піл «ту-ту» деп кернейдей айқайлайды"}};
 const PRAISE=[["Well done!","Жарайсың!"],["Great job!","Керемет!"],["Super!","Тамаша!"],["Yes! Clever!","Бәрекелді!"]];
 
 /* ---------- app ---------- */
@@ -282,9 +290,12 @@ const paintKz=()=>{document.body.classList.toggle("no-kz",!showKz);$("#kzBtn").s
 $("#kzBtn").onclick=()=>{showKz=!showKz;store.set("kz",showKz);paintKz()};paintStars();paintKz();
 
 let voice=null;
-function pick(){const v=speechSynthesis.getVoices();voice=v.find(x=>/^en-GB/i.test(x.lang))||v.find(x=>/^en/i.test(x.lang))||null}
+function pick(){const v=speechSynthesis.getVoices();const en=v.filter(x=>/^en[-_]/i.test(x.lang)||/^en$/i.test(x.lang));
+  voice=en.find(x=>/^en[-_]GB/i.test(x.lang)&&/Daniel|Serena|Kate|Google UK/i.test(x.name))||en.find(x=>/^en[-_]GB/i.test(x.lang))||en.find(x=>/^en[-_]US/i.test(x.lang))||en[0]||null}
 if("speechSynthesis" in window){pick();speechSynthesis.onvoiceschanged=pick}
-function say(t){if(!("speechSynthesis" in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="en-GB";if(voice)u.voice=voice;u.rate=.78;u.pitch=1.1;speechSynthesis.speak(u)}
+let sayTimer=0;
+function say(t){if(!("speechSynthesis" in window))return;if(!voice)pick();speechSynthesis.cancel();clearTimeout(sayTimer);
+  sayTimer=setTimeout(()=>{const u=new SpeechSynthesisUtterance(t);u.lang=voice?voice.lang:"en-GB";if(voice)u.voice=voice;u.rate=.8;u.pitch=1.05;speechSynthesis.speak(u)},80)}
 
 function home(){
   view.innerHTML=`<div style="display:flex;flex-direction:column;gap:18px">
@@ -308,27 +319,27 @@ function learn(cat,i){
     <button class="nav" id="next" aria-label="Келесі">›</button></div>
    <div class="dots">${cat.items.map((_,k)=>`<i class="${k===i?"on":""}"></i>`).join("")}</div></div>`;
   $("#back").onclick=home;$("#prev").onclick=()=>learn(cat,(i-1+n)%n);$("#next").onclick=()=>learn(cat,(i+1)%n);
-  const card=$("#card");card.onclick=()=>{say(SOUNDS[it.en]?`${it.en}. ${SOUNDS[it.en][0]}!`:it.en);card.classList.remove("lift");void card.offsetWidth;card.classList.add("lift")};
+  const card=$("#card");card.onclick=()=>{say(SOUNDS[it.en]?`${it.en}! The ${it.en} says ${SOUNDS[it.en].say}.`:it.en);card.classList.remove("lift");void card.offsetWidth;card.classList.add("lift")};
   cat.items[(i+1)%n].art(); // paint the next card ahead of time
 }
 const rand=n=>Math.floor(Math.random()*n);
 const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=rand(i+1);[a[i],a[j]]=[a[j],a[i]]}return a};
 function whoSays(){
   const animals=CATS[0].items.filter(a=>SOUNDS[a.en]);
-  const opts=shuffle(animals.slice()).slice(0,3),ans=opts[rand(3)],[snd,kzSnd]=SOUNDS[ans.en];
-  const q=`Who says ${snd}?`;
+  const opts=shuffle(animals.slice()).slice(0,3),ans=opts[rand(3)],S=SOUNDS[ans.en];
+  const q=`Who says ${S.show}?`;
   view.innerHTML=`<div style="display:flex;flex-direction:column;gap:16px">
    <div class="top"><button class="pill" id="back">← Артқа</button></div>
-   <div class="ask"><span class="en">${q}</span><span class="kz kz-opt">«${kzSnd}» деп кім айтады?</span><button class="listen" id="again">▶ Тағы тыңда</button></div>
+   <div class="ask"><span class="en">${q}</span><span class="kz kz-opt">Кім осылай дейді?</span><button class="listen" id="again">▶ Тағы тыңда</button></div>
    <div class="choices">${opts.map((o,k)=>`<button class="choice" data-k="${k}" aria-label="${o.en}"><img alt="" src="${o.art()}"></button>`).join("")}</div>
    <p class="cheer" id="cheer" aria-live="polite"></p></div>`;
-  $("#back").onclick=home;$("#again").onclick=()=>say(q);setTimeout(()=>say(q),350);
+  const ask=()=>say(`Who says ${S.say}?`);$("#back").onclick=home;$("#again").onclick=ask;setTimeout(ask,350);
   let done=false;
   view.querySelectorAll(".choice").forEach(b=>b.onclick=()=>{if(done)return;const o=opts[+b.dataset.k];
     if(o===ans){done=true;b.classList.add("right");
-      $("#cheer").innerHTML=`<b>The ${ans.en} says ${snd}!</b><span class="kz-opt">${ans.kz[0].toUpperCase()+ans.kz.slice(1)} «${kzSnd}» дейді. Жарайсың!</span>`;
-      say(`Yes! The ${ans.en} says ${snd}!`);stars++;store.set("stars",stars);paintStars();setTimeout(whoSays,2800)}
-    else{b.classList.remove("wrong");void b.offsetWidth;b.classList.add("wrong");const [os]=SOUNDS[o.en];say(`The ${o.en} says ${os}`)}});
+      $("#cheer").innerHTML=`<b>The ${ans.en} says ${S.show}!</b><span class="kz-opt">${S.kz}. Жарайсың!</span>`;
+      say(`Yes! The ${ans.en} says ${S.say}!`);stars++;store.set("stars",stars);paintStars();setTimeout(whoSays,2800)}
+    else{b.classList.remove("wrong");void b.offsetWidth;b.classList.add("wrong");say(`No, the ${o.en} says ${SOUNDS[o.en].say}.`)}});
 }
 function game(){
   const cat=CATS[rand(CATS.length)],opts=shuffle(cat.items.slice()).slice(0,3),ans=opts[rand(3)];
