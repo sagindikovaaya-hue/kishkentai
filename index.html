@@ -30,6 +30,9 @@ header{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .spacer{flex:1}
 .pill{border:1.5px solid rgba(74,56,43,.25);border-radius:999px;padding:9px 16px;font:inherit;font-size:.95rem;cursor:pointer;background:var(--card);color:var(--ink)}
 .pill[aria-pressed="false"]{opacity:.55}
+.vsel{display:flex;align-items:center;gap:6px;color:var(--soft);font-size:.85rem}
+.vsel span:has(+ select[hidden]){display:none}
+.vsel select{font:inherit;font-size:.9rem;color:var(--ink);background:var(--card);border:1.5px solid rgba(74,56,43,.25);border-radius:999px;padding:7px 12px;max-width:170px}
 .stars{font-variant-numeric:tabular-nums;color:var(--sienna);font-size:1.05rem}
 button:focus-visible{outline:3px solid var(--mist);outline-offset:3px}
 h1{font-family:var(--f-word);font-weight:500;font-size:clamp(1.7rem,6vw,2.4rem);margin:0;text-wrap:balance;line-height:1.15}
@@ -128,6 +131,7 @@ h1{font-family:var(--f-word);font-weight:500;font-size:clamp(1.7rem,6vw,2.4rem);
     <div class="spacer"></div>
     <span class="stars" id="stars">★ 0</span>
     <button class="pill" id="kzBtn" aria-pressed="true">Қазақша аудармасы</button>
+    <label class="vsel"><span>Дауыс</span><select id="voiceSel" hidden aria-label="Дауыс"></select></label>
   </header>
   <main id="view"></main>
 </div>
@@ -356,15 +360,24 @@ const store={get(k,v){try{const x=localStorage.getItem(k);return x==null?v:JSON.
 let stars=store.get("stars",0),showKz=store.get("kz",true);
 const paintStars=()=>$("#stars").textContent="★ "+stars;
 const paintKz=()=>{document.body.classList.toggle("no-kz",!showKz);$("#kzBtn").setAttribute("aria-pressed",showKz)};
-$("#kzBtn").onclick=()=>{showKz=!showKz;store.set("kz",showKz);paintKz()};paintStars();paintKz();
+$("#kzBtn").onclick=()=>{showKz=!showKz;store.set("kz",showKz);paintKz()};
+$("#voiceSel").onchange=e=>{voice=enVoices.find(x=>x.name===e.target.value)||voice;store.set("voice",voice?voice.name:"");say("Hello! Let's play.")};paintStars();paintKz();
 
-let voice=null;
-function pick(){const v=speechSynthesis.getVoices();const en=v.filter(x=>/^en[-_]/i.test(x.lang)||/^en$/i.test(x.lang));
-  voice=en.find(x=>/^en[-_]GB/i.test(x.lang)&&/Daniel|Serena|Kate|Google UK/i.test(x.name))||en.find(x=>/^en[-_]GB/i.test(x.lang))||en.find(x=>/^en[-_]US/i.test(x.lang))||en[0]||null}
-if("speechSynthesis" in window){pick();speechSynthesis.onvoiceschanged=pick}
+let voice=null,enVoices=[];
+/* soft female English voices, best first; names cover iPhone/Mac, Android/Chrome and Windows */
+const FEMALE=/Serena|Kate|Stephanie|Martha|Moira|Tessa|Karen|Fiona|Samantha|Ava|Allison|Susan|Zoe|Nicky|Joelle|Libby|Sonia|Maisie|Hazel|Susan|Aria|Jenny|Michelle|Emma|Natasha|Female|female|Woman|woman|en-gb-x-gba|en-gb-x-gbc|en-us-x-sfg|en-us-x-tpc/;
+const MALE=/Daniel|Arthur|Oliver|Alex|Fred|Tom|Aaron|Gordon|Rishi|Ryan|George|Guy|Male|male|en-gb-x-gbd|en-gb-x-rjs|en-us-x-iol|en-us-x-iom/;
+function score(x){let s=0;if(FEMALE.test(x.name))s+=50;if(MALE.test(x.name))s-=60;
+  if(/Premium|Enhanced|Natural|Neural/i.test(x.name))s+=15;if(/^en[-_]GB/i.test(x.lang))s+=8;else if(/^en[-_](US|AU|IE)/i.test(x.lang))s+=5;
+  if(/Serena|Libby|Sonia|Martha/.test(x.name))s+=6;if(x.localService)s+=2;return s}
+function pick(){const v=speechSynthesis.getVoices();enVoices=v.filter(x=>/^en([-_]|$)/i.test(x.lang)).sort((a,b)=>score(b)-score(a));
+  const saved=store.get("voice","");voice=enVoices.find(x=>x.name===saved)||enVoices[0]||null;paintVoices()}
+function paintVoices(){const sel=document.getElementById("voiceSel");if(!sel)return;
+  sel.hidden=enVoices.length<2;sel.innerHTML=enVoices.map(x=>`<option value="${x.name}"${voice&&x.name===voice.name?" selected":""}>${x.name.replace(/\s*\(.*\)/,"")}${FEMALE.test(x.name)?" ♀":""}</option>`).join("")}
+if("speechSynthesis" in window){pick();speechSynthesis.onvoiceschanged=pick;setTimeout(pick,700)}
 let sayTimer=0;
 function say(t){if(!("speechSynthesis" in window))return;if(!voice)pick();speechSynthesis.cancel();clearTimeout(sayTimer);
-  sayTimer=setTimeout(()=>{const u=new SpeechSynthesisUtterance(t);u.lang=voice?voice.lang:"en-GB";if(voice)u.voice=voice;u.rate=.8;u.pitch=1.05;speechSynthesis.speak(u)},80)}
+  sayTimer=setTimeout(()=>{const u=new SpeechSynthesisUtterance(t);u.lang=voice?voice.lang:"en-GB";if(voice)u.voice=voice;u.rate=.78;u.pitch=1.12;u.volume=.9;speechSynthesis.speak(u)},80)}
 
 function home(){
   view.innerHTML=`<div style="display:flex;flex-direction:column;gap:18px">
