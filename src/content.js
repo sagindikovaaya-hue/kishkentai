@@ -27,6 +27,10 @@ const THEMES=[
   ["bath","bath","ванна","ванна","бат"],["soap","soap","сабын","мыло","соуп"],["towel","towel","сүлгі","полотенце","тауэл"],
   ["brush","brush","щетка","щёточка","браш"],["rduck","rubber duck","үйрек ойыншық","уточка","рабэ дақ"],["comb","comb","тарақ","расчёска","коум"],
   ["potty","potty","түбек","горшок","поти"],["bubbles","bubbles","көпіршік","пузыри","баблз",1]]},
+ {id:"walk",name:{en:"Out for a walk",kk:"Серуен",ru:"Прогулка"},life:"walk",items:[
+  ["ball","ball","доп","мячик","бол"],["swing","swing","әткеншек","качели","свинг"],["slide","slide","сырғанақ","горка","слайд"],
+  ["tree","tree","ағаш","дерево","три"],["flower","flower","гүл","цветочек","флауә"],["sun","sun","күн","солнышко","сан"],
+  ["umbrella","umbrella","қолшатыр","зонтик","амбрэлә"],["boots","rain boots","резеңке етік","сапожки","рейн бутс",1]]},
  {id:"colors",name:{en:"Colours",kk:"Түстер",ru:"Цвета"},bare:1,items:[
   ["c-red","red","қызыл","красный","рэд"],["c-yellow","yellow","сары","жёлтый","йеллоу"],["c-blue","blue","көк","синий","блу"],
   ["c-green","green","жасыл","зелёный","грин"],["c-orange","orange","қызғылт сары","оранжевый","ориндж"],["c-purple","purple","күлгін","фиолетовый","пөпл"],
@@ -80,7 +84,15 @@ const ITEM_PHRASE={
  rduck:{en:"Quack! The duck can swim.",kk:"Барқ! Үйрек жүзе алады.",ru:"Кря! Уточка плавает."},
  comb:{en:"Let's comb your hair.",kk:"Шашыңды тарайық.",ru:"Давай причешемся."},
  potty:{en:"Let's go potty!",kk:"Түбекке отырайық!",ru:"Пойдём на горшок!"},
- bubbles:{en:"Pop the bubbles!",kk:"Көпіршікті жар!",ru:"Лопай пузыри!"}};
+ bubbles:{en:"Pop the bubbles!",kk:"Көпіршікті жар!",ru:"Лопай пузыри!"},
+ ball:{en:"Throw the ball!",kk:"Допты лақтыр!",ru:"Брось мячик!"},
+ swing:{en:"Swing, swing, higher!",kk:"Әткеншек, әткеншек, биігірек!",ru:"Качаемся выше!"},
+ slide:{en:"Wheee! Down the slide!",kk:"Уһ! Сырғанақпен сырғанаймыз!",ru:"Ух! Катимся с горки!"},
+ tree:{en:"Look, a big tree!",kk:"Қара, үлкен ағаш!",ru:"Смотри, большое дерево!"},
+ flower:{en:"Smell the flower.",kk:"Гүлдің иісін ал.",ru:"Понюхай цветочек."},
+ sun:{en:"The sun is shining.",kk:"Күн сәуле шашып тұр.",ru:"Солнышко светит."},
+ umbrella:{en:"Open your umbrella.",kk:"Қолшатырыңды аш.",ru:"Открой зонтик."},
+ boots:{en:"Rain boots on!",kk:"Резеңке етігіңді ки!",ru:"Надень сапожки!"}};
 
 /* phrases for parents to use in daily life */
 const LIFE={dress:{
@@ -118,7 +130,19 @@ const LIFE={dress:{
   {en:"Wash your tummy.",kk:"Ішіңді жу.",ru:"Помоем животик.",when:{kk:"Денесін жуғанда",ru:"Когда моете"}},
   {en:"Close your eyes.",kk:"Көзіңді жұм.",ru:"Закрой глазки.",when:{kk:"Шаш жуғанда",ru:"Когда моете голову"}},
   {en:"Brush your teeth.",kk:"Тісіңді тазала.",ru:"Почисти зубки.",when:{kk:"Ұйқы алдында",ru:"Перед сном"}},
-  {en:"All clean! Towel time.",kk:"Тап-таза! Сүлгіге оранайық.",ru:"Чистенький! Вытираемся.",when:{kk:"Ваннадан шыққанда",ru:"Когда выходите из ванны"}}]}};
+  {en:"All clean! Towel time.",kk:"Тап-таза! Сүлгіге оранайық.",ru:"Чистенький! Вытираемся.",when:{kk:"Ваннадан шыққанда",ru:"Когда выходите из ванны"}}]},
+ walk:{
+ title:{kk:"Серуенде айтатын фразалар",ru:"Фразы на прогулке"},
+ intro:{kk:"Далада бала көп нәрсені көреді: ағаш, гүл, күн. Көргеннің бәрін атап, қысқа фразамен айтыңыз.",
+        ru:"На улице ребёнок видит много нового: дерево, цветок, солнышко. Называйте всё, что видите, короткой фразой."},
+ phrases:[
+  {en:"Let's go outside!",kk:"Далаға шығайық!",ru:"Пойдём гулять!",when:{kk:"Үйден шығар алдында",ru:"Перед выходом из дома"}},
+  {en:"Look, the sun!",kk:"Қара, күн!",ru:"Смотри, солнышко!",when:{kk:"Аспанға қарап",ru:"Показывая на небо"}},
+  {en:"Throw the ball!",kk:"Допты лақтыр!",ru:"Брось мячик!",when:{kk:"Бірге доп ойнағанда",ru:"Когда играете в мяч"}},
+  {en:"Swing, swing, higher!",kk:"Әткеншек, әткеншек, биігірек!",ru:"Качаемся выше!",when:{kk:"Әткеншек тербеткенде",ru:"Когда качаете на качелях"}},
+  {en:"Wheee! Down the slide!",kk:"Уһ! Сырғанақпен сырғанаймыз!",ru:"Ух! Катимся с горки!",when:{kk:"Сырғанақта",ru:"На горке"}},
+  {en:"Smell the flower.",kk:"Гүлдің иісін ал.",ru:"Понюхай цветочек.",when:{kk:"Гүл көргенде",ru:"Когда увидели цветок"}},
+  {en:"Time to go home.",kk:"Үйге қайтатын уақыт.",ru:"Пора домой.",when:{kk:"Серуеннің соңында",ru:"В конце прогулки"}}]}};
 
 const PRAISE={en:["Well done!","Great job!","Super!","Yes! Clever!"],kk:["Жарайсың!","Керемет!","Тамаша!","Бәрекелді!"],ru:["Молодец!","Умница!","Отлично!","Здорово!"]};
 
@@ -174,14 +198,14 @@ const T={
 
 /* levels by age */
 const LEVELS=[
- {id:"sabi",ages:[1],name:"Сәби",themes:["animals","transport","fruit","clothes","kitchen","bath"],games:["listen","peek"],tip:1},
- {id:"balapan",ages:[2],name:"Балапан",themes:["animals","transport","fruit","clothes","kitchen","bath","colors"],games:["find","who"],tip:2},
- {id:"qulynshaq",ages:[3,4,5,6],name:"Құлыншақ",themes:["animals","transport","fruit","clothes","kitchen","bath","colors","numbers"],games:["find","who","pair"],tip:3}];
+ {id:"sabi",ages:[1],name:"Сәби",themes:["animals","transport","fruit","clothes","kitchen","bath","walk"],games:["listen","peek"],tip:1},
+ {id:"balapan",ages:[2],name:"Балапан",themes:["animals","transport","fruit","clothes","kitchen","bath","walk","colors"],games:["find","who"],tip:2},
+ {id:"qulynshaq",ages:[3,4,5,6],name:"Құлыншақ",themes:["animals","transport","fruit","clothes","kitchen","bath","walk","colors","numbers"],games:["find","who","pair"],tip:3}];
 
 /* ---------- programme: 5 days per theme, order by level ---------- */
-const PROGRAM={sabi:["animals","kitchen","clothes","bath","transport","fruit"],
-  balapan:["animals","kitchen","clothes","bath","transport","fruit","colors"],
-  qulynshaq:["animals","kitchen","clothes","bath","transport","fruit","colors","numbers"]};
+const PROGRAM={sabi:["animals","kitchen","clothes","bath","transport","fruit","walk"],
+  balapan:["animals","kitchen","clothes","bath","transport","fruit","colors","walk"],
+  qulynshaq:["animals","kitchen","clothes","bath","transport","fruit","colors","numbers","walk"]};
 const MINUTES={sabi:5,balapan:10,qulynshaq:15};
 const DAY_KIND=["words","words2","game","life","review"];
 const P={
