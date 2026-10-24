@@ -4,7 +4,7 @@
 const fs=require("fs"),path=require("path");
 const src=fs.readFileSync(path.join(__dirname,"../src/content.js"),"utf8")+";globalThis.X={THEME,ITEM_PHRASE,LIFE,SOUNDS,SAY,PRAISE}";
 (0,eval)(src);
-const {THEME,ITEM_PHRASE,LIFE,SOUNDS,SAY}=X,cap=s=>s[0].toUpperCase()+s.slice(1);
+const {THEME,ITEM_PHRASE,LIFE,SOUNDS,SAY,PRAISE}=X,cap=s=>s[0].toUpperCase()+s.slice(1);
 const id=process.argv[2],th=THEME[id];if(!th){console.error("unknown theme",id);process.exit(1)}
 const out=new Set(),add=(lang,t)=>t&&out.add(JSON.stringify({lang,text:t}));
 for(const lang of ["en","kk","ru"]){
@@ -17,5 +17,6 @@ for(const lang of ["en","kk","ru"]){
     if(SOUNDS[it.key])for(const k of ["sound","soundShow","who","whoShow","yes","no"])add(lang,SAY[lang][k](it));
   }
   if(th.life)for(const p of LIFE[th.life].phrases)add(lang,p[lang]);
+  for(const p of PRAISE[lang])add(lang,p);                             /* praise after a right answer, shared by every theme */
 }
 console.log(JSON.stringify([...out].map(s=>JSON.parse(s)),null,1));
