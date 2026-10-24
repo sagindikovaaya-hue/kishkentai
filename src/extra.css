@@ -97,3 +97,5 @@
 .go.small{font-size:.95rem;padding:11px 16px;white-space:nowrap}
 .sync{color:var(--good);font-size:.85rem}
 [hidden]{display:none!important}
+.navpair{display:inline-flex;gap:6px}
+.pill.fwd{padding-inline:14px}

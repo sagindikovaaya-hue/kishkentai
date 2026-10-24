@@ -76,7 +76,7 @@ function profiles(editId){
   const editing=editId?kids.find(k=>k.id===editId):null,k=editing||{name:"",age:2,learn:"en",help:H()};
   const tt=T[k.help]||T.kk;
   view.innerHTML=`<div class="col">
-   ${kids.length?`<div class="top"><button class="pill" id="back">${tt.back}</button></div>
+   ${kids.length?`<div class="top">${navBtns()}</div>
    <div class="kids">${kids.map(x=>`<div class="kidrow${x.id===kid().id?" on":""}"><button class="kidpick" data-id="${x.id}"><b>${esc(x.name)}</b><span>${T[x.help].ageWord(x.age)} · ${LANGS[x.learn]} · ★ ${x.stars||0}</span></button><button class="pill" data-edit="${x.id}">${tt.edit}</button></div>`).join("")}</div>`:""}
    ${accountBlock()}
    <form class="kidform" id="kidform">
@@ -95,7 +95,7 @@ function profiles(editId){
   $("#kidform").onsubmit=e=>{e.preventDefault();const f=readForm();if(!f.name){$("#kName").focus();return}
     if(editing)Object.assign(editing,f);else{const nk={id:"k"+Date.now().toString(36),stars:0,...f};kids.push(nk);curId=nk.id}
     saveKids();paintHeader();home()};
-  if($("#back"))$("#back").onclick=()=>home();bindAccount();
+  bindBack();bindAccount();
   view.querySelectorAll("[data-id]").forEach(b=>b.onclick=()=>{curId=b.dataset.id;saveKids();paintHeader();home()});
   view.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>profiles(b.dataset.edit));
   if($("#kDel"))$("#kDel").onclick=()=>{const b=$("#kDel");if(!b.dataset.sure){b.dataset.sure=1;b.textContent=(H()==="ru"?"Точно удалить?":"Шынымен өшіру?");return}
@@ -187,8 +187,9 @@ function library(){
   view.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>lv.id==="sabi"?listen(THEME[b.dataset.c],0):learn(THEME[b.dataset.c],0));
   view.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>({find,who:whoSays,pair:()=>memory(3),listen:()=>listen(null,0),peek:()=>peek(null)})[b.dataset.g]());
 }
-const topBar=title=>`<div class="top"><button class="pill" id="back">${t().back}</button>${title?`<h1 class="h-sm">${title}</h1>`:""}</div>`;
-const bindBack=()=>{$("#back").onclick=()=>home()};
+const navBtns=()=>`<span class="navpair"><button class="pill" id="back">${t().back}</button>${navCur<navHist.length-1?`<button class="pill fwd" id="fwd" aria-label="→">→</button>`:""}</span>`;
+const topBar=title=>`<div class="top">${navBtns()}${title?`<h1 class="h-sm">${title}</h1>`:""}</div>`;
+const bindBack=()=>{const b=$("#back");if(b)b.onclick=navBack;const f=$("#fwd");if(f)f.onclick=navFwd};
 function praise(){const l=L(),i=rand(4);return{main:PRAISE[l][i],help:PRAISE[H()][i]}}
 
 /* ---------- 1–2 years: listen (tap a big picture) ---------- */
@@ -285,7 +286,7 @@ function memory(pairs){
 function parents(sel){
   const th=THEME[sel]||THEMES[0],tt=t(),l=L(),h=H();
   view.innerHTML=`<div class="col">
-   <div class="top noprint"><button class="pill" id="back">${tt.back}</button><h1 class="h-sm">${tt.parents}</h1></div>
+   <div class="top noprint">${navBtns()}<h1 class="h-sm">${tt.parents}</h1></div>
    <p class="sub noprint">${tt.parentsIntro}</p>
    <div class="chips noprint">${THEMES.map(x=>`<button class="pill" data-s="${x.id}" aria-pressed="${x.id===th.id}">${x.name[h]}</button>`).join("")}</div>
    <div class="noprint row"><button class="listen" id="print">${tt.print}</button><span class="sub" style="font-size:.85rem">${tt.printNote}: sagindikovaaya-hue.github.io/kishkentai</span></div>
@@ -296,6 +297,21 @@ function parents(sel){
   bindBack();view.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>parents(b.dataset.s));
   $("#print").onclick=()=>{try{window.print()}catch(e){}};bindLife();
 }
+
+/* ---------- back / forward: every screen is a history entry, so the phone's back button, the iPhone swipe and the browser arrows all work ---------- */
+let navHist=[],navCur=-1,navRestoring=false;
+function nav(fn){return function(...a){
+  if(!navRestoring){const top=navHist[navCur];
+    if(top&&top.fn===fn){navHist[navCur]={fn,a};try{history.replaceState({kd:navCur},"")}catch(e){}}   /* next card or next round: same screen */
+    else{navHist=navHist.slice(0,navCur+1);navHist.push({fn,a});navCur=navHist.length-1;
+      try{navCur===0?history.replaceState({kd:0},""):history.pushState({kd:navCur},"")}catch(e){}}}
+  const r=fn.apply(this,a);window.scrollTo(0,0);return r}}
+function navShow(i){const e=navHist[i];if(!e)return;navCur=i;navRestoring=true;try{e.fn.apply(null,e.a)}finally{navRestoring=false}window.scrollTo(0,0)}
+function navBack(){if(navCur>0){try{history.back()}catch(e){navShow(navCur-1)}}else home()}
+function navFwd(){if(navCur<navHist.length-1){try{history.forward()}catch(e){navShow(navCur+1)}}}
+window.addEventListener("popstate",e=>{const i=e.state&&typeof e.state.kd==="number"?e.state.kd:0;if(navHist[i])navShow(i);else{navHist=[];navCur=-1;home()}});
+home=nav(home);library=nav(library);profiles=nav(profiles);parents=nav(parents);progress=nav(progress);phrases=nav(phrases);
+learn=nav(learn);listen=nav(listen);peek=nav(peek);find=nav(find);whoSays=nav(whoSays);memory=nav(memory);
 
 /* ---------- start ---------- */
 initAccount();paintHeader();
