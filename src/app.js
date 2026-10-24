@@ -21,7 +21,7 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",
 
 function addStar(){const k=kid();k.stars=(k.stars||0)+1;if(!k.sample)saveKids();paintHeader()}
 function paintHeader(){const k=kid();
-  $("#kidBtn").innerHTML=`<b>${esc(k.name)}</b><span>${t().ageWord(k.age)} · ${LANGS[k.learn]}</span>`;
+  $("#kidBtn").innerHTML=k.sample?`<b>${t().addKid}</b>`:`<b>${esc(k.name)}</b><span>${t().ageWord(k.age)} · ${LANGS[k.learn]}</span>`;
   $("#stars").textContent="★ "+(k.stars||0);$("#stars").hidden=k.age<2;
   $("#brandSub").textContent=t().sub;
   $("#trBtn").textContent=t().tr;$("#trBtn").setAttribute("aria-pressed",showTr);$("#trBtn").hidden=!needTr();
@@ -77,7 +77,7 @@ function profiles(editId){
   const tt=T[k.help]||T.kk;
   view.innerHTML=`<div class="col">
    ${kids.length?`<div class="top">${navBtns()}</div>
-   <div class="kids">${kids.map(x=>`<div class="kidrow${x.id===kid().id?" on":""}"><button class="kidpick" data-id="${x.id}"><b>${esc(x.name)}</b><span>${T[x.help].ageWord(x.age)} · ${LANGS[x.learn]} · ★ ${x.stars||0}</span></button><button class="pill" data-edit="${x.id}">${tt.edit}</button></div>`).join("")}</div>`:""}
+   <div class="kids">${kids.map(x=>`<div class="kidrow${x.id===kid().id?" on":""}"><button class="kidpick" data-id="${x.id}"><b>${esc(x.name)}</b><span>${T[x.help].ageWord(x.age)} · ${LANGS[x.learn]} · ★ ${x.stars||0}</span></button><button class="pill" data-edit="${x.id}">${tt.edit}</button><button class="pill del" data-del="${x.id}" aria-label="${tt.del}">✕</button></div>`).join("")}</div>`:""}
    ${accountBlock()}
    <form class="kidform" id="kidform">
     <h1>${editing?esc(editing.name):kids.length?tt.addKid.replace("+ ",""):tt.kidTitle}</h1>
@@ -98,6 +98,9 @@ function profiles(editId){
   bindBack();bindAccount();
   view.querySelectorAll("[data-id]").forEach(b=>b.onclick=()=>{curId=b.dataset.id;saveKids();paintHeader();home()});
   view.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>profiles(b.dataset.edit));
+  view.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{const x=kids.find(k=>k.id===b.dataset.del);if(!x)return;
+    if(!b.dataset.sure){b.dataset.sure=1;b.classList.add("sure");b.textContent=(H()==="ru"?`Удалить ${x.name}?`:`${x.name} өшірілсін бе?`);return}
+    kids=kids.filter(k=>k!==x);if(curId===x.id)curId=kids[0]?kids[0].id:null;store.set("kids",kids);store.set("kid",curId);if(typeof pushFamily==="function")pushFamily(true);paintHeader();profiles()});
   if($("#kDel"))$("#kDel").onclick=()=>{const b=$("#kDel");if(!b.dataset.sure){b.dataset.sure=1;b.textContent=(H()==="ru"?"Точно удалить?":"Шынымен өшіру?");return}
     kids=kids.filter(x=>x!==editing);curId=kids[0]?kids[0].id:null;saveKids();paintHeader();kids.length?home():profiles()};
 }
@@ -106,7 +109,7 @@ function profiles(editId){
 const prog=()=>{const k=kid();k.prog=k.prog||{day:0,done:{},w:{}};return k.prog};
 const saveProg=()=>{if(!kid().sample)saveKids()};
 function dayPlan(d){
-  const lv=level(),seq=PROGRAM[lv.id],th=THEME[seq[Math.floor(d/5)%seq.length]],kind=DAY_KIND[d%5],it=th.items,n=it.length;
+  const lv=level(),seq=PROGRAM[lv.id],th=THEME[seq[d%seq.length]],kind=DAY_KIND[Math.floor(d/seq.length)%5],it=th.items,n=it.length;
   const focus={words:it.slice(0,3),words2:it.slice(3,6),game:it.slice(0,6),life:[it[6%n],it[7%n],it[0]],review:it.slice(0,3)}[kind];
   return {d,lv,th,kind:kind==="life"&&!th.life?"hunt":kind,focus,week:Math.floor(d/5)+1,dayN:d%5+1}}
 function stepsFor(p){const h=H(),PT=P[h],q=SAY[L()].where(p.focus[0]);
@@ -127,7 +130,7 @@ function home(viewDay){if(typeof viewDay!=="number")viewDay=null;
   view.innerHTML=`<div class="col">
    ${k.sample?`<button class="setup" id="setup"><b>${tt.kidTitle}</b><span>${tt.kidIntro}</span><em>${tt.start} →</em></button>`:""}
    <section class="today">
-    <div class="today-head"><div><span class="eyebrow">${PT.academy} · ${esc(k.name)}</span><h1>${PT.today}</h1></div><img class="mascot" alt="" src="${PAINTED.rabbit}"></div>
+    <div class="today-head"><div><span class="eyebrow">${PT.academy}${k.sample?"":" · "+esc(k.name)}</span><h1>${PT.today}</h1></div><img class="mascot" alt="" src="${PAINTED.rabbit}"></div>
     <div class="plan">
      <span class="plan-meta">${PT.week(p.week)} · ${PT.day(p.dayN)} · ${p.th.name[L()]}${needTr()?`<i class="tr-opt"> · ${thName}</i>`:""}</span>
      <h2>${PT.title[p.kind](thName)}</h2>
@@ -187,9 +190,12 @@ function library(){
   view.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>lv.id==="sabi"?listen(THEME[b.dataset.c],0):learn(THEME[b.dataset.c],0));
   view.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>({find,who:whoSays,pair:()=>memory(3),listen:()=>listen(null,0),peek:()=>peek(null)})[b.dataset.g]());
 }
-const navBtns=()=>`<span class="navpair"><button class="pill" id="back">${t().back}</button>${navCur<navHist.length-1?`<button class="pill fwd" id="fwd" aria-label="→">→</button>`:""}</span>`;
+const navBtns=()=>"";
 const topBar=title=>`<div class="top">${navBtns()}${title?`<h1 class="h-sm">${title}</h1>`:""}</div>`;
-const bindBack=()=>{const b=$("#back");if(b)b.onclick=navBack;const f=$("#fwd");if(f)f.onclick=navFwd};
+const bindBack=()=>{};
+function paintNav(){const b=$("#nBack"),f=$("#nFwd"),h=$("#nHome"),tt=t();if(!b)return;
+  b.disabled=navCur<=0;f.disabled=navCur>=navHist.length-1;const atHome=navHist[navCur]&&navHist[navCur].fn===homeRaw;h.disabled=!!atHome;
+  b.querySelector("span").textContent=tt.back.replace(/^←\s*/,"");h.querySelector("span").textContent=tt.home;f.querySelector("span").textContent=tt.fwd}
 function praise(){const l=L(),i=rand(4);return{main:PRAISE[l][i],help:PRAISE[H()][i]}}
 
 /* ---------- 1–2 years: listen (tap a big picture) ---------- */
@@ -305,13 +311,15 @@ function nav(fn){return function(...a){
     if(top&&top.fn===fn){navHist[navCur]={fn,a};try{history.replaceState({kd:navCur},"")}catch(e){}}   /* next card or next round: same screen */
     else{navHist=navHist.slice(0,navCur+1);navHist.push({fn,a});navCur=navHist.length-1;
       try{navCur===0?history.replaceState({kd:0},""):history.pushState({kd:navCur},"")}catch(e){}}}
-  const r=fn.apply(this,a);window.scrollTo(0,0);return r}}
-function navShow(i){const e=navHist[i];if(!e)return;navCur=i;navRestoring=true;try{e.fn.apply(null,e.a)}finally{navRestoring=false}window.scrollTo(0,0)}
+  const r=fn.apply(this,a);window.scrollTo(0,0);paintNav();return r}}
+function navShow(i){const e=navHist[i];if(!e)return;navCur=i;navRestoring=true;try{e.fn.apply(null,e.a)}finally{navRestoring=false}window.scrollTo(0,0);paintNav()}
 function navBack(){if(navCur>0){try{history.back()}catch(e){navShow(navCur-1)}}else home()}
 function navFwd(){if(navCur<navHist.length-1){try{history.forward()}catch(e){navShow(navCur+1)}}}
 window.addEventListener("popstate",e=>{const i=e.state&&typeof e.state.kd==="number"?e.state.kd:0;if(navHist[i])navShow(i);else{navHist=[];navCur=-1;home()}});
-home=nav(home);library=nav(library);profiles=nav(profiles);parents=nav(parents);progress=nav(progress);phrases=nav(phrases);
+const homeRaw=home;home=nav(home);library=nav(library);profiles=nav(profiles);parents=nav(parents);progress=nav(progress);phrases=nav(phrases);
 learn=nav(learn);listen=nav(listen);peek=nav(peek);find=nav(find);whoSays=nav(whoSays);memory=nav(memory);
+
+$("#nBack").onclick=navBack;$("#nFwd").onclick=navFwd;$("#nHome").onclick=()=>home();
 
 /* ---------- start ---------- */
 initAccount();paintHeader();

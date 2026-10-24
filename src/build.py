@@ -31,6 +31,11 @@ body = '''<div class="wrap">
   </header>
   <main id="view"></main>
 </div>
+<nav class="bottomnav" aria-label="Навигация">
+  <button id="nBack" disabled><b aria-hidden="true">←</b><span></span></button>
+  <button id="nHome"><b aria-hidden="true">⌂</b><span></span></button>
+  <button id="nFwd" disabled><span></span><b aria-hidden="true">→</b></button>
+</nav>
 '''
 js = ("const PAINTED=" + json.dumps(painted) + ";\nconst VOICE_CLIPS=" + json.dumps(clips, ensure_ascii=False) + ";\n"
       + rd("content.js") + "\n" + rd("account.js") + "\n" + rd("app.js"))
