@@ -597,8 +597,11 @@ function voiceFor(lang){
   if(!list.length&&lang==="kk")list=voices.filter(v=>/^ru([-_]|$)/i.test(v.lang)); /* few phones have Kazakh: Russian reads Cyrillic closest */
   const sc=v=>(FEMALE.test(v.name)?50:0)-(MALE.test(v.name)?60:0)+(/Premium|Enhanced|Natural|Neural/i.test(v.name)?15:0)+(lang==="en"&&/^en[-_]GB/i.test(v.lang)?8:0);
   return list.sort((a,b)=>sc(b)-sc(a))[0]||null}
+/* recorded voice: audio/index.json maps "lang|text" to a file in audio/; anything not recorded falls back to the phone voice */
+let CLIPS={};
+fetch("audio/index.json").then(r=>r.ok?r.json():{}).then(j=>{CLIPS=j}).catch(()=>{});
 function say(text,lang=L()){
-  const clip=lang==="en"&&VOICE_CLIPS[text];
+  const file=CLIPS[lang+"|"+text],clip=file?"audio/"+file:(lang==="en"&&VOICE_CLIPS[text]);
   if("speechSynthesis" in window)speechSynthesis.cancel();
   if(clip){try{player.pause();player.src=clip;player.currentTime=0;const p=player.play();if(p&&p.catch)p.catch(()=>speak(text,lang));return}catch(e){}}
   speak(text,lang)}
