@@ -206,7 +206,8 @@ const T={
   ageWord:a=>`${a} жас`,level:"Деңгей",soon:"4–6 жас деңгейі әзірленуде. Әзірге 3 жасқа арналған тапсырмалар.",
   tip:{1:"1–2 жаста бала әлі таңдамайды — тек көріп, тыңдайды. Суретті бірге басыңыз, сөзді өзіңіз де айтыңыз. Күніне 3–5 минут жеткілікті.",
        2:"Күніне 5–10 минут жеткілікті. Сөзді балаңызбен бірге қайталаңыз, үйдегі заттарды атап көрсетіңіз.",
-       3:"Сөздерді күнделікті өмірде қолданыңыз: киінгенде, тамақтанғанда, серуенде. «Ата-аналарға» бөлімінде дайын фразалар бар."}},
+       3:"Сөздерді күнделікті өмірде қолданыңыз: киінгенде, тамақтанғанда, серуенде. «Ата-аналарға» бөлімінде дайын фразалар бар.",
+       4:"4–6 жаста әріптер мен санау қосылады: «Бірінші әріп», «Сөз құра», «Санап көр». Әріпті бірге айтып, асықпаңыз — күніне 15 минут жеткілікті."}},
  ru:{sub:"1–6 лет · три языка",hello:n=>`Привет, ${n}!`,back:"← Назад",tr:"Перевод",again:"▶ Ещё раз",
   themesHead:"Темы",gamesHead:"Игры",find:"Найди",who:"Кто так говорит?",pair:"Найди пару",listen:"Слушай",peek:"Прятки",
   listenSub:"Нажми на картинку — услышишь слово",peekSub:"Нажми на облачко — кто спрятался?",tapHint:"Нажми на картинку",
@@ -218,19 +219,22 @@ const T={
   ageWord:a=>a===1?"1 год":a<5?`${a} года`:`${a} лет`,level:"Уровень",soon:"Уровень 4–6 лет готовится. Пока задания для 3 лет.",
   tip:{1:"В 1–2 года ребёнок ещё не выбирает — он смотрит и слушает. Нажимайте на картинку вместе и повторяйте слово сами. Хватит 3–5 минут в день.",
        2:"Хватит 5–10 минут в день. Повторяйте слова вместе с ребёнком и называйте предметы дома.",
-       3:"Используйте слова в жизни: когда одеваетесь, едите, гуляете. В разделе «Родителям» есть готовые фразы."}}};
+       3:"Используйте слова в жизни: когда одеваетесь, едите, гуляете. В разделе «Родителям» есть готовые фразы.",
+       4:"В 4–6 лет добавляются буквы и счёт: «Первая буква», «Собери слово», «Посчитай». Проговаривайте буквы вместе и не торопите — хватит 15 минут в день."}}};
 
 /* levels by age */
 const LEVELS=[
- {id:"sabi",ages:[1],name:"Сәби",themes:["animals","transport","fruit","clothes","kitchen","bath","walk","sleep"],games:["listen","peek"],tip:1},
- {id:"balapan",ages:[2],name:"Балапан",themes:["animals","transport","fruit","clothes","kitchen","bath","walk","sleep","colors"],games:["find","who","pair"],tip:2},
- {id:"qulynshaq",ages:[3,4,5,6],name:"Құлыншақ",themes:["animals","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers"],games:["find","who","pair"],tip:3}];
+ {id:"sabi",ages:[1],name:"Сәби",themes:["animals","transport","fruit","clothes","kitchen","bath","walk","sleep"],games:["listen","peek","knock","bubbles","goodnight"],tip:1},
+ {id:"balapan",ages:[2],name:"Балапан",themes:["animals","transport","fruit","clothes","kitchen","bath","walk","sleep","colors"],games:["find","who","pair","shadow","feed","dress","color"],tip:2},
+ {id:"qulynshaq",ages:[3],name:"Құлыншақ",themes:["animals","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers"],games:["find","who","pair","shadow","feed","color","oddone","count","missing"],tip:3},
+ {id:"batyr",ages:[4,5,6],name:"Батыр",themes:["animals","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers"],games:["letter","spell","count","wordpair","repeat","oddone","missing","pair","find","shadow","color","who"],tip:4}];
 
 /* ---------- programme: 5 days per theme, order by level ---------- */
 const PROGRAM={sabi:["animals","kitchen","clothes","bath","transport","fruit","walk","sleep"],
   balapan:["animals","kitchen","clothes","bath","transport","fruit","colors","walk","sleep"],
-  qulynshaq:["animals","kitchen","clothes","bath","transport","fruit","colors","numbers","walk","sleep"]};
-const MINUTES={sabi:5,balapan:10,qulynshaq:15};
+  qulynshaq:["animals","kitchen","clothes","bath","transport","fruit","colors","numbers","walk","sleep"],
+  batyr:["animals","kitchen","clothes","bath","transport","fruit","colors","numbers","walk","sleep"]};
+const MINUTES={sabi:5,balapan:10,qulynshaq:15,batyr:15};
 const DAY_KIND=["words","words2","game","life","review"];
 const P={
  kk:{academy:"Ойын академиясы",today:"Бүгін ойнаймыз!",week:n=>`${n}-апта`,day:n=>`${n}-күн`,mins:n=>`${n} минут бірге`,
@@ -259,3 +263,26 @@ const P={
    hunt:q=>["Спрячьте в комнате 3 игрушки или предмета.",`Спросите «${q}» и ищите вместе.`,"Нашли — назовите слово вместе и похлопайте."],
    review:()=>["Ещё раз посмотрите все карточки.","Ниже отметьте, что ребёнок понимает и что говорит сам.","На следующей неделе — новая тема!"]},
   status:["—","понимает","говорит"],understands:"понимает",says:"говорит",tapWord:"Нажмите на слово: один раз — понимает, два раза — говорит."}};
+
+/* ---------- extra games: what they say (kept here so tools/voice_texts.js can list them for recording) ---------- */
+/* lines in the language the child learns */
+const G={
+ en:{knock:"Knock, knock! Who's there?",night:w=>`Good night, ${w}!`,dreams:"Sweet dreams!",
+  shadow:"Whose shadow is this?",hungry:a=>`The ${a} is hungry! What does the ${a} want?`,yum:(a,f)=>`Yummy! The ${a} likes the ${f}!`,
+  dress:it=>it.pl?`Let's put on the ${it.en}!`:`Let's put on the ${it.en}!`,colorQ:c=>`Find something ${c}!`,
+  odd:"Which one is different?",count:p=>`How many ${p}?`,look:"Look carefully!",missing:"What is missing?",
+  letterQ:w=>`${w} starts with…?`,letterA:(w,l)=>`${w} starts with ${l}!`,spell:"Make the word!",sayWith:w=>`Say it with me: ${w}!`,match:"Find the picture for each word!"},
+ kk:{knock:"Тық-тық! Кім бар?",night:w=>`Қайырлы түн, ${w}!`,dreams:"Тәтті түс көр!",
+  shadow:"Бұл кімнің көлеңкесі?",hungry:a=>`${a} қарны ашты! Оған не береміз?`,yum:(a,f)=>`Дәмді! Рахмет!`,
+  dress:it=>`${cap(it.kk)} киейік!`,colorQ:c=>`${cap(c)} түсті тап!`,
+  odd:"Қайсысы артық?",count:()=>`Неше? Санап көр!`,look:"Мұқият қара!",missing:"Не жоғалды?",
+  letterQ:w=>`«${w}» қай әріптен басталады?`,letterA:(w,l)=>`«${w}» — «${l}» әрпінен басталады!`,spell:"Сөзді құра!",sayWith:w=>`Менімен бірге айт: ${w}!`,match:"Әр сөздің суретін тап!"},
+ ru:{knock:"Тук-тук! Кто там?",night:w=>`Спокойной ночи, ${w}!`,dreams:"Сладких снов!",
+  shadow:"Чья это тень?",hungry:a=>`${a} хочет кушать! Что дать?`,yum:()=>`Ням-ням! Спасибо!`,
+  dress:it=>`Надеваем: ${it.ru}!`,colorQ:c=>`Найди ${c}!`,
+  odd:"Что лишнее?",count:()=>`Сколько? Посчитай!`,look:"Смотри внимательно!",missing:"Что пропало?",
+  letterQ:w=>`На какую букву «${w}»?`,letterA:(w,l)=>`«${w}» начинается на «${l}»!`,spell:"Собери слово!",sayWith:w=>`Скажи со мной: ${w}!`,match:"Найди картинку к каждому слову!"}};
+const FEED={cat:"milk",duck:"bread",elephant:"banana",horse:"apple",bear:"strawberry",rabbit:"pear",fox:"grapes",sheep:"water"};
+const COLOR_OF={apple:"red",strawberry:"red",cherry:"red",banana:"yellow",lemon:"yellow",pear:"green",orange:"orange",fox:"orange",bear:"brown",bread:"brown",horse:"brown",milk:"white",sheep:"white",grapes:"purple"};
+const RU_NEUT={red:"красное",yellow:"жёлтое",green:"зелёное",orange:"оранжевое",brown:"коричневое",white:"белое",purple:"фиолетовое"};
+const COUNTABLE={duck:"ducks",cat:"cats",apple:"apples",cherry:"cherries",ball:"balls",star:"stars",car:"cars",fox:"foxes",bear:"bears",strawberry:"strawberries",flower:"flowers",sheep:"sheep"};

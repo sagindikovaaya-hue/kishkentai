@@ -147,7 +147,7 @@ function home(viewDay){if(typeof viewDay!=="number")viewDay=null;
     <div class="weekstrip" aria-label="${PT.week(p.week)}">${[0,1,2,3,4].map(i=>{const dd=wk0+i;return `<button data-day="${dd}" class="${pr.done[dd]?"ok":""}${dd===d?" cur":""}" aria-label="${PT.day(i+1)}">${i+1}</button>`}).join("")}</div>
    </section>
    <h2 class="sec">${tt.gamesHead}</h2>
-   <div class="cats games">${p.lv.games.map(g=>`<button class="cat play" data-hg="${g}"><img alt="" src="${PAINTED[GAME_ART[g]]}"><span class="en">${tt[g]}</span></button>`).join("")}</div>
+   <div class="cats games">${p.lv.games.map(g=>`<button class="cat play" data-hg="${g}"><img alt="" src="${PAINTED[GAME_ART[g]]}"><span class="en">${gameName(g)}</span></button>`).join("")}</div>
    <div class="cats two">
     <button class="cat play" id="lib"><img alt="" src="${PAINTED.owl}"><span class="en">${PT.library}</span></button>
     <button class="cat play" id="prog"><img alt="" src="${PAINTED.bear}"><span class="en">${PT.progress}</span><span class="kz">${PT.progressSub}</span></button>
@@ -159,7 +159,7 @@ function home(viewDay){if(typeof viewDay!=="number")viewDay=null;
   $("#done").onclick=()=>{pr.done[d]=true;if(d>=pr.day)pr.day=d+1;saveProg();addStar();sparkle($("#done"));setTimeout(()=>home(d),350)};
   view.querySelectorAll("[data-day]").forEach(b=>b.onclick=()=>home(+b.dataset.day));
   view.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{const it=p.th.items[+b.dataset.t];say(cardLine(it));b.classList.remove("lift");void b.offsetWidth;b.classList.add("lift")});
-  view.querySelectorAll("[data-hg]").forEach(b=>b.onclick=()=>({find:()=>find(),who:whoSays,pair:()=>memory(3),listen:()=>listen(null,0),peek:()=>peek(null)})[b.dataset.hg]());
+  view.querySelectorAll("[data-hg]").forEach(b=>b.onclick=()=>GAME_RUN[b.dataset.hg]());
   $("#lib").onclick=library;$("#prog").onclick=()=>progress();
   $("#parents").onclick=()=>parents(p.th.id);
   if($("#setup"))$("#setup").onclick=()=>profiles();
@@ -183,16 +183,16 @@ function progress(onlyTheme){
 /* ---------- library (all games and themes) ---------- */
 const GAME_ART={find:"owl",who:"duck",pair:"mittens",listen:"rabbit",peek:"fox"};
 function library(){
-  const lv=level(),k=kid(),tt=t(),ageNote=k.age>=4?`<p class="soon">${tt.soon}</p>`:"";
+  const lv=level(),k=kid(),tt=t(),ageNote=false?`<p class="soon">${tt.soon}</p>`:"";
   view.innerHTML=`<div class="col">
    ${topBar(P[H()].library)}${ageNote}
    <h2 class="sec">${tt.gamesHead}</h2>
-   <div class="cats">${lv.games.map(g=>`<button class="cat play" data-g="${g}"><img alt="" src="${PAINTED[GAME_ART[g]]}"><span class="en">${tt[g]}</span>${g==="listen"||g==="peek"?`<span class="kz">${tt[g+"Sub"]}</span>`:""}</button>`).join("")}</div>
+   <div class="cats">${lv.games.map(g=>`<button class="cat play" data-g="${g}"><img alt="" src="${PAINTED[GAME_ART[g]]}"><span class="en">${gameName(g)}</span>${g==="listen"||g==="peek"?`<span class="kz">${tt[g+"Sub"]}</span>`:""}</button>`).join("")}</div>
    <h2 class="sec">${tt.themesHead}</h2>
    <div class="cats">${lv.themes.map(id=>{const th=THEME[id];return `<button class="cat" data-c="${id}"><img alt="" src="${art(th.items[0])}"><span class="en">${th.name[L()]}</span><span class="kz tr-opt">${th.name[H()]}</span></button>`}).join("")}</div>
    </div>`;bindBack();
   view.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>lv.id==="sabi"?listen(THEME[b.dataset.c],0):learn(THEME[b.dataset.c],0));
-  view.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>({find,who:whoSays,pair:()=>memory(3),listen:()=>listen(null,0),peek:()=>peek(null)})[b.dataset.g]());
+  view.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>GAME_RUN[b.dataset.g]());
 }
 const navBtns=()=>"";
 const topBar=title=>`<div class="top">${navBtns()}${title?`<h1 class="h-sm">${title}</h1>`:""}</div>`;
@@ -259,7 +259,7 @@ function find(fixed){
    <p class="cheer" id="cheer" aria-live="polite"></p></div>`;
   bindBack();$("#again").onclick=()=>say(q);setTimeout(()=>say(q),350);
   let done=false;view.querySelectorAll(".choice").forEach(b=>b.onclick=()=>{if(done)return;const o=opts[+b.dataset.k];
-    if(o===ans){done=true;b.classList.add("right");const p=praise();$("#cheer").innerHTML=`<b>${p.main}</b>${needTr()?`<span class="tr-opt">${p.help}</span>`:""}`;say(p.main);addStar();setTimeout(()=>find(fixed),2200)}
+    if(o===ans){done=true;b.classList.add("right");const p=praise();$("#cheer").innerHTML=`<b>${p.main}</b>${needTr()?`<span class="tr-opt">${p.help}</span>`:""}`;say(p.main);addStar();later(()=>find(fixed),2200)}
     else{b.classList.remove("wrong");void b.offsetWidth;b.classList.add("wrong");say(cap(word(o)))}});
 }
 function whoSays(){
@@ -273,7 +273,7 @@ function whoSays(){
   let done=false;view.querySelectorAll(".choice").forEach(b=>b.onclick=()=>{if(done)return;const o=opts[+b.dataset.k];
     if(o===ans){done=true;b.classList.add("right");const p=praise();
       $("#cheer").innerHTML=`<b>${esc(S.soundShow(ans))}</b>${needTr()?`<span class="tr-opt">${esc(SAY[H()].soundShow(ans))} ${p.help}</span>`:""}`;
-      say(S.yes(ans));addStar();setTimeout(whoSays,2800)}
+      say(S.yes(ans));addStar();later(whoSays,2800)}
     else{b.classList.remove("wrong");void b.offsetWidth;b.classList.add("wrong");say(S.no(o))}});
 }
 function memory(pairs){
@@ -309,19 +309,23 @@ function parents(sel){
 }
 
 /* ---------- back / forward: every screen is a history entry, so the phone's back button, the iPhone swipe and the browser arrows all work ---------- */
-let navHist=[],navCur=-1,navRestoring=false;
+let navHist=[],navCur=-1,navRestoring=false,screenTok=0;
+/* a timer that only fires if the person is still on the same screen (no jumping back into a game they left) */
+function later(f,ms){const tk=screenTok;setTimeout(()=>{if(tk===screenTok)f()},ms)}
 function nav(fn){return function(...a){
   if(!navRestoring){const top=navHist[navCur];
     if(top&&top.fn===fn){navHist[navCur]={fn,a};try{history.replaceState({kd:navCur},"")}catch(e){}}   /* next card or next round: same screen */
     else{navHist=navHist.slice(0,navCur+1);navHist.push({fn,a});navCur=navHist.length-1;
       try{navCur===0?history.replaceState({kd:0},""):history.pushState({kd:navCur},"")}catch(e){}}}
-  const r=fn.apply(this,a);window.scrollTo(0,0);paintNav();return r}}
-function navShow(i){const e=navHist[i];if(!e)return;navCur=i;navRestoring=true;try{e.fn.apply(null,e.a)}finally{navRestoring=false}window.scrollTo(0,0);paintNav()}
+  screenTok++;const r=fn.apply(this,a);window.scrollTo(0,0);paintNav();return r}}
+function navShow(i){const e=navHist[i];if(!e)return;navCur=i;navRestoring=true;screenTok++;try{e.fn.apply(null,e.a)}finally{navRestoring=false}window.scrollTo(0,0);paintNav()}
 function navBack(){if(navCur>0){try{history.back()}catch(e){navShow(navCur-1)}}else home()}
 function navFwd(){if(navCur<navHist.length-1){try{history.forward()}catch(e){navShow(navCur+1)}}}
 window.addEventListener("popstate",e=>{const i=e.state&&typeof e.state.kd==="number"?e.state.kd:0;if(navHist[i])navShow(i);else{navHist=[];navCur=-1;home()}});
 const homeRaw=home;home=nav(home);library=nav(library);profiles=nav(profiles);parents=nav(parents);progress=nav(progress);phrases=nav(phrases);
 learn=nav(learn);listen=nav(listen);peek=nav(peek);find=nav(find);whoSays=nav(whoSays);memory=nav(memory);
+knock=nav(knock);bubbles=nav(bubbles);goodnight=nav(goodnight);shadow=nav(shadow);feed=nav(feed);dress=nav(dress);colorGame=nav(colorGame);
+oddone=nav(oddone);count=nav(count);missing=nav(missing);letter=nav(letter);spell=nav(spell);repeat=nav(repeat);wordpair=nav(wordpair);
 
 $("#nBack").onclick=navBack;$("#nFwd").onclick=navFwd;$("#nHome").onclick=()=>home();
 

@@ -38,7 +38,7 @@ body = '''<div class="wrap">
 </nav>
 '''
 js = ("const PAINTED=" + json.dumps(painted) + ";\nconst VOICE_CLIPS=" + json.dumps(clips, ensure_ascii=False) + ";\n"
-      + rd("content.js") + "\n" + rd("account.js") + "\n" + rd("app.js"))
+      + rd("content.js") + "\n" + rd("account.js") + "\n" + rd("app.js") + "\n" + rd("games.js"))
 page = head + "<style>" + css + "</style>\n\n" + body + "\n<script>\n" + js + "\n</script>\n"
 
 os.makedirs(os.path.join(ROOT, "build"), exist_ok=True)
