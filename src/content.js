@@ -223,7 +223,7 @@ const T={
 /* levels by age */
 const LEVELS=[
  {id:"sabi",ages:[1],name:"Сәби",themes:["animals","transport","fruit","clothes","kitchen","bath","walk","sleep"],games:["listen","peek"],tip:1},
- {id:"balapan",ages:[2],name:"Балапан",themes:["animals","transport","fruit","clothes","kitchen","bath","walk","sleep","colors"],games:["find","who"],tip:2},
+ {id:"balapan",ages:[2],name:"Балапан",themes:["animals","transport","fruit","clothes","kitchen","bath","walk","sleep","colors"],games:["find","who","pair"],tip:2},
  {id:"qulynshaq",ages:[3,4,5,6],name:"Құлыншақ",themes:["animals","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers"],games:["find","who","pair"],tip:3}];
 
 /* ---------- programme: 5 days per theme, order by level ---------- */

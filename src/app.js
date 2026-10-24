@@ -116,11 +116,11 @@ function stepsFor(p){const h=H(),PT=P[h],q=SAY[L()].where(p.focus[0]);
   switch(p.kind){case"words":return PT.how.words(q);case"words2":return PT.how.words2(SAY[L()].where(p.focus[1]||p.focus[0]));
    case"game":return PT.how.game();case"life":return PT.how.life(LIFE[p.th.life].phrases.slice(0,3).map(x=>x[L()]));
    case"hunt":return PT.how.hunt(q);default:return PT.how.review()}}
-function startDay(p){const sub={...p.th,items:p.kind==="game"||p.kind==="review"?p.th.items:p.focus};
+function startDay(p){const sub=p.th,start=Math.max(0,p.th.items.indexOf(p.focus[0]));
   if(p.kind==="game")return p.lv.id==="sabi"?peek(null,p.th.items):find(p.th);
   if(p.kind==="review")return progress(p.th.id);
   if(p.kind==="life"&&p.lv.id!=="sabi")return phrases(p.th);
-  return p.lv.id==="sabi"?listen(sub,0):learn(sub,0)}
+  return p.lv.id==="sabi"?listen(sub,start):learn(sub,start)}
 function phrases(th){view.innerHTML=`<div class="col">${topBar(th.name[H()])}${lifeBlock(th.life)}</div>`;bindBack();bindLife()}
 
 /* ---------- home: today's plan ---------- */
@@ -135,7 +135,7 @@ function home(viewDay){if(typeof viewDay!=="number")viewDay=null;
      <span class="plan-meta">${PT.week(p.week)} · ${PT.day(p.dayN)} · ${p.th.name[L()]}${needTr()?`<i class="tr-opt"> · ${thName}</i>`:""}</span>
      <h2>${PT.title[p.kind](thName)}</h2>
      <span class="mins">${PT.mins(MINUTES[p.lv.id])}</span>
-     <div class="thumbs">${p.focus.slice(0,3).map(it=>`<figure><img alt="" src="${art(it)}"><figcaption>${esc(word(it))}</figcaption></figure>`).join("")}</div>
+     <div class="thumbs all">${p.th.items.map((it,k)=>`<button class="thumb${p.focus.includes(it)?" focus":""}" data-t="${k}" aria-label="${esc(word(it))}"><img alt="" src="${art(it)}"><span>${esc(word(it))}</span></button>`).join("")}</div>
      <h3>${PT.steps}</h3>
      <ol class="steps">${stepsFor(p).map(x=>`<li>${esc(x)}</li>`).join("")}</ol>
     </div>
@@ -146,6 +146,8 @@ function home(viewDay){if(typeof viewDay!=="number")viewDay=null;
     </div>
     <div class="weekstrip" aria-label="${PT.week(p.week)}">${[0,1,2,3,4].map(i=>{const dd=wk0+i;return `<button data-day="${dd}" class="${pr.done[dd]?"ok":""}${dd===d?" cur":""}" aria-label="${PT.day(i+1)}">${i+1}</button>`}).join("")}</div>
    </section>
+   <h2 class="sec">${tt.gamesHead}</h2>
+   <div class="cats games">${p.lv.games.map(g=>`<button class="cat play" data-hg="${g}"><img alt="" src="${PAINTED[GAME_ART[g]]}"><span class="en">${tt[g]}</span></button>`).join("")}</div>
    <div class="cats two">
     <button class="cat play" id="lib"><img alt="" src="${PAINTED.owl}"><span class="en">${PT.library}</span></button>
     <button class="cat play" id="prog"><img alt="" src="${PAINTED.bear}"><span class="en">${PT.progress}</span><span class="kz">${PT.progressSub}</span></button>
@@ -156,6 +158,8 @@ function home(viewDay){if(typeof viewDay!=="number")viewDay=null;
   $("#cards").onclick=()=>parents(p.th.id);
   $("#done").onclick=()=>{pr.done[d]=true;if(d>=pr.day)pr.day=d+1;saveProg();addStar();sparkle($("#done"));setTimeout(()=>home(d),350)};
   view.querySelectorAll("[data-day]").forEach(b=>b.onclick=()=>home(+b.dataset.day));
+  view.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{const it=p.th.items[+b.dataset.t];say(cardLine(it));b.classList.remove("lift");void b.offsetWidth;b.classList.add("lift")});
+  view.querySelectorAll("[data-hg]").forEach(b=>b.onclick=()=>({find:()=>find(),who:whoSays,pair:()=>memory(3),listen:()=>listen(null,0),peek:()=>peek(null)})[b.dataset.hg]());
   $("#lib").onclick=library;$("#prog").onclick=()=>progress();
   $("#parents").onclick=()=>parents(p.th.id);
   if($("#setup"))$("#setup").onclick=()=>profiles();
