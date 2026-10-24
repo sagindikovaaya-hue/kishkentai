@@ -4,7 +4,7 @@
         ELEVENLABS_API_KEY=...
         ELEVEN_VOICE_ID=...              # voice from your ElevenLabs library
     (or set the same names as environment variables)
-    python3 tools/make_audio.py animals [--dry] [--lang en]
+    python3 tools/make_audio.py animals [--dry] [--lang en] [--limit N]
 
 Skips phrases that are already recorded, so it is safe to re-run. Optional: ELEVEN_MODEL (default eleven_v3).
 """
@@ -19,6 +19,8 @@ index_path = os.path.join(ROOT, "audio", "index.json")
 index = json.load(open(index_path, encoding="utf-8")) if os.path.exists(index_path) else {}
 todo = [t for t in texts if t["lang"] in langs and f'{t["lang"]}|{t["text"]}' not in index]
 print(f"{len(texts)} phrases, {len(todo)} to record, {sum(len(t['text']) for t in todo)} characters")
+if "--limit" in sys.argv:
+    todo = todo[: int(sys.argv[sys.argv.index("--limit") + 1])]
 if dry or not todo:
     sys.exit(0)
 
