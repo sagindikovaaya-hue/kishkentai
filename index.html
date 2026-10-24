@@ -169,6 +169,50 @@ h1{font-family:var(--f-word);font-weight:500;font-size:clamp(1.7rem,6vw,2.4rem);
 @keyframes spark{to{transform:translate(var(--x),var(--y)) scale(.2);opacity:0}}
 .tablewrap{overflow-x:auto}
 .memctl .pill[aria-pressed="true"]{background:var(--ink);color:var(--card)}
+/* today */
+.today{background:var(--card);border-radius:28px;padding:18px;display:flex;flex-direction:column;gap:14px;box-shadow:0 18px 40px -26px rgba(74,56,43,.45)}
+.today-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.today-head h1{margin:2px 0 0}
+.eyebrow{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--soft)}
+.mascot{width:76px;height:76px;object-fit:cover;object-position:50% 30%;border-radius:20px;background:var(--wash);mix-blend-mode:multiply;flex:none}
+.plan{background:var(--wash);border-radius:22px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.plan-meta{color:var(--sienna);font-size:.92rem}
+.plan-meta i{font-style:normal;color:var(--soft)}
+.plan h2{margin:0;font-family:var(--f-word);font-weight:500;font-size:1.55rem;line-height:1.2;text-wrap:balance}
+.plan h3{margin:4px 0 0;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--soft)}
+.mins{color:var(--soft);font-weight:600}
+.thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.thumbs figure{margin:0;background:var(--card);border-radius:16px;padding:4px 4px 6px;display:flex;flex-direction:column;align-items:center;min-width:0}
+.thumbs img{width:100%;aspect-ratio:3/4;object-fit:contain;mix-blend-mode:multiply}
+.thumbs figcaption{font-family:var(--f-word);font-size:1rem;text-align:center;overflow-wrap:anywhere}
+.steps{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px;font-weight:600;line-height:1.45}
+.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.act{border:0;border-radius:18px;background:var(--paper);color:var(--ink);font:inherit;padding:12px 10px;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;min-width:0}
+.act b{font-size:1rem}.act span{font-size:.8rem;color:var(--soft);font-weight:600}
+.act.main{background:var(--sienna);color:#fff;justify-content:center}
+.act.isdone{background:#E7EEDD}.act.isdone b{color:var(--good);font-size:1.4rem}
+.weekstrip{display:flex;gap:8px;justify-content:center}
+.weekstrip button{width:40px;height:40px;border-radius:50%;border:1.5px solid rgba(74,56,43,.2);background:var(--paper);font:inherit;color:var(--ink);cursor:pointer}
+.weekstrip button.ok{background:var(--good);border-color:var(--good);color:#fff}
+.weekstrip button.cur{outline:3px solid var(--sienna);outline-offset:2px}
+.nextday{align-self:center}
+.cats.two{grid-template-columns:repeat(2,1fr)!important}
+.cats.two img{aspect-ratio:4/3;object-fit:cover;object-position:50% 40%}
+@media (max-width:420px){.actions{grid-template-columns:1fr 1fr}.act.main{grid-column:1/-1;padding:14px}}
+/* progress */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stats div{background:var(--card);border-radius:18px;padding:12px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.stats b{font-family:var(--f-word);font-weight:500;font-size:2rem;font-variant-numeric:tabular-nums}
+.stats span{color:var(--soft);font-size:.85rem;text-align:center}
+.pgroup h2{margin:0 0 8px;font-family:var(--f-word);font-weight:500;font-size:1.2rem}
+.pgroup h2 i{font-style:normal;color:var(--soft);font-size:.95rem}
+.wchips{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+.wchip{border:2px solid transparent;background:var(--card);border-radius:16px;padding:6px 6px 8px;cursor:pointer;font:inherit;color:var(--ink);display:flex;flex-direction:column;align-items:center;gap:1px;min-width:0}
+.wchip img{width:100%;aspect-ratio:1;object-fit:contain;mix-blend-mode:multiply}
+.wchip b{font-family:var(--f-word);font-weight:500;font-size:.95rem;overflow-wrap:anywhere;text-align:center}
+.wchip span{font-size:.72rem;color:var(--soft)}
+.wchip.s1{border-color:#D4A863}.wchip.s1 span{color:#A07A2E}
+.wchip.s2{border-color:var(--good);background:#EEF3E7}.wchip.s2 span{color:var(--good)}
 </style>
 </head>
 <body>
@@ -367,6 +411,40 @@ const LEVELS=[
  {id:"balapan",ages:[2],name:"Балапан",themes:["animals","transport","fruit","clothes","kitchen","bath","colors"],games:["find","who"],tip:2},
  {id:"qulynshaq",ages:[3,4,5,6],name:"Құлыншақ",themes:["animals","transport","fruit","clothes","kitchen","bath","colors","numbers"],games:["find","who","pair"],tip:3}];
 
+/* ---------- programme: 5 days per theme, order by level ---------- */
+const PROGRAM={sabi:["animals","kitchen","clothes","bath","transport","fruit"],
+  balapan:["animals","kitchen","clothes","bath","transport","fruit","colors"],
+  qulynshaq:["animals","kitchen","clothes","bath","transport","fruit","colors","numbers"]};
+const MINUTES={sabi:5,balapan:10,qulynshaq:15};
+const DAY_KIND=["words","words2","game","life","review"];
+const P={
+ kk:{academy:"Ойын академиясы",today:"Бүгін ойнаймыз!",week:n=>`${n}-апта`,day:n=>`${n}-күн`,mins:n=>`${n} минут бірге`,
+  start:"Бастау",cards:"Карточкалар",cardsSub:"Басып шығару",done:"Ойнадық ✓",doneSub:"Белгілеу",doneYet:"Бүгін ойнадық! Ертең жаңа тапсырма.",
+  next:"Келесі күнге өту →",library:"Ойындар мен тақырыптар кітапханасы",progress:"Прогресс",progressSub:"Бала не біледі",
+  steps:"Не істейміз",daysDone:n=>`${n} күн ойналды`,
+  title:{words:th=>`Танысамыз: ${th}`,words2:th=>`Жаңа сөздер: ${th}`,game:()=>`Ойнаймыз!`,life:th=>`Күнделікті өмірде: ${th}`,hunt:th=>`Үйден іздейміз: ${th}`,review:th=>`Қайталаймыз: ${th}`},
+  how:{
+   words:q=>["Карточкаларды бірге қараңыз, әр сөзді 2–3 рет айтыңыз.",`Баладан көрсетуін сұраңыз: «${q}»`,"Үйден осындай ойыншық не зат тауып, атын бірге айтыңыз."],
+   words2:q=>["Кешегі сөздерді қайталап, жаңаларымен танысыңыз.",`Сұраңыз: «${q}» — бала саусағымен көрсетсін.`,"Әр дұрыс жауапқа күліп, мақтаңыз."],
+   game:()=>["Ойынды бірге ашыңыз — экранды бала өзі бассын.","Дұрыс тапса — бірге қуаныңыз.","Қате болса, ұрыспаңыз: дұрыс сөзді жай ғана қайталаңыз."],
+   life:ps=>["Бүгін осы фразаларды күні бойы айтыңыз:",...ps.map(p=>`«${p}»`)],
+   hunt:q=>["3 ойыншықты не затты бөлмеге жасырыңыз.",`«${q}» деп сұрап, бірге іздеңіз.`,"Тапқанда сөзді бірге айтып, қол соғыңыз."],
+   review:()=>["Барлық карточканы тағы бір рет қараңыз.","Төменде бала нені түсінетінін және айтатынын белгілеңіз.","Келесі аптада — жаңа тақырып!"]},
+  status:["—","түсінеді","айтады"],understands:"түсінеді",says:"айтады",tapWord:"Сөзді басыңыз: бір рет — түсінеді, екі рет — айтады."},
+ ru:{academy:"Игровая академия",today:"Сегодня играем!",week:n=>`Неделя ${n}`,day:n=>`День ${n}`,mins:n=>`${n} минут вместе`,
+  start:"Начать",cards:"Карточки",cardsSub:"Распечатать",done:"Поиграли ✓",doneSub:"Отметить",doneYet:"Сегодня уже поиграли! Завтра новое задание.",
+  next:"Перейти к следующему дню →",library:"Библиотека игр и тем",progress:"Прогресс",progressSub:"Что знает ребёнок",
+  steps:"Что делаем",daysDone:n=>`Сыграно дней: ${n}`,
+  title:{words:th=>`Знакомимся: ${th}`,words2:th=>`Новые слова: ${th}`,game:()=>`Играем!`,life:th=>`В жизни: ${th}`,hunt:th=>`Ищем дома: ${th}`,review:th=>`Повторяем: ${th}`},
+  how:{
+   words:q=>["Посмотрите карточки вместе, назовите каждое слово 2–3 раза.",`Попросите показать: «${q}»`,"Найдите дома такую игрушку или предмет и назовите вместе."],
+   words2:q=>["Повторите вчерашние слова и познакомьтесь с новыми.",`Спросите: «${q}» — пусть покажет пальчиком.`,"Улыбайтесь и хвалите за каждый ответ."],
+   game:()=>["Откройте игру вместе — пусть ребёнок сам нажимает на экран.","Угадал — радуйтесь вместе.","Ошибся — не ругайте, просто спокойно повторите правильное слово."],
+   life:ps=>["Сегодня говорите эти фразы весь день:",...ps.map(p=>`«${p}»`)],
+   hunt:q=>["Спрячьте в комнате 3 игрушки или предмета.",`Спросите «${q}» и ищите вместе.`,"Нашли — назовите слово вместе и похлопайте."],
+   review:()=>["Ещё раз посмотрите все карточки.","Ниже отметьте, что ребёнок понимает и что говорит сам.","На следующей неделе — новая тема!"]},
+  status:["—","понимает","говорит"],understands:"понимает",says:"говорит",tapWord:"Нажмите на слово: один раз — понимает, два раза — говорит."}};
+
 /* ---------- storage, profiles ---------- */
 const $=s=>document.querySelector(s),view=$("#view");
 const store={get(k,v){try{const x=localStorage.getItem(k);return x==null?v:JSON.parse(x)}catch(e){return v}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
@@ -391,7 +469,7 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",
 function addStar(){const k=kid();k.stars=(k.stars||0)+1;if(!k.sample)saveKids();paintHeader()}
 function paintHeader(){const k=kid();
   $("#kidBtn").innerHTML=`<b>${esc(k.name)}</b><span>${t().ageWord(k.age)} · ${LANGS[k.learn]}</span>`;
-  $("#stars").textContent="★ "+(k.stars||0);
+  $("#stars").textContent="★ "+(k.stars||0);$("#stars").hidden=k.age<2;
   $("#brandSub").textContent=t().sub;
   $("#trBtn").textContent=t().tr;$("#trBtn").setAttribute("aria-pressed",showTr);$("#trBtn").hidden=!needTr();
   document.body.classList.toggle("no-tr",!showTr||!needTr());
@@ -460,33 +538,100 @@ function profiles(editId){
   $("#kidform").onsubmit=e=>{e.preventDefault();const f=readForm();if(!f.name){$("#kName").focus();return}
     if(editing)Object.assign(editing,f);else{const nk={id:"k"+Date.now().toString(36),stars:0,...f};kids.push(nk);curId=nk.id}
     saveKids();paintHeader();home()};
-  if($("#back"))$("#back").onclick=home;
+  if($("#back"))$("#back").onclick=()=>home();
   view.querySelectorAll("[data-id]").forEach(b=>b.onclick=()=>{curId=b.dataset.id;saveKids();paintHeader();home()});
   view.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>profiles(b.dataset.edit));
   if($("#kDel"))$("#kDel").onclick=()=>{const b=$("#kDel");if(!b.dataset.sure){b.dataset.sure=1;b.textContent=(H()==="ru"?"Точно удалить?":"Шынымен өшіру?");return}
     kids=kids.filter(x=>x!==editing);curId=kids[0]?kids[0].id:null;saveKids();paintHeader();kids.length?home():profiles()};
 }
 
-/* ---------- home ---------- */
-const GAME_ART={find:"owl",who:"duck",pair:"mittens",listen:"rabbit",peek:"fox"};
-function home(){
-  const lv=level(),k=kid(),tt=t(),ageNote=k.age>=4?`<p class="soon">${tt.soon}</p>`:"";
+/* ---------- programme state ---------- */
+const prog=()=>{const k=kid();k.prog=k.prog||{day:0,done:{},w:{}};return k.prog};
+const saveProg=()=>{if(!kid().sample)saveKids()};
+function dayPlan(d){
+  const lv=level(),seq=PROGRAM[lv.id],th=THEME[seq[Math.floor(d/5)%seq.length]],kind=DAY_KIND[d%5],it=th.items,n=it.length;
+  const focus={words:it.slice(0,3),words2:it.slice(3,6),game:it.slice(0,6),life:[it[6%n],it[7%n],it[0]],review:it.slice(0,3)}[kind];
+  return {d,lv,th,kind:kind==="life"&&!th.life?"hunt":kind,focus,week:Math.floor(d/5)+1,dayN:d%5+1}}
+function stepsFor(p){const h=H(),PT=P[h],q=SAY[L()].where(p.focus[0]);
+  switch(p.kind){case"words":return PT.how.words(q);case"words2":return PT.how.words2(SAY[L()].where(p.focus[1]||p.focus[0]));
+   case"game":return PT.how.game();case"life":return PT.how.life(LIFE[p.th.life].phrases.slice(0,3).map(x=>x[L()]));
+   case"hunt":return PT.how.hunt(q);default:return PT.how.review()}}
+function startDay(p){const sub={...p.th,items:p.kind==="game"||p.kind==="review"?p.th.items:p.focus};
+  if(p.kind==="game")return p.lv.id==="sabi"?peek(null,p.th.items):find(p.th);
+  if(p.kind==="review")return progress(p.th.id);
+  if(p.kind==="life"&&p.lv.id!=="sabi")return phrases(p.th);
+  return p.lv.id==="sabi"?listen(sub,0):learn(sub,0)}
+function phrases(th){view.innerHTML=`<div class="col">${topBar(th.name[H()])}${lifeBlock(th.life)}</div>`;bindBack();bindLife()}
+
+/* ---------- home: today's plan ---------- */
+function home(viewDay){if(typeof viewDay!=="number")viewDay=null;
+  const k=kid(),tt=t(),PT=P[H()],pr=prog(),d=viewDay==null?pr.day:viewDay,p=dayPlan(d),thName=p.th.name[H()],done=!!pr.done[d];
+  const wk0=Math.floor(pr.day/5)*5;
   view.innerHTML=`<div class="col">
    ${k.sample?`<button class="setup" id="setup"><b>${tt.kidTitle}</b><span>${tt.kidIntro}</span><em>${tt.start} →</em></button>`:""}
-   <div class="hello"><h1>${tt.hello(esc(k.name))}</h1><span class="lvl">${tt.level}: ${lv.name}</span></div>${ageNote}
+   <section class="today">
+    <div class="today-head"><div><span class="eyebrow">${PT.academy} · ${esc(k.name)}</span><h1>${PT.today}</h1></div><img class="mascot" alt="" src="${PAINTED.rabbit}"></div>
+    <div class="plan">
+     <span class="plan-meta">${PT.week(p.week)} · ${PT.day(p.dayN)} · ${p.th.name[L()]}${needTr()?`<i class="tr-opt"> · ${thName}</i>`:""}</span>
+     <h2>${PT.title[p.kind](thName)}</h2>
+     <span class="mins">${PT.mins(MINUTES[p.lv.id])}</span>
+     <div class="thumbs">${p.focus.slice(0,3).map(it=>`<figure><img alt="" src="${art(it)}"><figcaption>${esc(word(it))}</figcaption></figure>`).join("")}</div>
+     <h3>${PT.steps}</h3>
+     <ol class="steps">${stepsFor(p).map(x=>`<li>${esc(x)}</li>`).join("")}</ol>
+    </div>
+    <div class="actions">
+     <button class="act main" id="go"><b>▶ ${PT.start}</b></button>
+     <button class="act" id="cards"><b>${PT.cards}</b><span>${PT.cardsSub}</span></button>
+     <button class="act${done?" isdone":""}" id="done"><b>${done?"✓":PT.done}</b><span>${done?PT.doneYet:PT.doneSub}</span></button>
+    </div>
+    <div class="weekstrip" aria-label="${PT.week(p.week)}">${[0,1,2,3,4].map(i=>{const dd=wk0+i;return `<button data-day="${dd}" class="${pr.done[dd]?"ok":""}${dd===d?" cur":""}" aria-label="${PT.day(i+1)}">${i+1}</button>`}).join("")}</div>
+   </section>
+   <div class="cats two">
+    <button class="cat play" id="lib"><img alt="" src="${PAINTED.owl}"><span class="en">${PT.library}</span></button>
+    <button class="cat play" id="prog"><img alt="" src="${PAINTED.bear}"><span class="en">${PT.progress}</span><span class="kz">${PT.progressSub}</span></button>
+   </div>
+   <button class="parents" id="parents"><b>${tt.parents}</b><span>${tt.parentsSub}</span></button>
+   <div class="note">${tt.tip[p.lv.tip]}</div></div>`;
+  $("#go").onclick=()=>startDay(p);
+  $("#cards").onclick=()=>parents(p.th.id);
+  $("#done").onclick=()=>{pr.done[d]=true;if(d>=pr.day)pr.day=d+1;saveProg();addStar();sparkle($("#done"));setTimeout(()=>home(d),350)};
+  view.querySelectorAll("[data-day]").forEach(b=>b.onclick=()=>home(+b.dataset.day));
+  $("#lib").onclick=library;$("#prog").onclick=()=>progress();
+  $("#parents").onclick=()=>parents(p.th.id);
+  if($("#setup"))$("#setup").onclick=()=>profiles();
+  if(done&&d===pr.day-1){const nb=document.createElement("button");nb.className="pill nextday";nb.textContent=PT.next;nb.onclick=()=>home(pr.day);$("#done").closest(".today").appendChild(nb)}
+}
+
+/* ---------- progress ---------- */
+function progress(onlyTheme){
+  const PT=P[H()],pr=prog(),lv=level(),ths=onlyTheme?[THEME[onlyTheme]]:PROGRAM[lv.id].map(id=>THEME[id]);
+  const all=PROGRAM[lv.id].flatMap(id=>THEME[id].items),und=all.filter(it=>(pr.w[it.key+"@"+it.theme]||0)>=1).length,sy=all.filter(it=>(pr.w[it.key+"@"+it.theme]||0)>=2).length;
+  view.innerHTML=`<div class="col">${topBar(PT.progress)}
+   <div class="stats"><div><b>${und}</b><span>${PT.understands}</span></div><div><b>${sy}</b><span>${PT.says}</span></div><div><b>${Object.keys(pr.done).length}</b><span>${PT.daysDone("").replace(/[: ]+$/,"")}</span></div></div>
+   <p class="sub">${PT.tapWord}</p>
+   ${ths.map(th=>`<section class="pgroup"><h2>${th.name[L()]}${needTr()?` <i class="tr-opt">· ${th.name[H()]}</i>`:""}</h2><div class="wchips">${th.items.map(it=>{const id=it.key+"@"+it.theme,v=pr.w[id]||0;
+     return `<button class="wchip s${v}" data-w="${id}"><img alt="" src="${art(it)}"><b>${esc(word(it))}</b><span>${PT.status[v]}</span></button>`}).join("")}</div></section>`).join("")}</div>`;
+  bindBack();
+  view.querySelectorAll("[data-w]").forEach(b=>b.onclick=()=>{const v=((pr.w[b.dataset.w]||0)+1)%3;pr.w[b.dataset.w]=v;saveProg();
+    b.className="wchip s"+v;b.querySelector("span").textContent=PT.status[v];if(v===2)sparkle(b)});
+}
+
+/* ---------- library (all games and themes) ---------- */
+const GAME_ART={find:"owl",who:"duck",pair:"mittens",listen:"rabbit",peek:"fox"};
+function library(){
+  const lv=level(),k=kid(),tt=t(),ageNote=k.age>=4?`<p class="soon">${tt.soon}</p>`:"";
+  view.innerHTML=`<div class="col">
+   ${topBar(P[H()].library)}${ageNote}
    <h2 class="sec">${tt.gamesHead}</h2>
    <div class="cats">${lv.games.map(g=>`<button class="cat play" data-g="${g}"><img alt="" src="${PAINTED[GAME_ART[g]]}"><span class="en">${tt[g]}</span>${g==="listen"||g==="peek"?`<span class="kz">${tt[g+"Sub"]}</span>`:""}</button>`).join("")}</div>
    <h2 class="sec">${tt.themesHead}</h2>
    <div class="cats">${lv.themes.map(id=>{const th=THEME[id];return `<button class="cat" data-c="${id}"><img alt="" src="${art(th.items[0])}"><span class="en">${th.name[L()]}</span><span class="kz tr-opt">${th.name[H()]}</span></button>`}).join("")}</div>
-   <button class="parents" id="parents"><b>${tt.parents}</b><span>${tt.parentsSub}</span></button>
-   <div class="note">${tt.tip[lv.tip]}</div></div>`;
+   </div>`;bindBack();
   view.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>lv.id==="sabi"?listen(THEME[b.dataset.c],0):learn(THEME[b.dataset.c],0));
   view.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>({find,who:whoSays,pair:()=>memory(3),listen:()=>listen(null,0),peek:()=>peek(null)})[b.dataset.g]());
-  $("#parents").onclick=()=>parents(lv.themes.includes("clothes")?"clothes":lv.themes[0]);
-  if($("#setup"))$("#setup").onclick=()=>profiles();
 }
 const topBar=title=>`<div class="top"><button class="pill" id="back">${t().back}</button>${title?`<h1 class="h-sm">${title}</h1>`:""}</div>`;
-const bindBack=()=>{$("#back").onclick=home};
+const bindBack=()=>{$("#back").onclick=()=>home()};
 function praise(){const l=L(),i=rand(4);return{main:PRAISE[l][i],help:PRAISE[H()][i]}}
 
 /* ---------- 1–2 years: listen (tap a big picture) ---------- */
@@ -507,14 +652,14 @@ function sparkle(el){const r=el.getBoundingClientRect();for(let k=0;k<8;k++){con
   document.body.appendChild(s);setTimeout(()=>s.remove(),1000)}}
 
 /* ---------- 1–2 years: peekaboo ---------- */
-function peek(last){
-  const pool=babyPool(null).filter(x=>x!==last),it=pool[rand(pool.length)];
+function peek(last,base){
+  const pool=(base||babyPool(null)).filter(x=>x!==last),it=pool[rand(pool.length)];
   view.innerHTML=`<div class="col">${topBar(t().peek)}
    <button class="baby peekbox" id="peek" aria-label="${t().peek}"><img alt="" src="${art(it)}"><span class="cloud" aria-hidden="true"></span><span class="bw">${esc(cap(word(it)))}</span></button>
    <div class="babynav"><span class="hint">${t().peekSub}</span><button class="next" id="next" aria-label="→" hidden>→</button></div></div>`;
   bindBack();let open=false;const b=$("#peek");
   b.onclick=()=>{if(!open){open=true;b.classList.add("open");say(SAY[L()].peek(it));$("#next").hidden=false;sparkle(b);addStar()}else{say(cardLine(it));b.classList.remove("hop");void b.offsetWidth;b.classList.add("hop")}};
-  $("#next").onclick=()=>peek(it);
+  $("#next").onclick=()=>peek(it,base);
 }
 
 /* ---------- 2+ years: learn cards ---------- */
@@ -538,15 +683,15 @@ function bindLife(){view.querySelectorAll(".life[data-life]").forEach(sec=>{cons
 
 /* ---------- games ---------- */
 function gamePool(filter){const lv=level();return lv.themes.map(id=>THEME[id]).filter(filter||(()=>true))}
-function find(){
-  const ths=gamePool(),th=ths[rand(ths.length)],opts=shuffle(th.items.slice()).slice(0,3),ans=opts[rand(3)],q=SAY[L()].where(ans);
+function find(fixed){
+  const ths=gamePool(),th=fixed||ths[rand(ths.length)],opts=shuffle(th.items.slice()).slice(0,3),ans=opts[rand(3)],q=SAY[L()].where(ans);
   view.innerHTML=`<div class="col">${topBar()}
    <div class="ask"><span class="en">${esc(q)}</span>${needTr()?`<span class="kz tr-opt">${esc(SAY[H()].where(ans))}</span>`:""}<button class="listen" id="again">${t().again}</button></div>
    <div class="choices">${opts.map((o,k)=>`<button class="choice" data-k="${k}" aria-label="${esc(word(o))}"><img alt="" src="${art(o)}"></button>`).join("")}</div>
    <p class="cheer" id="cheer" aria-live="polite"></p></div>`;
   bindBack();$("#again").onclick=()=>say(q);setTimeout(()=>say(q),350);
   let done=false;view.querySelectorAll(".choice").forEach(b=>b.onclick=()=>{if(done)return;const o=opts[+b.dataset.k];
-    if(o===ans){done=true;b.classList.add("right");const p=praise();$("#cheer").innerHTML=`<b>${p.main}</b>${needTr()?`<span class="tr-opt">${p.help}</span>`:""}`;say(p.main);addStar();setTimeout(find,2200)}
+    if(o===ans){done=true;b.classList.add("right");const p=praise();$("#cheer").innerHTML=`<b>${p.main}</b>${needTr()?`<span class="tr-opt">${p.help}</span>`:""}`;say(p.main);addStar();setTimeout(()=>find(fixed),2200)}
     else{b.classList.remove("wrong");void b.offsetWidth;b.classList.add("wrong");say(cap(word(o)))}});
 }
 function whoSays(){
@@ -597,7 +742,7 @@ function parents(sel){
 
 /* ---------- start ---------- */
 paintHeader();
-Promise.race([document.fonts.load('800 300px Nunito'),new Promise(r=>setTimeout(r,1500))]).then(buildDigits,buildDigits).then(home,home);
+Promise.race([document.fonts.load('800 300px Nunito'),new Promise(r=>setTimeout(r,1500))]).then(buildDigits,buildDigits).then(()=>home(),()=>home());
 
 </script>
 </body>
