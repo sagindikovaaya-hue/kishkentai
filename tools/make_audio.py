@@ -1,7 +1,9 @@
 """Record the phrases of a theme with ElevenLabs and register them in audio/index.json.
 
-    export ELEVENLABS_API_KEY=...        # never commit it
-    export ELEVEN_VOICE_ID=...           # voice from your ElevenLabs library
+    ~/.config/kishkentai/elevenlabs.env  # outside the repo, two lines:
+        ELEVENLABS_API_KEY=...
+        ELEVEN_VOICE_ID=...              # voice from your ElevenLabs library
+    (or set the same names as environment variables)
     python3 tools/make_audio.py animals [--dry] [--lang en]
 
 Skips phrases that are already recorded, so it is safe to re-run. Optional: ELEVEN_MODEL (default eleven_v3).
@@ -20,9 +22,15 @@ print(f"{len(texts)} phrases, {len(todo)} to record, {sum(len(t['text']) for t i
 if dry or not todo:
     sys.exit(0)
 
+conf = os.path.expanduser("~/.config/kishkentai/elevenlabs.env")
+if os.path.exists(conf):
+    for line in open(conf):
+        if "=" in line and not line.startswith("#"):
+            a, b = line.strip().split("=", 1)
+            os.environ.setdefault(a, b)
 key, voice = os.environ.get("ELEVENLABS_API_KEY"), os.environ.get("ELEVEN_VOICE_ID")
 if not key or not voice:
-    sys.exit("set ELEVENLABS_API_KEY and ELEVEN_VOICE_ID first")
+    sys.exit("put ELEVENLABS_API_KEY and ELEVEN_VOICE_ID in ~/.config/kishkentai/elevenlabs.env")
 model = os.environ.get("ELEVEN_MODEL", "eleven_v3")
 
 for n, t in enumerate(todo, 1):
