@@ -96,6 +96,12 @@ git add -A && git commit -m "…" && git push
   (в т.ч. Lauren, `nf4MCGNSdM0hxM95ZBQR`) через API на бесплатном тарифе недоступны** (402) — нужно $5 на баланс.
   Сейчас записан английский голосом Sarah (`EXAVITQu4vr4xnSDxMaL`, стандартный), 430 фраз, все 10 тем.
   Ключ без права `voices_read` — список голосов получить нельзя.
+- **Telegram-бот** @KishkentaiKidsBot: Supabase Edge Function `telegram-bot` (`supabase/functions/telegram-bot/index.ts`,
+  Verify JWT выключен), таблица `telegram_links`, расписание pg_cron `kishkentai-weekly` (воскресенье 14:00 UTC =
+  19:00 Алматы) — `supabase/telegram.sql`. Секреты функции: TELEGRAM_BOT_TOKEN, TELEGRAM_WEBHOOK_SECRET, CRON_SECRET
+  (заданы в Supabase, в репозиторий не класть). На сайте: кнопка «Telegram-ға қосу» в аккаунте (`TG_BOT` в account.js)
+  → t.me/KishkentaiKidsBot?start=<user id>. Команды бота: /report, /stop. Отчёт = `report()` в функции,
+  тот же расчёт, что `weekStats()` в app.js (дни из `prog.act`, слова из `prog.w`/`prog.wt`).
 - Ключей и паролей в репозиторий **не класть**.
 
 ## Что сделано / что дальше

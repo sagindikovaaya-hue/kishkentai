@@ -1,5 +1,5 @@
 /* ---------- parent account: email code sign-in, family sync (Supabase) ---------- */
-const TG_BOT="";   /* the bot username without @, e.g. "KishkentaiKidsBot"; empty = button hidden */
+const TG_BOT="KishkentaiKidsBot";   /* the bot username without @, e.g. "KishkentaiKidsBot"; empty = button hidden */
 const SB_URL="https://ktrgvmuctcjyniptwvjl.supabase.co",SB_KEY="sb_publishable_LeR42wJ8_lBVI__Jq5bmHQ_NXqAcorm";
 let sb=null,sbUser=null,syncTimer=0,syncState="";
 const A={
