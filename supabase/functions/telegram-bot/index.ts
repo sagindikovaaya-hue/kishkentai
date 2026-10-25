@@ -1,7 +1,11 @@
 // Kishkentai Telegram bot (Supabase Edge Function "telegram-bot").
 // 1) Telegram webhook: a parent opens t.me/<bot>?start=<user id> from the site -> the chat is linked to the family.
-//    Commands: /report (send the report now), /stop (unsubscribe).
+//    Commands: /report (send the report now), /stop (unsubscribe); for the owner also /pending (payments waiting).
 // 2) Weekly: pg_cron calls  ...?task=weekly  with header x-cron-secret -> every linked parent gets the week's report.
+// 3) Payments: a new row in pay_requests makes the database call  ...?task=payreq  (body {id}) -> the owner gets
+//    the request with buttons "1 month / 1 year / reject"; a tap opens access in subscriptions and tells the parent.
+//    The owner = the Telegram chat linked to an account whose subscriptions.plan is 'owner'.
+// 4) Daily: pg_cron calls  ...?task=daily  -> parents whose access ends in 3 days get a reminder.
 // Secrets (Edge Functions -> Secrets): TELEGRAM_BOT_TOKEN, TELEGRAM_WEBHOOK_SECRET, CRON_SECRET.
 // Deploy with "Verify JWT" switched OFF (Telegram does not send a Supabase token).
 import { createClient } from "npm:@supabase/supabase-js@2.45.4";
@@ -48,6 +52,68 @@ async function send(chat: number, text: string) {
     body: JSON.stringify({ chat_id: chat, text, reply_markup: { inline_keyboard: [[{ text: "Kishkentai ↗", url: "https://kishkentai.com/" }]] } }),
   });
 }
+async function tg(method: string, body: unknown) {
+  const r = await fetch(`https://api.telegram.org/bot${TOKEN}/${method}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
+  return r.json().catch(() => ({}));
+}
+
+/* ---------- payments ---------- */
+const PLAN_TEXT: Record<string, string> = { month: "1 ай / 1 месяц · 4 490 ₸", year: "1 жыл / 1 год · 44 900 ₸" };
+type PayReq = { id: number; user_id: string; email: string | null; plan: string; status: string; created_at: string };
+async function ownerChats(): Promise<number[]> {
+  const { data: owners } = await db.from("subscriptions").select("user_id").eq("plan", "owner");
+  const ids = (owners ?? []).map((o) => o.user_id);
+  if (!ids.length) return [];
+  const { data } = await db.from("telegram_links").select("chat_id").in("user_id", ids);
+  return (data ?? []).map((l) => Number(l.chat_id));
+}
+const reqText = (r: PayReq) => `💳 Төлем сұрауы / Запрос оплаты #${r.id}\n${r.email ?? r.user_id}\n${PLAN_TEXT[r.plan] ?? r.plan}\n${new Date(r.created_at).toLocaleString("ru-RU", { timeZone: "Asia/Almaty" })}\n\nKaspi-ден тексеріңіз, сосын ашыңыз. / Проверьте поступление в Kaspi и откройте доступ.`;
+const reqButtons = (r: PayReq) => ({ inline_keyboard: [
+  [{ text: "✅ 1 ай / месяц", callback_data: `pay:${r.id}:month` }, { text: "✅ 1 жыл / год", callback_data: `pay:${r.id}:year` }],
+  [{ text: "✖️ Жоқ / Отклонить", callback_data: `pay:${r.id}:no` }]] });
+async function notifyOwner(r: PayReq) {
+  for (const chat of await ownerChats()) await tg("sendMessage", { chat_id: chat, text: reqText(r), reply_markup: reqButtons(r) });
+}
+/* the owner tapped a button: extend from today or from the current end date, whichever is later */
+async function decide(cb: { id: string; from: { id: number }; data: string; message?: { chat: { id: number }; message_id: number } }) {
+  const answer = (text: string) => tg("answerCallbackQuery", { callback_query_id: cb.id, text });
+  if (!(await ownerChats()).includes(cb.from.id)) return answer("Тек иесі / Только владелец");
+  const [, idStr, choice] = cb.data.split(":");
+  const { data: r } = await db.from("pay_requests").select("*").eq("id", Number(idStr)).maybeSingle();
+  if (!r) return answer("Табылмады / Не найдено");
+  const edit = (text: string) => cb.message && tg("editMessageText", { chat_id: cb.message.chat.id, message_id: cb.message.message_id, text });
+  if (r.status !== "new") { await edit(reqText(r).split("\n\n")[0] + `\n\nБұрын шешілген / Уже обработано: ${r.status}`); return answer("Бұрын шешілген / Уже обработано"); }
+  const { data: link } = await db.from("telegram_links").select("chat_id").eq("user_id", r.user_id).maybeSingle();
+  if (choice === "no") {
+    await db.from("pay_requests").update({ status: "rejected" }).eq("id", r.id);
+    await edit(reqText(r).split("\n\n")[0] + "\n\n✖️ Қабылданбады / Отклонено");
+    if (link) await send(Number(link.chat_id), "Төлем табылмады. Сұрақ болса, жазыңыз.\nОплата не найдена. Если есть вопрос — напишите нам.");
+    return answer("✖️");
+  }
+  const { data: sub } = await db.from("subscriptions").select("plan, paid_until").eq("user_id", r.user_id).maybeSingle();
+  const now = new Date(), cur = sub?.paid_until ? new Date(sub.paid_until) : now, from = cur > now ? cur : now, until = new Date(from);
+  until.setMonth(until.getMonth() + (choice === "year" ? 12 : 1));
+  const { error } = await db.from("subscriptions").upsert({ user_id: r.user_id, plan: sub?.plan === "owner" ? "owner" : choice, paid_until: until.toISOString() });
+  if (error) return answer("Қате / Ошибка: " + error.message);
+  await db.from("pay_requests").update({ status: "done" }).eq("id", r.id);
+  const day = until.toLocaleDateString("ru-RU", { timeZone: "Asia/Almaty" });
+  await edit(reqText(r).split("\n\n")[0] + `\n\n✅ Ашылды / Открыто до ${day}`);
+  if (link) await send(Number(link.chat_id), `✅ Kishkentai толық ашылды, ${day} дейін. Рақмет!\n✅ Полный доступ открыт до ${day}. Спасибо!`);
+  return answer("✅ " + day);
+}
+async function remind() {
+  const from = new Date(Date.now() + 2 * 864e5).toISOString(), to = new Date(Date.now() + 3 * 864e5).toISOString();
+  const { data } = await db.from("subscriptions").select("user_id, paid_until").neq("plan", "owner").gt("paid_until", from).lte("paid_until", to);
+  let n = 0;
+  for (const s of data ?? []) {
+    const { data: link } = await db.from("telegram_links").select("chat_id").eq("user_id", s.user_id).maybeSingle();
+    if (!link) continue;
+    const day = new Date(s.paid_until).toLocaleDateString("ru-RU", { timeZone: "Asia/Almaty" });
+    try { await send(Number(link.chat_id), `⏰ Kishkentai ${day} дейін ашық. Жалғастыру үшін сайтта төлем жасаңыз.\n⏰ Доступ открыт до ${day}. Чтобы продолжить, оплатите на сайте.`); n++; } catch (_) { /* skip */ }
+  }
+  return n;
+}
+
 async function sendReports(userId: string, chat: number) {
   const { data } = await db.from("families").select("kids").eq("user_id", userId).maybeSingle();
   const kids: Kid[] = data?.kids ?? [];
@@ -63,8 +129,20 @@ Deno.serve(async (req) => {
     for (const l of data ?? []) { try { await sendReports(l.user_id, l.chat_id); } catch (_) { /* one family failing must not stop the rest */ } }
     return new Response(`sent to ${data?.length ?? 0}`);
   }
+  if (url.searchParams.get("task") === "daily") {
+    if (!CRON || req.headers.get("x-cron-secret") !== CRON) return new Response("forbidden", { status: 403 });
+    return new Response(`reminded ${await remind()}`);
+  }
+  /* called by the database trigger on pay_requests; needs no secret: it only announces a request that is still new and not announced yet */
+  if (url.searchParams.get("task") === "payreq") {
+    const { id } = await req.json().catch(() => ({ id: 0 }));
+    const { data: r } = await db.from("pay_requests").update({ notified_at: new Date().toISOString() }).eq("id", Number(id)).eq("status", "new").is("notified_at", null).select("*").maybeSingle();
+    if (r) await notifyOwner(r);
+    return new Response(r ? "notified" : "skip");
+  }
   if (!HOOK || req.headers.get("x-telegram-bot-api-secret-token") !== HOOK) return new Response("forbidden", { status: 403 });
   const upd = await req.json().catch(() => ({}));
+  if (upd.callback_query?.data?.startsWith("pay:")) { await decide(upd.callback_query); return new Response("ok"); }
   const msg = upd.message;
   if (!msg?.text) return new Response("ok");
   const chat: number = msg.chat.id, text: string = msg.text.trim();
@@ -80,6 +158,11 @@ Deno.serve(async (req) => {
   } else if (text.startsWith("/report")) {
     const { data } = await db.from("telegram_links").select("user_id").eq("chat_id", chat).maybeSingle();
     if (data) await sendReports(data.user_id, chat); else await send(chat, "Алдымен сайттан қосылыңыз. / Сначала подключитесь на сайте.");
+  } else if (text.startsWith("/pending")) {
+    if (!(await ownerChats()).includes(chat)) return new Response("ok");
+    const { data } = await db.from("pay_requests").select("*").eq("status", "new").order("created_at");
+    if (!data?.length) await send(chat, "Күтіп тұрған төлем жоқ. / Нет ожидающих оплат.");
+    for (const r of data ?? []) await tg("sendMessage", { chat_id: chat, text: reqText(r), reply_markup: reqButtons(r) });
   } else if (text.startsWith("/stop")) {
     await db.from("telegram_links").delete().eq("chat_id", chat);
     await send(chat, "Хабарламалар тоқтатылды. / Отчёты отключены.");
