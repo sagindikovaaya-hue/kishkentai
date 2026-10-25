@@ -171,3 +171,12 @@
 .wword.sel{border-color:var(--sienna)}
 .wword.ok,.wpic.ok{border-color:var(--good);background:#EEF3E7;opacity:.7}
 .wpic.wrong{animation:shake .45s}
+.week{background:var(--card);border-radius:22px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.week h2{margin:0;font-family:var(--f-word);font-weight:500;font-size:1.3rem}
+.stats.four{grid-template-columns:repeat(4,1fr)}
+.stats.four div{background:var(--paper);padding:10px 4px}
+.stats.four b{font-size:1.5rem}
+.stats b i{font-style:normal;font-size:.8rem;color:var(--good);margin-left:2px;vertical-align:super}
+.share a{text-decoration:none;display:inline-flex;align-items:center}
+@media(max-width:420px){.stats.four{grid-template-columns:repeat(2,1fr)}}
+.acc .tg{align-self:flex-start;text-decoration:none}

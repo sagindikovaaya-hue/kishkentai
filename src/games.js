@@ -157,7 +157,7 @@ function repeat(){
    <button class="baby" id="pic"><img alt="" src="${art(it)}"><span class="bw">${esc(W(it))}</span><span class="tr-opt bh">${needTr()?esc(helpWord(it)):""}</span></button>
    <div class="row" style="justify-content:center"><button class="go" id="said">${gt().said}</button><button class="pill" id="again2">${gt().again}</button><button class="pill" id="skip">${gt().next}</button></div></div>`;
   setTimeout(()=>say(line),350);$("#pic").onclick=()=>say(W(it));$("#again2").onclick=()=>say(line);$("#skip").onclick=repeat;
-  $("#said").onclick=()=>{const pr=prog();pr.w[id]=2;saveProg();addStar();sparkle($("#said"));const p=praise();say(p.main);later(repeat,1500)}}
+  $("#said").onclick=()=>{setWord(id,2);addStar();sparkle($("#said"));const p=praise();say(p.main);later(repeat,1500)}}
 
 function wordpair(){
   const th=THEME[pick(level().themes.filter(id=>!THEME[id].bare),1)[0]],picks=pick(th.items,4);

@@ -19,7 +19,7 @@ const rand=n=>Math.floor(Math.random()*n);
 const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=rand(i+1);[a[i],a[j]]=[a[j],a[i]]}return a};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
-function addStar(){const k=kid();k.stars=(k.stars||0)+1;if(!k.sample)saveKids();paintHeader()}
+function addStar(){const k=kid();k.stars=(k.stars||0)+1;try{markPlayed()}catch(e){}if(!k.sample)saveKids();paintHeader()}
 function paintHeader(){const k=kid();
   $("#kidBtn").innerHTML=k.sample?`<b>${t().addKid}</b>`:`<b>${esc(k.name)}</b><span>${t().ageWord(k.age)} · ${LANGS[k.learn]}</span>`;
   $("#stars").textContent="★ "+(k.stars||0);$("#stars").hidden=k.age<2;
@@ -106,7 +106,11 @@ function profiles(editId){
 }
 
 /* ---------- programme state ---------- */
-const prog=()=>{const k=kid();k.prog=k.prog||{day:0,done:{},w:{}};return k.prog};
+const prog=()=>{const k=kid();k.prog=k.prog||{day:0,done:{},w:{}};const p=k.prog;p.wt=p.wt||{};p.act=p.act||{};return p};
+const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+/* remember that the child played today (for the weekly report) */
+function markPlayed(){const pr=prog();pr.act[today()]=(pr.act[today()]||0)+1}
+function setWord(id,v){const pr=prog();pr.w[id]=v;pr.wt[id]=Date.now();markPlayed();saveProg()}
 const saveProg=()=>{if(!kid().sample)saveKids()};
 function dayPlan(d){
   const lv=level(),seq=PROGRAM[lv.id],th=THEME[seq[d%seq.length]],kind=DAY_KIND[Math.floor(d/seq.length)%5],it=th.items,n=it.length;
@@ -172,13 +176,32 @@ function progress(onlyTheme){
   const all=PROGRAM[lv.id].flatMap(id=>THEME[id].items),und=all.filter(it=>(pr.w[it.key+"@"+it.theme]||0)>=1).length,sy=all.filter(it=>(pr.w[it.key+"@"+it.theme]||0)>=2).length;
   view.innerHTML=`<div class="col">${topBar(PT.progress)}
    <div class="stats"><div><b>${und}</b><span>${PT.understands}</span></div><div><b>${sy}</b><span>${PT.says}</span></div><div><b>${Object.keys(pr.done).length}</b><span>${PT.daysDone("").replace(/[: ]+$/,"")}</span></div></div>
+   ${onlyTheme?"":weekCard()}
    <p class="sub">${PT.tapWord}</p>
    ${ths.map(th=>`<section class="pgroup"><h2>${th.name[L()]}${needTr()?` <i class="tr-opt">· ${th.name[H()]}</i>`:""}</h2><div class="wchips">${th.items.map(it=>{const id=it.key+"@"+it.theme,v=pr.w[id]||0;
      return `<button class="wchip s${v}" data-w="${id}"><img alt="" src="${art(it)}"><b>${esc(word(it))}</b><span>${PT.status[v]}</span></button>`}).join("")}</div></section>`).join("")}</div>`;
   bindBack();
-  view.querySelectorAll("[data-w]").forEach(b=>b.onclick=()=>{const v=((pr.w[b.dataset.w]||0)+1)%3;pr.w[b.dataset.w]=v;saveProg();
+  view.querySelectorAll("[data-w]").forEach(b=>b.onclick=()=>{const v=((pr.w[b.dataset.w]||0)+1)%3;setWord(b.dataset.w,v);
     b.className="wchip s"+v;b.querySelector("span").textContent=PT.status[v];if(v===2)sparkle(b)});
 }
+
+/* ---------- weekly report (shared by hand now, sent by the Telegram bot later) ---------- */
+function weekStats(k){const pr=k.prog||{w:{},wt:{},act:{},done:{}},wk=Date.now()-7*864e5,lv=LEVELS.find(l=>l.ages.includes(Math.min(k.age,6)))||LEVELS[2];
+  const days=Object.keys(pr.act||{}).filter(d=>new Date(d+"T12:00").getTime()>wk).length;
+  const ids=PROGRAM[lv.id].flatMap(id=>THEME[id].items.map(it=>it.key+"@"+it.theme)),st=id=>(pr.w||{})[id]||0,fresh=id=>((pr.wt||{})[id]||0)>wk;
+  return {days,und:ids.filter(id=>st(id)>=1).length,undNew:ids.filter(id=>st(id)>=1&&fresh(id)).length,
+    says:ids.filter(id=>st(id)>=2).length,saysNew:ids.filter(id=>st(id)>=2&&fresh(id)).length,stars:k.stars||0,next:THEME[PROGRAM[lv.id][(pr.day||0)%PROGRAM[lv.id].length]]}}
+const RP={
+ kk:{title:"Апта қорытындысы",days:"Ойнаған күндер",und:"Түсінетін сөздер",says:"Айтатын сөздер",stars:"Жұлдыздар",next:"Келесі тақырып",tg:"Telegram-ға жіберу",wa:"WhatsApp-қа жіберу",
+  text:(k,s)=>`🌱 Kishkentai · ${k.name}, апта қорытындысы\n✅ Ойнаған күндер: ${s.days}/7\n🧠 Түсінетін сөздер: ${s.und}${s.undNew?` (+${s.undNew})`:""}\n🗣 Айтатын сөздер: ${s.says}${s.saysNew?` (+${s.saysNew})`:""}\n⭐ Жұлдыздар: ${s.stars}\n📚 Келесі тақырып: ${s.next.name.kk}`},
+ ru:{title:"Итоги недели",days:"Дней занимались",und:"Понимает слов",says:"Говорит слов",stars:"Звёзды",next:"Следующая тема",tg:"Отправить в Telegram",wa:"Отправить в WhatsApp",
+  text:(k,s)=>`🌱 Kishkentai · ${k.name}, итоги недели\n✅ Дней занимались: ${s.days}/7\n🧠 Понимает слов: ${s.und}${s.undNew?` (+${s.undNew})`:""}\n🗣 Говорит слов: ${s.says}${s.saysNew?` (+${s.saysNew})`:""}\n⭐ Звёзды: ${s.stars}\n📚 Следующая тема: ${s.next.name.ru}`}};
+const SITE_URL="https://sagindikovaaya-hue.github.io/kishkentai/";
+function weekCard(){const k=kid(),r=RP[H()],s=weekStats(k),txt=r.text(k,s);
+  return `<section class="week"><h2>${r.title}</h2>
+   <div class="stats four"><div><b>${s.days}/7</b><span>${r.days}</span></div><div><b>${s.und}${s.undNew?`<i>+${s.undNew}</i>`:""}</b><span>${r.und}</span></div><div><b>${s.says}${s.saysNew?`<i>+${s.saysNew}</i>`:""}</b><span>${r.says}</span></div><div><b>${s.stars}</b><span>${r.stars}</span></div></div>
+   <div class="row share"><a class="go small" target="_blank" rel="noopener" href="https://t.me/share/url?url=${encodeURIComponent(SITE_URL)}&text=${encodeURIComponent(txt)}">✈️ ${r.tg}</a>
+   <a class="pill" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(txt+"\n"+SITE_URL)}">${r.wa}</a></div></section>`}
 
 /* ---------- library (all games and themes) ---------- */
 const GAME_ART={find:"owl",who:"duck",pair:"mittens",listen:"rabbit",peek:"fox"};
