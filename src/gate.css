@@ -1,0 +1,26 @@
+/* gate screens: intro, demo, payment — the app's header controls and bottom bar stay hidden until the family is unlocked */
+body.gated #stars,body.gated #trBtn,body.gated #kidBtn,body.gated .bottomnav{display:none!important}
+.gtop{margin-bottom:-8px}
+.hero{background:var(--card);border-radius:28px;padding:22px 18px;display:flex;flex-direction:column;gap:14px;box-shadow:0 18px 40px -26px rgba(74,56,43,.45)}
+.hero-art{grid-template-columns:repeat(6,1fr);gap:6px}
+.hero-art figure{background:var(--paper)}
+.feats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.feat{background:var(--card);border-radius:20px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.feat b{font-family:var(--f-word);font-weight:500;font-size:1.15rem}
+.inside{margin:0;padding:14px 16px 14px 34px;background:var(--card);border-radius:20px;display:flex;flex-direction:column;gap:8px;line-height:1.45;font-weight:600}
+.prices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.price{background:var(--card);border:2px solid transparent;border-radius:20px;padding:16px;display:flex;flex-direction:column;align-items:flex-start;gap:2px;font:inherit;color:var(--ink);text-align:left}
+.today .price{background:var(--paper)}
+button.price{cursor:pointer}
+button.price[aria-pressed="true"]{border-color:var(--sienna)}
+.price b{font-family:var(--f-word);font-weight:500;font-size:1.7rem;font-variant-numeric:tabular-nums}
+.price span{color:var(--soft)}
+.price em{font-style:normal;font-size:.85rem;color:#fff;background:var(--good);border-radius:999px;padding:3px 10px;margin-top:6px}
+.faq{display:flex;flex-direction:column;gap:8px}
+.faq details{background:var(--card);border-radius:18px;padding:14px 16px}
+.faq summary{cursor:pointer;font-weight:700}
+.faq details p{margin-top:8px}
+.reg{display:flex;flex-direction:column;gap:10px;scroll-margin-top:16px}
+.qr{display:flex;flex-direction:column;align-items:center;gap:8px}
+.qr img{width:min(260px,70vw);aspect-ratio:1;object-fit:contain;background:#fff;border-radius:16px;padding:10px}
+@media (max-width:560px){.feats{grid-template-columns:1fr}.hero-art{grid-template-columns:repeat(3,1fr)}}

@@ -12,7 +12,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 S = os.path.join(ROOT, "src")
 rd = lambda name: open(os.path.join(S, name), encoding="utf-8").read()
 
-css = rd("base.css") + "\n" + rd("extra.css")
+css = rd("base.css") + "\n" + rd("extra.css") + "\n" + rd("gate.css")
 painted = json.loads(rd("painted.json"))
 clips = json.loads(rd("clips.json")) if os.path.exists(os.path.join(S, "clips.json")) else {}
 
@@ -38,7 +38,7 @@ body = '''<div class="wrap">
 </nav>
 '''
 js = ("const PAINTED=" + json.dumps(painted) + ";\nconst VOICE_CLIPS=" + json.dumps(clips, ensure_ascii=False) + ";\n"
-      + rd("content.js") + "\n" + rd("account.js") + "\n" + rd("app.js") + "\n" + rd("games.js"))
+      + rd("content.js") + "\n" + rd("account.js") + "\n" + rd("app.js") + "\n" + rd("games.js") + "\n" + rd("gate.js"))
 page = head + "<style>" + css + "</style>\n\n" + body + "\n<script>\n" + js + "\n</script>\n"
 
 os.makedirs(os.path.join(ROOT, "build"), exist_ok=True)

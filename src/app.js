@@ -4,7 +4,8 @@ const store={get(k,v){try{const x=localStorage.getItem(k);return x==null?v:JSON.
 let kids=store.get("kids",[]),curId=store.get("kid",null),showTr=store.get("tr",true);
 /* until a parent sets up a profile, show a sample child so the page is complete at first glance */
 const SAMPLE={id:"sample",name:"Айлин",age:2,learn:"en",help:"kk",stars:0,sample:true};
-const kid=()=>kids.find(k=>k.id===curId)||kids[0]||SAMPLE;
+let DEMO=null;   /* set by the gate screens (intro, demo, payment) so they speak the page's language */
+const kid=()=>DEMO||kids.find(k=>k.id===curId)||kids[0]||SAMPLE;
 const saveKids=()=>{const k=kids.find(x=>x.id===curId);if(k)k.t=Date.now();store.set("kids",kids);store.set("kid",curId);if(typeof pushFamily==="function")pushFamily()};
 const L=()=>kid().learn, H=()=>kid().help, t=()=>T[H()];
 const level=()=>LEVELS.find(l=>l.ages.includes(Math.min(kid().age,6)))||LEVELS[2];
@@ -352,6 +353,4 @@ oddone=nav(oddone);count=nav(count);missing=nav(missing);letter=nav(letter);spel
 
 $("#nBack").onclick=navBack;$("#nFwd").onclick=navFwd;$("#nHome").onclick=()=>home();
 
-/* ---------- start ---------- */
-initAccount();paintHeader();
-Promise.race([document.fonts.load('800 300px Nunito'),new Promise(r=>setTimeout(r,1500))]).then(buildDigits,buildDigits).then(()=>home(),()=>home());
+/* start: see gate.js */

@@ -36,9 +36,9 @@ function accountBlock(){const a=A[H()];
    <form id="codeForm" class="row" hidden><input id="accCode" inputmode="numeric" autocomplete="one-time-code" maxlength="10" placeholder="12345678" aria-label="${a.code}"><button class="go small" type="submit">${a.enter}</button></form>
    <p class="sub" id="accMsg" aria-live="polite"></p></section>`}
 function bindAccount(){if(!sb)return;const a=A[H()],msg=t=>{const m=$("#accMsg");if(m)m.textContent=t};
-  if($("#signOut"))$("#signOut").onclick=async()=>{try{await sb.auth.signOut()}catch(e){}sbUser=null;profiles()};
+  if($("#signOut"))$("#signOut").onclick=async()=>{try{await sb.auth.signOut()}catch(e){}sbUser=null;paidOpen=false;store.set("paid",null);gate()};
   if($("#otpForm"))$("#otpForm").onsubmit=async e=>{e.preventDefault();const email=$("#accEmail").value.trim();if(!/^\S+@\S+\.\S+$/.test(email)){msg(a.badMail);return}
     try{const {error}=await sb.auth.signInWithOtp({email,options:{shouldCreateUser:true,emailRedirectTo:location.origin+location.pathname}});if(error)throw error;msg(a.sent(email));$("#codeForm").hidden=false;$("#accCode").focus()}catch(err){msg(/fetch|network/i.test(err.message||"")?a.offline:(err.message||a.offline))}};
   if($("#codeForm"))$("#codeForm").onsubmit=async e=>{e.preventDefault();const email=$("#accEmail").value.trim(),token=$("#accCode").value.trim();
-    try{const {data,error}=await sb.auth.verifyOtp({email,token,type:"email"});if(error)throw error;sbUser=data.user;await pullFamily();profiles()}catch(err){msg(a.bad)}};
+    try{const {data,error}=await sb.auth.verifyOtp({email,token,type:"email"});if(error)throw error;sbUser=data.user;await pullFamily();gate()}catch(err){msg(a.bad)}};
   paintSync()}
