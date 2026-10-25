@@ -1,6 +1,6 @@
 /* ---------- gate: intro page + short demo for everyone, the app itself only for a signed-in parent with a paid plan ---------- */
 const PRICE={month:"4 490 ₸",year:"44 900 ₸"};
-const PAY_QR="";   /* Kaspi QR picture (data:image/... or a file next to index.html); empty = "coming soon" note */
+const PAY_QR="kaspi-qr.png";   /* Kaspi QR picture (data:image/... or a file next to index.html); empty = "coming soon" note */
 const GATE={
  kk:{other:"Русский",hero:"Балаңыз үш тілде сөйлей бастасын",
   heroSub:"Kishkentai — 1–6 жастағы балаларға ағылшын, қазақ және орыс тілдері. Күніне 5–15 минут, ойын арқылы, акварель суреттермен.",
@@ -25,7 +25,7 @@ const GATE={
   demoTag:"Демо",demoTap:"Суретті басыңыз — сөзді естисіз",demoClose:"✕ Шығу",
   demoEndHead:"Бұл — кішкене бөлігі ғана",demoEnd:"Ішінде 10 тақырып, 19 ойын, күн сайынғы жоспар, прогресс және Telegram-да апталық есеп.",
   payHead:"Толық қолжетімділік",paySub:e=>`Сіз кірдіңіз: ${e}. Жоспарды таңдап, Kaspi арқылы төлеңіз.`,expired:"Жазылым мерзімі бітті. Жалғастыру үшін ұзартыңыз.",
-  payQr:p=>`Kaspi QR-ды сканерлеп, ${p} төлеңіз`,noQr:"Kaspi QR жақында осында шығады.",paid:"Мен төледім",check:"Тексеру",out:"Шығу",
+  payQr:p=>`Kaspi QR-ды сканерлеп, ${p} төлеңіз`,noQr:"Kaspi QR жақында осында шығады.",saveQr:"QR-ды сақтау",sameHint:"Сайт осы телефонда ашық болса: QR-ды сақтаңыз, сосын Kaspi сканерінде галереядан ашыңыз.",paid:"Мен төледім",check:"Тексеру",out:"Шығу",
   sent:"Рақмет! Төлемді тексеріп жатырмыз — әдетте бірнеше сағат ішінде ашылады. Ашылғанда бұл бет өзі жаңарады.",
   payErr:"Жіберу мүмкін болмады. Интернетті тексеріп, қайталаңыз.",offline:"Қазір тексеру мүмкін емес: интернет жоқ."},
  ru:{other:"Қазақша",hero:"Пусть ребёнок заговорит на трёх языках",
@@ -51,7 +51,7 @@ const GATE={
   demoTag:"Демо",demoTap:"Нажмите на картинку — услышите слово",demoClose:"✕ Выйти",
   demoEndHead:"Это только маленькая часть",demoEnd:"Внутри 10 тем, 19 игр, план на каждый день, прогресс и итоги недели в Telegram.",
   payHead:"Полный доступ",paySub:e=>`Вы вошли: ${e}. Выберите тариф и оплатите через Kaspi.`,expired:"Срок подписки закончился. Продлите, чтобы продолжить.",
-  payQr:p=>`Отсканируйте Kaspi QR и оплатите ${p}`,noQr:"Kaspi QR скоро появится здесь.",paid:"Я оплатил(а)",check:"Проверить",out:"Выйти",
+  payQr:p=>`Отсканируйте Kaspi QR и оплатите ${p}`,noQr:"Kaspi QR скоро появится здесь.",saveQr:"Сохранить QR",sameHint:"Если сайт открыт на этом же телефоне: сохраните QR и откройте его в сканере Kaspi из галереи.",paid:"Я оплатил(а)",check:"Проверить",out:"Выйти",
   sent:"Спасибо! Проверяем оплату — обычно доступ открывается в течение нескольких часов. Эта страница обновится сама.",
   payErr:"Не получилось отправить. Проверьте интернет и попробуйте ещё раз.",offline:"Сейчас не проверить: нет интернета."}};
 let GL=store.get("ui",H()),paidOpen=false,payPoll=0;
@@ -122,7 +122,7 @@ function paywall(expired,note){gated(true);const G1=gx();let plan=store.get("pla
    <section class="today"><h1>${G1.payHead}</h1><p class="sub">${esc(G1.paySub(sbUser&&sbUser.email||""))}</p>
     ${expired?`<p class="note">${G1.expired}</p>`:""}
     <div id="gPrices">${prices(plan)}</div>
-    <div class="qr">${PAY_QR?`<img alt="Kaspi QR" src="${PAY_QR}"><p class="sub" id="gQrNote"></p>`:`<p class="note">${G1.noQr}</p>`}</div>
+    <div class="qr">${PAY_QR?`<img alt="Kaspi QR" src="${PAY_QR}"><p class="sub" id="gQrNote"></p><a class="pill" href="${PAY_QR}" download="kishkentai-kaspi-qr.png">${G1.saveQr}</a><p class="sub qrhint">${G1.sameHint}</p>`:`<p class="note">${G1.noQr}</p>`}</div>
     <div class="row"><button class="go" id="gPaid">${G1.paid}</button><button class="pill" id="gCheck">${G1.check}</button><button class="pill" id="gOut">${G1.out}</button></div>
     <p class="sub" id="gMsg" aria-live="polite">${note||""}</p></section></div>`;
   window.scrollTo(0,0);
