@@ -2,7 +2,9 @@
 
 Платформа раннего развития речи для детей **1–6 лет**, **три языка**: английский, казахский, русский.
 Владелец — Аяжан Сагындыкова (sagindikovaaya@gmail.com). Общается по-русски, иногда по-казахски.
-Сайт: https://sagindikovaaya-hue.github.io/kishkentai/ (GitHub Pages, ветка `main`, корень репозитория).
+Сайт: **https://kishkentai.com** (домен куплен в Cloudflare 25.10.2026, DNS: 4 A-записи GitHub Pages + CNAME www,
+«DNS only»; файл `CNAME` в корне). Хостинг — GitHub Pages, ветка `main`, корень репозитория;
+старый адрес https://sagindikovaaya-hue.github.io/kishkentai/ сам перекидывает на домен.
 Короткий адрес https://sagindikovaaya-hue.github.io/ — отдельный репозиторий `sagindikovaaya-hue.github.io`
 с одной страницей-переадресацией сюда (нужна для ссылок входа из писем Supabase).
 

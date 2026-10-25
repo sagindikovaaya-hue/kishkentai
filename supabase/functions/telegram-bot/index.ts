@@ -45,7 +45,7 @@ function report(k: Kid): string {
 async function send(chat: number, text: string) {
   await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
     method: "POST", headers: { "content-type": "application/json" },
-    body: JSON.stringify({ chat_id: chat, text, reply_markup: { inline_keyboard: [[{ text: "Kishkentai ↗", url: "https://sagindikovaaya-hue.github.io/kishkentai/" }]] } }),
+    body: JSON.stringify({ chat_id: chat, text, reply_markup: { inline_keyboard: [[{ text: "Kishkentai ↗", url: "https://kishkentai.com/" }]] } }),
   });
 }
 async function sendReports(userId: string, chat: number) {

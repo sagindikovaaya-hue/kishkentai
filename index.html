@@ -866,7 +866,7 @@ const RP={
   text:(k,s)=>`🌱 Kishkentai · ${k.name}, апта қорытындысы\n✅ Ойнаған күндер: ${s.days}/7\n🧠 Түсінетін сөздер: ${s.und}${s.undNew?` (+${s.undNew})`:""}\n🗣 Айтатын сөздер: ${s.says}${s.saysNew?` (+${s.saysNew})`:""}\n⭐ Жұлдыздар: ${s.stars}\n📚 Келесі тақырып: ${s.next.name.kk}`},
  ru:{title:"Итоги недели",days:"Дней занимались",und:"Понимает слов",says:"Говорит слов",stars:"Звёзды",next:"Следующая тема",tg:"Отправить в Telegram",wa:"Отправить в WhatsApp",
   text:(k,s)=>`🌱 Kishkentai · ${k.name}, итоги недели\n✅ Дней занимались: ${s.days}/7\n🧠 Понимает слов: ${s.und}${s.undNew?` (+${s.undNew})`:""}\n🗣 Говорит слов: ${s.says}${s.saysNew?` (+${s.saysNew})`:""}\n⭐ Звёзды: ${s.stars}\n📚 Следующая тема: ${s.next.name.ru}`}};
-const SITE_URL="https://sagindikovaaya-hue.github.io/kishkentai/";
+const SITE_URL="https://kishkentai.com/";
 function weekCard(){const k=kid(),r=RP[H()],s=weekStats(k),txt=r.text(k,s);
   return `<section class="week"><h2>${r.title}</h2>
    <div class="stats four"><div><b>${s.days}/7</b><span>${r.days}</span></div><div><b>${s.und}${s.undNew?`<i>+${s.undNew}</i>`:""}</b><span>${r.und}</span></div><div><b>${s.says}${s.saysNew?`<i>+${s.saysNew}</i>`:""}</b><span>${r.says}</span></div><div><b>${s.stars}</b><span>${r.stars}</span></div></div>
@@ -992,7 +992,7 @@ function parents(sel){
    <div class="top noprint">${navBtns()}<h1 class="h-sm">${tt.parents}</h1></div>
    <p class="sub noprint">${tt.parentsIntro}</p>
    <div class="chips noprint">${THEMES.map(x=>`<button class="pill" data-s="${x.id}" aria-pressed="${x.id===th.id}">${x.name[h]}</button>`).join("")}</div>
-   <div class="noprint row"><button class="listen" id="print">${tt.print}</button><span class="sub" style="font-size:.85rem">${tt.printNote}: sagindikovaaya-hue.github.io/kishkentai</span></div>
+   <div class="noprint row"><button class="listen" id="print">${tt.print}</button><span class="sub" style="font-size:.85rem">${tt.printNote}: kishkentai.com</span></div>
    <div class="sheet"><h2 class="printonly">${th.name[l]}${l!==h?" · "+th.name[h]:""}</h2>${th.items.map(it=>`<div class="pcard"><img alt="" src="${art(it)}"><b>${esc(word(it))}</b>${l!==h?`<span>${esc(helpWord(it))}</span>`:""}</div>`).join("")}</div>
    ${th.life?lifeBlock(th.life):""}
    <section class="life"><h2>${tt.chkTitle}</h2><p>${tt.chkIntro}</p>
