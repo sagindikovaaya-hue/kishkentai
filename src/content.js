@@ -59,6 +59,8 @@ const THEMES=[
   ["happy","happy","көңілді","весёлая","хэппи"],["sad","sad","мұңды","грустная","сэд"],["angry","angry","ашулы","сердитая","энгри"],["scared","scared","қорыққан","испуганная","скэад"],["surprised","surprised","таңғалған","удивлённая","сэпрайзд"],["sleepy","sleepy","ұйқылы","сонная","слипи"],["shy","shy","ұялшақ","стеснительная","шай"],["hungry","hungry","аш","голодная","хангри"]]},
  {id:"shapes",name:{"en": "Shapes", "kk": "Пішіндер", "ru": "Формы"},life:"shapes",items:[
   ["s-circle","circle","дөңгелек","круг","сёкл"],["s-square","square","шаршы","квадрат","скуэа"],["s-triangle","triangle","үшбұрыш","треугольник","трайэнгл"],["s-star","star","жұлдыз","звезда","ста"],["s-heart","heart","жүрек","сердце","хат"],["s-oval","oval","сопақ","овал","оувл"],["s-rectangle","rectangle","тіктөртбұрыш","прямоугольник","рэктэнгл"],["s-diamond","diamond","ромб","ромб","даймэнд"]]},
+ {id:"bugs",name:{"en": "Bugs", "kk": "Жәндіктер", "ru": "Насекомые"},life:"bugs",items:[
+  ["butterfly","butterfly","көбелек","бабочка","батэфлай"],["ladybird","ladybird","қанқызы","божья коровка","лэдибёд"],["bee","bee","ара","пчела","би"],["ant","ant","құмырсқа","муравей","энт"],["snail","snail","ұлу","улитка","снейл"],["caterpillar","caterpillar","жұлдызқұрт","гусеница","кэтэпилэ"],["dragonfly","dragonfly","инелік","стрекоза","дрэгонфлай"],["grasshopper","grasshopper","шегіртке","кузнечик","грасхопэ"]]},
  {id:"colors",name:{en:"Colours",kk:"Түстер",ru:"Цвета"},bare:1,items:[
   ["c-red","red","қызыл","красный","рэд"],["c-yellow","yellow","сары","жёлтый","йеллоу"],["c-blue","blue","көк","синий","блу"],
   ["c-green","green","жасыл","зелёный","грин"],["c-orange","orange","қызғылт сары","оранжевый","ориндж"],["c-purple","purple","күлгін","фиолетовый","пөпл"],
@@ -193,6 +195,14 @@ const ITEM_PHRASE={
  "s-oval":{"en": "An oval looks like an egg.", "kk": "Сопақ жұмыртқаға ұқсайды.", "ru": "Овал похож на яйцо."},
  "s-rectangle":{"en": "A rectangle looks like a door.", "kk": "Тіктөртбұрыш есікке ұқсайды.", "ru": "Прямоугольник похож на дверь."},
  "s-diamond":{"en": "A diamond looks like a kite.", "kk": "Ромб батпыраққа ұқсайды.", "ru": "Ромб похож на воздушного змея."},
+ "butterfly":{"en": "Fly, fly, little butterfly!", "kk": "Ұш, ұш, көбелек!", "ru": "Лети, лети, бабочка!"},
+ "ladybird":{"en": "Let's count the spots!", "kk": "Дақтарын санайық!", "ru": "Посчитаем пятнышки!"},
+ "bee":{"en": "Buzz, buzz, says the bee.", "kk": "Ара «з-з-з» дейді.", "ru": "Пчела жужжит: ж-ж-ж."},
+ "ant":{"en": "The ant is very strong.", "kk": "Құмырсқа өте күшті.", "ru": "Муравей очень сильный."},
+ "snail":{"en": "The snail is slow.", "kk": "Ұлу ақырын жүреді.", "ru": "Улитка ползёт медленно."},
+ "caterpillar":{"en": "The caterpillar is hungry.", "kk": "Жұлдызқұрттың қарны ашты.", "ru": "Гусеница проголодалась."},
+ "dragonfly":{"en": "Look, a dragonfly!", "kk": "Қара, инелік!", "ru": "Смотри, стрекоза!"},
+ "grasshopper":{"en": "Jump like a grasshopper!", "kk": "Шегірткедей секір!", "ru": "Прыгай, как кузнечик!"},
  yurt:{en:"This is a yurt, a Kazakh home.",kk:"Бұл — киіз үй, қазақтың үйі.",ru:"Это юрта — казахский дом."},
  dombyra:{en:"Let's play the dombra!",kk:"Домбыра тартайық!",ru:"Сыграем на домбре!"},
  shanyraq:{en:"Look up, the shanyrak!",kk:"Жоғары қара, шаңырақ!",ru:"Посмотри наверх — шанырак!"},
@@ -341,6 +351,17 @@ const LIFE={dress:{
   {"en": "Let's draw a triangle.", "kk": "Үшбұрыш салайық.", "ru": "Давай нарисуем треугольник.", "when": {"kk": "Сурет салғанда", "ru": "Когда рисуете"}},
   {"en": "Let's count the corners.", "kk": "Бұрыштарын санайық.", "ru": "Посчитаем уголки.", "when": {"kk": "Пішінді қарағанда", "ru": "Разглядывая фигуру"}},
   {"en": "Let's cut out a star.", "kk": "Жұлдыз қиып алайық.", "ru": "Вырежем звёздочку.", "when": {"kk": "Қолөнер кезінде", "ru": "Во время поделок"}}]},
+ bugs:{
+ title:{"kk": "Табиғатта айтатын фразалар", "ru": "Фразы на природе"},
+ intro:{"kk": "Серуенде жәндіктерді бірге іздеңіз. Оларды ұстамай, тек қарап, атаймыз.", "ru": "На прогулке ищите насекомых вместе. Не трогаем — только смотрим и называем."},
+ phrases:[
+  {"en": "Let's look for bugs.", "kk": "Жәндік іздейік.", "ru": "Давай поищем жучков.", "when": {"kk": "Саябақта", "ru": "В парке"}},
+  {"en": "Look, but don't touch.", "kk": "Қара, бірақ ұстама.", "ru": "Смотри, но не трогай.", "when": {"kk": "Жәндік тапқанда", "ru": "Когда нашли насекомое"}},
+  {"en": "Where is the butterfly?", "kk": "Көбелек қайда?", "ru": "Где бабочка?", "when": {"kk": "Гүлдердің қасында", "ru": "Возле цветов"}},
+  {"en": "It's very small.", "kk": "Ол өте кішкентай.", "ru": "Он очень маленький.", "when": {"kk": "Құмырсқаны көргенде", "ru": "Разглядывая муравья"}},
+  {"en": "Shh, let's be quiet.", "kk": "Тсс, ақырын.", "ru": "Тсс, тихонько.", "when": {"kk": "Жәндікті бақылағанда", "ru": "Когда наблюдаете"}},
+  {"en": "Bees make honey.", "kk": "Ара бал жинайды.", "ru": "Пчёлы делают мёд.", "when": {"kk": "Бал жегенде", "ru": "Когда едите мёд"}},
+  {"en": "Bye-bye, little bug!", "kk": "Сау бол, кішкентай жәндік!", "ru": "Пока, жучок!", "when": {"kk": "Серуеннің соңында", "ru": "В конце прогулки"}}]},
  guests:{
  title:{kk:"Қонақ келгенде айтатын фразалар",ru:"Фразы, когда приходят гости"},
  intro:{kk:"Қонақ келгенде немесе әже-атаға барғанда айтыңыз: бала салт-дәстүрді сөзбен бірге үйренеді.",
@@ -422,16 +443,16 @@ const T={
 
 /* levels by age */
 const LEVELS=[
- {id:"sabi",ages:[1],name:"Сәби",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","culture","toys","veg","home","weather"],games:["listen","peek","knock","bubbles","goodnight"],tip:1},
- {id:"balapan",ages:[2],name:"Балапан",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","culture","toys","veg","home","weather","emotions","shapes"],games:["find","who","pair","shadow","feed","dress","color"],tip:2},
- {id:"qulynshaq",ages:[3],name:"Құлыншақ",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture","toys","veg","home","weather","emotions","shapes"],games:["find","who","pair","shadow","feed","color","oddone","count","missing"],tip:3},
- {id:"batyr",ages:[4,5,6],name:"Батыр",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture","toys","veg","home","weather","emotions","shapes"],games:["letter","spell","count","wordpair","repeat","oddone","missing","pair","find","shadow","color","who"],tip:4}];
+ {id:"sabi",ages:[1],name:"Сәби",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","culture","toys","veg","home","weather","bugs"],games:["listen","peek","knock","bubbles","goodnight"],tip:1},
+ {id:"balapan",ages:[2],name:"Балапан",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","culture","toys","veg","home","weather","emotions","shapes","bugs"],games:["find","who","pair","shadow","feed","dress","color"],tip:2},
+ {id:"qulynshaq",ages:[3],name:"Құлыншақ",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture","toys","veg","home","weather","emotions","shapes","bugs"],games:["find","who","pair","shadow","feed","color","oddone","count","missing"],tip:3},
+ {id:"batyr",ages:[4,5,6],name:"Батыр",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture","toys","veg","home","weather","emotions","shapes","bugs"],games:["letter","spell","count","wordpair","repeat","oddone","missing","pair","find","shadow","color","who"],tip:4}];
 
 /* ---------- programme: 5 days per theme, order by level ---------- */
-const PROGRAM={sabi:["animals","family","body","kitchen","clothes","bath","transport","fruit","walk","sleep","culture","toys","veg","home","weather"],
-  balapan:["animals","family","body","kitchen","clothes","bath","transport","fruit","colors","walk","sleep","culture","toys","veg","home","weather","emotions","shapes"],
-  qulynshaq:["animals","family","body","kitchen","clothes","bath","transport","fruit","colors","numbers","walk","sleep","culture","toys","veg","home","weather","emotions","shapes"],
-  batyr:["animals","family","body","kitchen","clothes","bath","transport","fruit","colors","numbers","walk","sleep","culture","toys","veg","home","weather","emotions","shapes"]};
+const PROGRAM={sabi:["animals","family","body","kitchen","clothes","bath","transport","fruit","walk","sleep","culture","toys","veg","home","weather","bugs"],
+  balapan:["animals","family","body","kitchen","clothes","bath","transport","fruit","colors","walk","sleep","culture","toys","veg","home","weather","emotions","shapes","bugs"],
+  qulynshaq:["animals","family","body","kitchen","clothes","bath","transport","fruit","colors","numbers","walk","sleep","culture","toys","veg","home","weather","emotions","shapes","bugs"],
+  batyr:["animals","family","body","kitchen","clothes","bath","transport","fruit","colors","numbers","walk","sleep","culture","toys","veg","home","weather","emotions","shapes","bugs"]};
 const MINUTES={sabi:5,balapan:10,qulynshaq:15,batyr:15};
 const DAY_KIND=["words","words2","game","life","review"];
 const P={
