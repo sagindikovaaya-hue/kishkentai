@@ -51,6 +51,8 @@ const THEMES=[
   ["blocks","blocks","кубиктер","кубики","блокс",1],["doll","doll","қуыршақ","кукла","дол"],["pyramid","stacking rings","пирамида","пирамидка","стэкинг рингз",1],["top","spinning top","зырылдауық","юла","спиннинг топ"],["drum","drum","барабан","барабан","драм"],["balloon","balloon","әуе шары","шарик","бэлун"],["puzzle","puzzle","пазл","пазл","пазл"],["robot","robot","робот","робот","роубот"]]},
  {id:"veg",name:{"en": "Vegetables", "kk": "Көкөністер", "ru": "Овощи"},life:"veg",items:[
   ["carrot","carrot","сәбіз","морковка","кэрэт"],["potato","potatoes","картоп","картошка","потейтоуз",1],["tomato","tomato","қызанақ","помидор","томатоу"],["cucumber","cucumber","қияр","огурец","кьюкамбэ"],["onion","onion","пияз","лук","аньен"],["cabbage","cabbage","қырыққабат","капуста","кэбидж"],["pumpkin","pumpkin","асқабақ","тыква","пампкин"],["corn","corn","жүгері","кукуруза","корн"]]},
+ {id:"home",name:{"en": "At home", "kk": "Үй", "ru": "Дом"},life:"home",items:[
+  ["table","table","үстел","стол","тейбл"],["chair","chair","орындық","стул","чеа"],["sofa","sofa","диван","диван","соуфа"],["door","door","есік","дверь","до"],["window","window","терезе","окно","уиндоу"],["lamp","lamp","шам","лампа","лэмп"],["clock","clock","сағат","часы","клок"],["tv","TV","теледидар","телевизор","ти-ви"]]},
  {id:"colors",name:{en:"Colours",kk:"Түстер",ru:"Цвета"},bare:1,items:[
   ["c-red","red","қызыл","красный","рэд"],["c-yellow","yellow","сары","жёлтый","йеллоу"],["c-blue","blue","көк","синий","блу"],
   ["c-green","green","жасыл","зелёный","грин"],["c-orange","orange","қызғылт сары","оранжевый","ориндж"],["c-purple","purple","күлгін","фиолетовый","пөпл"],
@@ -153,6 +155,14 @@ const ITEM_PHRASE={
  cabbage:{"en": "A big round cabbage.", "kk": "Үлкен дөңгелек қырыққабат.", "ru": "Большая круглая капуста."},
  pumpkin:{"en": "What a big pumpkin!", "kk": "Қандай үлкен асқабақ!", "ru": "Какая большая тыква!"},
  corn:{"en": "Yummy sweet corn.", "kk": "Тәтті жүгері.", "ru": "Сладкая кукуруза."},
+ table:{"en": "Let's sit at the table.", "kk": "Үстелге отырайық.", "ru": "Садимся за стол."},
+ chair:{"en": "Sit on the chair.", "kk": "Орындыққа отыр.", "ru": "Сядь на стульчик."},
+ sofa:{"en": "Let's read on the sofa.", "kk": "Диванда кітап оқиық.", "ru": "Почитаем на диване."},
+ door:{"en": "Knock, knock! Open the door.", "kk": "Тық-тық! Есікті аш.", "ru": "Тук-тук! Открой дверь."},
+ window:{"en": "Look out of the window.", "kk": "Терезеден қара.", "ru": "Посмотри в окно."},
+ lamp:{"en": "Turn on the lamp.", "kk": "Шамды жақ.", "ru": "Включи лампу."},
+ clock:{"en": "Tick-tock goes the clock.", "kk": "Сағат тық-тық етеді.", "ru": "Часы тикают: тик-так."},
+ tv:{"en": "Time to turn off the TV.", "kk": "Теледидарды өшіретін уақыт.", "ru": "Пора выключить телевизор."},
  yurt:{en:"This is a yurt, a Kazakh home.",kk:"Бұл — киіз үй, қазақтың үйі.",ru:"Это юрта — казахский дом."},
  dombyra:{en:"Let's play the dombra!",kk:"Домбыра тартайық!",ru:"Сыграем на домбре!"},
  shanyraq:{en:"Look up, the shanyrak!",kk:"Жоғары қара, шаңырақ!",ru:"Посмотри наверх — шанырак!"},
@@ -257,6 +267,17 @@ const LIFE={dress:{
   {"en": "Let's make a salad.", "kk": "Салат жасайық.", "ru": "Давай сделаем салат.", "when": {"kk": "Ас үйде бірге", "ru": "Вместе на кухне"}},
   {"en": "Taste it, it's yummy.", "kk": "Дәмін татып көр, тәтті.", "ru": "Попробуй, вкусно.", "when": {"kk": "Тамақ кезінде", "ru": "Во время еды"}},
   {"en": "Vegetables make you strong!", "kk": "Көкөніс күш береді!", "ru": "Овощи дают силу!", "when": {"kk": "Бала көкөніс жегенде", "ru": "Когда ребёнок ест овощи"}}]},
+ home:{
+ title:{"kk": "Үйде айтатын фразалар", "ru": "Фразы дома"},
+ intro:{"kk": "Үйдегі заттарды көрсетіп атаңыз: «Мынау — есік, мынау — терезе». Бала заттарды өзі тауып көрсетсін.", "ru": "Показывайте и называйте вещи дома: «Это дверь, это окно». Пусть ребёнок сам находит и показывает."},
+ phrases:[
+  {"en": "Welcome home!", "kk": "Үйге қош келдің!", "ru": "С возвращением домой!", "when": {"kk": "Үйге келгенде", "ru": "Когда пришли домой"}},
+  {"en": "Close the door, please.", "kk": "Есікті жапшы.", "ru": "Закрой дверь, пожалуйста.", "when": {"kk": "Үйге кіргенде", "ru": "Когда зашли в дом"}},
+  {"en": "Where is the chair?", "kk": "Орындық қайда?", "ru": "Где стульчик?", "when": {"kk": "Ойнап отырғанда", "ru": "Во время игры"}},
+  {"en": "Help me tidy up.", "kk": "Жинауға көмектес.", "ru": "Помоги убраться.", "when": {"kk": "Үй жинағанда", "ru": "Когда убираетесь"}},
+  {"en": "Open the window, it's hot.", "kk": "Терезені аш, ыстық.", "ru": "Открой окно, жарко.", "when": {"kk": "Бөлме ысығанда", "ru": "Когда в комнате жарко"}},
+  {"en": "Turn off the light.", "kk": "Жарықты сөндір.", "ru": "Выключи свет.", "when": {"kk": "Ұйықтар алдында", "ru": "Перед сном"}},
+  {"en": "I love our home.", "kk": "Біздің үйді жақсы көремін.", "ru": "Я люблю наш дом.", "when": {"kk": "Кешке, бәрі бірге болғанда", "ru": "Вечером, когда все вместе"}}]},
  guests:{
  title:{kk:"Қонақ келгенде айтатын фразалар",ru:"Фразы, когда приходят гости"},
  intro:{kk:"Қонақ келгенде немесе әже-атаға барғанда айтыңыз: бала салт-дәстүрді сөзбен бірге үйренеді.",
@@ -338,16 +359,16 @@ const T={
 
 /* levels by age */
 const LEVELS=[
- {id:"sabi",ages:[1],name:"Сәби",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","culture","toys","veg"],games:["listen","peek","knock","bubbles","goodnight"],tip:1},
- {id:"balapan",ages:[2],name:"Балапан",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","culture","toys","veg"],games:["find","who","pair","shadow","feed","dress","color"],tip:2},
- {id:"qulynshaq",ages:[3],name:"Құлыншақ",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture","toys","veg"],games:["find","who","pair","shadow","feed","color","oddone","count","missing"],tip:3},
- {id:"batyr",ages:[4,5,6],name:"Батыр",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture","toys","veg"],games:["letter","spell","count","wordpair","repeat","oddone","missing","pair","find","shadow","color","who"],tip:4}];
+ {id:"sabi",ages:[1],name:"Сәби",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","culture","toys","veg","home"],games:["listen","peek","knock","bubbles","goodnight"],tip:1},
+ {id:"balapan",ages:[2],name:"Балапан",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","culture","toys","veg","home"],games:["find","who","pair","shadow","feed","dress","color"],tip:2},
+ {id:"qulynshaq",ages:[3],name:"Құлыншақ",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture","toys","veg","home"],games:["find","who","pair","shadow","feed","color","oddone","count","missing"],tip:3},
+ {id:"batyr",ages:[4,5,6],name:"Батыр",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture","toys","veg","home"],games:["letter","spell","count","wordpair","repeat","oddone","missing","pair","find","shadow","color","who"],tip:4}];
 
 /* ---------- programme: 5 days per theme, order by level ---------- */
-const PROGRAM={sabi:["animals","family","body","kitchen","clothes","bath","transport","fruit","walk","sleep","culture","toys","veg"],
-  balapan:["animals","family","body","kitchen","clothes","bath","transport","fruit","colors","walk","sleep","culture","toys","veg"],
-  qulynshaq:["animals","family","body","kitchen","clothes","bath","transport","fruit","colors","numbers","walk","sleep","culture","toys","veg"],
-  batyr:["animals","family","body","kitchen","clothes","bath","transport","fruit","colors","numbers","walk","sleep","culture","toys","veg"]};
+const PROGRAM={sabi:["animals","family","body","kitchen","clothes","bath","transport","fruit","walk","sleep","culture","toys","veg","home"],
+  balapan:["animals","family","body","kitchen","clothes","bath","transport","fruit","colors","walk","sleep","culture","toys","veg","home"],
+  qulynshaq:["animals","family","body","kitchen","clothes","bath","transport","fruit","colors","numbers","walk","sleep","culture","toys","veg","home"],
+  batyr:["animals","family","body","kitchen","clothes","bath","transport","fruit","colors","numbers","walk","sleep","culture","toys","veg","home"]};
 const MINUTES={sabi:5,balapan:10,qulynshaq:15,batyr:15};
 const DAY_KIND=["words","words2","game","life","review"];
 const P={
