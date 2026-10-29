@@ -61,6 +61,8 @@ const THEMES=[
   ["s-circle","circle","дөңгелек","круг","сёкл"],["s-square","square","шаршы","квадрат","скуэа"],["s-triangle","triangle","үшбұрыш","треугольник","трайэнгл"],["s-star","star","жұлдыз","звезда","ста"],["s-heart","heart","жүрек","сердце","хат"],["s-oval","oval","сопақ","овал","оувл"],["s-rectangle","rectangle","тіктөртбұрыш","прямоугольник","рэктэнгл"],["s-diamond","diamond","ромб","ромб","даймэнд"]]},
  {id:"bugs",name:{"en": "Bugs", "kk": "Жәндіктер", "ru": "Насекомые"},life:"bugs",items:[
   ["butterfly","butterfly","көбелек","бабочка","батэфлай"],["ladybird","ladybird","қанқызы","божья коровка","лэдибёд"],["bee","bee","ара","пчела","би"],["ant","ant","құмырсқа","муравей","энт"],["snail","snail","ұлу","улитка","снейл"],["caterpillar","caterpillar","жұлдызқұрт","гусеница","кэтэпилэ"],["dragonfly","dragonfly","инелік","стрекоза","дрэгонфлай"],["grasshopper","grasshopper","шегіртке","кузнечик","грасхопэ"]]},
+ {id:"jobs",name:{"en": "Jobs", "kk": "Мамандықтар", "ru": "Профессии"},life:"jobs",items:[
+  ["doctor","doctor","дәрігер","врач","доктэ"],["chef","cook","аспаз","повар","кук"],["police","police officer","полицей","полицейский","полис офисэ"],["firefighter","firefighter","өрт сөндіруші","пожарный","файэфайтэ"],["teacher","teacher","мұғалім","учительница","тичэ"],["builder","builder","құрылысшы","строитель","билдэ"],["farmer","farmer","фермер","фермер","фамэ"],["driver","bus driver","жүргізуші","водитель","бас драйвэ"]]},
  {id:"colors",name:{en:"Colours",kk:"Түстер",ru:"Цвета"},bare:1,items:[
   ["c-red","red","қызыл","красный","рэд"],["c-yellow","yellow","сары","жёлтый","йеллоу"],["c-blue","blue","көк","синий","блу"],
   ["c-green","green","жасыл","зелёный","грин"],["c-orange","orange","қызғылт сары","оранжевый","ориндж"],["c-purple","purple","күлгін","фиолетовый","пөпл"],
@@ -203,6 +205,14 @@ const ITEM_PHRASE={
  "caterpillar":{"en": "The caterpillar is hungry.", "kk": "Жұлдызқұрттың қарны ашты.", "ru": "Гусеница проголодалась."},
  "dragonfly":{"en": "Look, a dragonfly!", "kk": "Қара, инелік!", "ru": "Смотри, стрекоза!"},
  "grasshopper":{"en": "Jump like a grasshopper!", "kk": "Шегірткедей секір!", "ru": "Прыгай, как кузнечик!"},
+ "doctor":{"en": "The doctor helps us get well.", "kk": "Дәрігер бізді емдейді.", "ru": "Врач нас лечит."},
+ "chef":{"en": "The cook makes yummy food.", "kk": "Аспаз дәмді тамақ пісіреді.", "ru": "Повар готовит вкусную еду."},
+ "police":{"en": "The police officer keeps us safe.", "kk": "Полицей бізді қорғайды.", "ru": "Полицейский нас охраняет."},
+ "firefighter":{"en": "The firefighter puts out fires.", "kk": "Өрт сөндіруші өртті сөндіреді.", "ru": "Пожарный тушит огонь."},
+ "teacher":{"en": "The teacher reads us a book.", "kk": "Мұғалім бізге кітап оқиды.", "ru": "Учительница читает нам книжку."},
+ "builder":{"en": "The builder builds a house.", "kk": "Құрылысшы үй салады.", "ru": "Строитель строит дом."},
+ "farmer":{"en": "The farmer grows vegetables.", "kk": "Фермер көкөніс өсіреді.", "ru": "Фермер выращивает овощи."},
+ "driver":{"en": "The bus driver drives the bus.", "kk": "Жүргізуші автобус айдайды.", "ru": "Водитель ведёт автобус."},
  yurt:{en:"This is a yurt, a Kazakh home.",kk:"Бұл — киіз үй, қазақтың үйі.",ru:"Это юрта — казахский дом."},
  dombyra:{en:"Let's play the dombra!",kk:"Домбыра тартайық!",ru:"Сыграем на домбре!"},
  shanyraq:{en:"Look up, the shanyrak!",kk:"Жоғары қара, шаңырақ!",ru:"Посмотри наверх — шанырак!"},
@@ -362,6 +372,17 @@ const LIFE={dress:{
   {"en": "Shh, let's be quiet.", "kk": "Тсс, ақырын.", "ru": "Тсс, тихонько.", "when": {"kk": "Жәндікті бақылағанда", "ru": "Когда наблюдаете"}},
   {"en": "Bees make honey.", "kk": "Ара бал жинайды.", "ru": "Пчёлы делают мёд.", "when": {"kk": "Бал жегенде", "ru": "Когда едите мёд"}},
   {"en": "Bye-bye, little bug!", "kk": "Сау бол, кішкентай жәндік!", "ru": "Пока, жучок!", "when": {"kk": "Серуеннің соңында", "ru": "В конце прогулки"}}]},
+ jobs:{
+ title:{"kk": "Мамандықтар туралы әңгіме", "ru": "Говорим о профессиях"},
+ intro:{"kk": "Көшеде, дүкенде, емханада адамдардың кім болып жұмыс істейтінін атаңыз.", "ru": "На улице, в магазине, в поликлинике называйте, кем работают люди."},
+ phrases:[
+  {"en": "Who is this?", "kk": "Бұл кім?", "ru": "Кто это?", "when": {"kk": "Суретке қарағанда", "ru": "Разглядывая картинку"}},
+  {"en": "What does a doctor do?", "kk": "Дәрігер не істейді?", "ru": "Что делает врач?", "when": {"kk": "Емханада", "ru": "В поликлинике"}},
+  {"en": "Say thank you to the driver.", "kk": "Жүргізушіге рақмет айт.", "ru": "Скажи водителю спасибо.", "when": {"kk": "Автобустан түскенде", "ru": "Выходя из автобуса"}},
+  {"en": "What do you want to be?", "kk": "Кім болғың келеді?", "ru": "Кем ты хочешь стать?", "when": {"kk": "Әңгімелескенде", "ru": "В разговоре"}},
+  {"en": "Let's play doctor!", "kk": "Дәрігер ойнайық!", "ru": "Давай поиграем во врача!", "when": {"kk": "Ойын кезінде", "ru": "Во время игры"}},
+  {"en": "Firefighters are brave.", "kk": "Өрт сөндірушілер батыл.", "ru": "Пожарные смелые.", "when": {"kk": "Өрт сөндіру көлігін көргенде", "ru": "Увидев пожарную машину"}},
+  {"en": "Let's cook together like a chef.", "kk": "Аспаз сияқты бірге тамақ пісірейік.", "ru": "Давай готовить вместе, как повар.", "when": {"kk": "Ас үйде", "ru": "На кухне"}}]},
  guests:{
  title:{kk:"Қонақ келгенде айтатын фразалар",ru:"Фразы, когда приходят гости"},
  intro:{kk:"Қонақ келгенде немесе әже-атаға барғанда айтыңыз: бала салт-дәстүрді сөзбен бірге үйренеді.",
@@ -444,15 +465,15 @@ const T={
 /* levels by age */
 const LEVELS=[
  {id:"sabi",ages:[1],name:"Сәби",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","culture","toys","veg","home","weather","bugs"],games:["listen","peek","knock","bubbles","goodnight"],tip:1},
- {id:"balapan",ages:[2],name:"Балапан",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","culture","toys","veg","home","weather","emotions","shapes","bugs"],games:["find","who","pair","shadow","feed","dress","color"],tip:2},
- {id:"qulynshaq",ages:[3],name:"Құлыншақ",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture","toys","veg","home","weather","emotions","shapes","bugs"],games:["find","who","pair","shadow","feed","color","oddone","count","missing"],tip:3},
- {id:"batyr",ages:[4,5,6],name:"Батыр",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture","toys","veg","home","weather","emotions","shapes","bugs"],games:["letter","spell","count","wordpair","repeat","oddone","missing","pair","find","shadow","color","who"],tip:4}];
+ {id:"balapan",ages:[2],name:"Балапан",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","culture","toys","veg","home","weather","emotions","shapes","bugs","jobs"],games:["find","who","pair","shadow","feed","dress","color"],tip:2},
+ {id:"qulynshaq",ages:[3],name:"Құлыншақ",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture","toys","veg","home","weather","emotions","shapes","bugs","jobs"],games:["find","who","pair","shadow","feed","color","oddone","count","missing"],tip:3},
+ {id:"batyr",ages:[4,5,6],name:"Батыр",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture","toys","veg","home","weather","emotions","shapes","bugs","jobs"],games:["letter","spell","count","wordpair","repeat","oddone","missing","pair","find","shadow","color","who"],tip:4}];
 
 /* ---------- programme: 5 days per theme, order by level ---------- */
 const PROGRAM={sabi:["animals","family","body","kitchen","clothes","bath","transport","fruit","walk","sleep","culture","toys","veg","home","weather","bugs"],
-  balapan:["animals","family","body","kitchen","clothes","bath","transport","fruit","colors","walk","sleep","culture","toys","veg","home","weather","emotions","shapes","bugs"],
-  qulynshaq:["animals","family","body","kitchen","clothes","bath","transport","fruit","colors","numbers","walk","sleep","culture","toys","veg","home","weather","emotions","shapes","bugs"],
-  batyr:["animals","family","body","kitchen","clothes","bath","transport","fruit","colors","numbers","walk","sleep","culture","toys","veg","home","weather","emotions","shapes","bugs"]};
+  balapan:["animals","family","body","kitchen","clothes","bath","transport","fruit","colors","walk","sleep","culture","toys","veg","home","weather","emotions","shapes","bugs","jobs"],
+  qulynshaq:["animals","family","body","kitchen","clothes","bath","transport","fruit","colors","numbers","walk","sleep","culture","toys","veg","home","weather","emotions","shapes","bugs","jobs"],
+  batyr:["animals","family","body","kitchen","clothes","bath","transport","fruit","colors","numbers","walk","sleep","culture","toys","veg","home","weather","emotions","shapes","bugs","jobs"]};
 const MINUTES={sabi:5,balapan:10,qulynshaq:15,batyr:15};
 const DAY_KIND=["words","words2","game","life","review"];
 const P={
