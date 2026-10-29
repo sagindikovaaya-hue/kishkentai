@@ -8,7 +8,7 @@ body.gated #stars,body.gated #trBtn,body.gated #kidBtn,body.gated .bottomnav{dis
 .feat{background:var(--card);border-radius:20px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
 .feat b{font-family:var(--f-word);font-weight:500;font-size:1.15rem}
 .inside{margin:0;padding:14px 16px 14px 34px;background:var(--card);border-radius:20px;display:flex;flex-direction:column;gap:8px;line-height:1.45;font-weight:600}
-.prices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.prices{display:grid;grid-template-columns:minmax(0,320px);gap:12px}
 .price{background:var(--card);border:2px solid transparent;border-radius:20px;padding:16px;display:flex;flex-direction:column;align-items:flex-start;gap:2px;font:inherit;color:var(--ink);text-align:left}
 .today .price{background:var(--paper)}
 button.price{cursor:pointer}

@@ -4,7 +4,7 @@ create table if not exists public.pay_requests (
   id         bigint generated always as identity primary key,
   user_id    uuid not null default auth.uid() references auth.users(id) on delete cascade,
   email      text,
-  plan       text not null check (plan in ('month','year')),
+  plan       text not null check (plan in ('month','year','forever')),
   status     text not null default 'new' check (status in ('new','done','rejected')),
   created_at timestamptz not null default now()
 );
@@ -41,3 +41,7 @@ create trigger pay_request_notify after insert on public.pay_requests for each r
 select cron.unschedule('kishkentai-daily') where exists (select 1 from cron.job where jobname = 'kishkentai-daily');
 select cron.schedule('kishkentai-daily', '0 4 * * *',
   (select replace(command, 'task=weekly', 'task=daily') from cron.job where jobname = 'kishkentai-weekly'));
+
+-- 29.10.2026: one price, 6 990 ₸, access for good (plan 'forever', paid_until = 2100-01-01).
+alter table public.pay_requests drop constraint if exists pay_requests_plan_check;
+alter table public.pay_requests add constraint pay_requests_plan_check check (plan in ('month','year','forever'));

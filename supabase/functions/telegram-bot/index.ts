@@ -3,7 +3,7 @@
 //    Commands: /report (send the report now), /stop (unsubscribe); for the owner also /pending (payments waiting).
 // 2) Weekly: pg_cron calls  ...?task=weekly  with header x-cron-secret -> every linked parent gets the week's report.
 // 3) Payments: a new row in pay_requests makes the database call  ...?task=payreq  (body {id}) -> the owner gets
-//    the request with buttons "1 month / 1 year / reject"; a tap opens access in subscriptions and tells the parent.
+//    the request with buttons "open forever / reject" (old month/year requests still work); a tap opens access in subscriptions and tells the parent.
 //    The owner = the Telegram chat linked to an account whose subscriptions.plan is 'owner'.
 // 4) Daily: pg_cron calls  ...?task=daily  -> parents whose access ends in 3 days get a reminder.
 // Secrets (Edge Functions -> Secrets): TELEGRAM_BOT_TOKEN, TELEGRAM_WEBHOOK_SECRET, CRON_SECRET.
@@ -58,7 +58,8 @@ async function tg(method: string, body: unknown) {
 }
 
 /* ---------- payments ---------- */
-const PLAN_TEXT: Record<string, string> = { month: "1 ай / 1 месяц · 4 490 ₸", year: "1 жыл / 1 год · 44 900 ₸" };
+const PLAN_TEXT: Record<string, string> = { forever: "Біржола / Навсегда · 6 990 ₸", month: "1 ай / 1 месяц · 4 490 ₸", year: "1 жыл / 1 год · 44 900 ₸" };
+const FOREVER = "2100-01-01T00:00:00Z";   /* "for good" = paid_until far in the future */
 type PayReq = { id: number; user_id: string; email: string | null; plan: string; status: string; created_at: string };
 async function ownerChats(): Promise<number[]> {
   const { data: owners } = await db.from("subscriptions").select("user_id").eq("plan", "owner");
@@ -69,7 +70,7 @@ async function ownerChats(): Promise<number[]> {
 }
 const reqText = (r: PayReq) => `💳 Төлем сұрауы / Запрос оплаты #${r.id}\n${r.email ?? r.user_id}\n${PLAN_TEXT[r.plan] ?? r.plan}\n${new Date(r.created_at).toLocaleString("ru-RU", { timeZone: "Asia/Almaty" })}\n\nKaspi-ден тексеріңіз, сосын ашыңыз. / Проверьте поступление в Kaspi и откройте доступ.`;
 const reqButtons = (r: PayReq) => ({ inline_keyboard: [
-  [{ text: "✅ 1 ай / месяц", callback_data: `pay:${r.id}:month` }, { text: "✅ 1 жыл / год", callback_data: `pay:${r.id}:year` }],
+  [{ text: "✅ Ашу біржола / Открыть навсегда", callback_data: `pay:${r.id}:forever` }],
   [{ text: "✖️ Жоқ / Отклонить", callback_data: `pay:${r.id}:no` }]] });
 async function notifyOwner(r: PayReq) {
   for (const chat of await ownerChats()) await tg("sendMessage", { chat_id: chat, text: reqText(r), reply_markup: reqButtons(r) });
@@ -92,13 +93,13 @@ async function decide(cb: { id: string; from: { id: number }; data: string; mess
   }
   const { data: sub } = await db.from("subscriptions").select("plan, paid_until").eq("user_id", r.user_id).maybeSingle();
   const now = new Date(), cur = sub?.paid_until ? new Date(sub.paid_until) : now, from = cur > now ? cur : now, until = new Date(from);
-  until.setMonth(until.getMonth() + (choice === "year" ? 12 : 1));
+  if (choice === "forever") until.setTime(Date.parse(FOREVER)); else until.setMonth(until.getMonth() + (choice === "year" ? 12 : 1));
   const { error } = await db.from("subscriptions").upsert({ user_id: r.user_id, plan: sub?.plan === "owner" ? "owner" : choice, paid_until: until.toISOString() });
   if (error) return answer("Қате / Ошибка: " + error.message);
   await db.from("pay_requests").update({ status: "done" }).eq("id", r.id);
-  const day = until.toLocaleDateString("ru-RU", { timeZone: "Asia/Almaty" });
-  await edit(reqText(r).split("\n\n")[0] + `\n\n✅ Ашылды / Открыто до ${day}`);
-  if (link) await send(Number(link.chat_id), `✅ Kishkentai толық ашылды, ${day} дейін. Рақмет!\n✅ Полный доступ открыт до ${day}. Спасибо!`);
+  const forever = choice === "forever", day = forever ? "∞" : until.toLocaleDateString("ru-RU", { timeZone: "Asia/Almaty" });
+  await edit(reqText(r).split("\n\n")[0] + (forever ? "\n\n✅ Біржола ашылды / Открыто навсегда" : `\n\n✅ Ашылды / Открыто до ${day}`));
+  if (link) await send(Number(link.chat_id), forever ? "✅ Kishkentai біржола ашылды. Рақмет!\n✅ Полный доступ открыт навсегда. Спасибо!" : `✅ Kishkentai толық ашылды, ${day} дейін. Рақмет!\n✅ Полный доступ открыт до ${day}. Спасибо!`);
   return answer("✅ " + day);
 }
 async function remind() {

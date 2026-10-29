@@ -322,7 +322,7 @@ body.gated #stars,body.gated #trBtn,body.gated #kidBtn,body.gated .bottomnav{dis
 .feat{background:var(--card);border-radius:20px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
 .feat b{font-family:var(--f-word);font-weight:500;font-size:1.15rem}
 .inside{margin:0;padding:14px 16px 14px 34px;background:var(--card);border-radius:20px;display:flex;flex-direction:column;gap:8px;line-height:1.45;font-weight:600}
-.prices{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.prices{display:grid;grid-template-columns:minmax(0,320px);gap:12px}
 .price{background:var(--card);border:2px solid transparent;border-radius:20px;padding:16px;display:flex;flex-direction:column;align-items:flex-start;gap:2px;font:inherit;color:var(--ink);text-align:left}
 .today .price{background:var(--paper)}
 button.price{cursor:pointer}
@@ -1230,7 +1230,7 @@ function wordpair(){
     else{b.classList.remove("wrong");void b.offsetWidth;b.classList.add("wrong");say(W(p))}})}
 
 /* ---------- gate: intro page + short demo for everyone, the app itself only for a signed-in parent with a paid plan ---------- */
-const PRICE={month:"4 490 ₸",year:"44 900 ₸"};
+const PRICE={forever:"6 990 ₸"};   /* one payment, access for good */
 const PAY_QR="kaspi-qr.png";   /* Kaspi QR picture (data:image/... or a file next to index.html); empty = "coming soon" note */
 const GATE={
  kk:{other:"Русский",hero:"Балаңыз үш тілде сөйлей бастасын",
@@ -1245,8 +1245,8 @@ const GATE={
   inside:["10 тақырып: жануарлар, көлік, жемістер, киім, ас үй, жуыну, серуен, ұйқы, түстер, сандар",
    "19 ойын: «Тыңда», «Жасырынбақ», «Тауып бер», «Кім айтады?», «Жұбын тап» және басқалар",
    "4–6 жасқа: әріптер, сөз құрастыру, санау","Бірнеше бала — бір аккаунт, кез келген телефонда"],
-  priceHead:"Бағасы",month:"ай",year:"жыл",yearNote:"2 ай тегін",
-  priceNote:"Төлем Kaspi арқылы. Ақша автоматты түрде алынбайды — мерзімі біткенде өзіңіз ұзартасыз.",
+  priceHead:"Бағасы",forever:"бір рет",foreverNote:"Толық қолжетімділік мерзімсіз",
+  priceNote:"Бір рет Kaspi арқылы төлейсіз — платформа сізде біржола қалады. Ай сайынғы төлем жоқ.",
   faqHead:"Сұрақтар",
   faq:[["Қай құрылғыда жұмыс істейді?","Телефон, планшет, компьютер — браузер арқылы. Телефонға қосымша ретінде орнатуға болады."],
    ["Бір аккаунтқа неше бала?","Бірнеше бала. Әрқайсысына жеке профиль мен прогресс."],
@@ -1255,7 +1255,7 @@ const GATE={
   regHead:"Тіркелу",regSub:"Email жазыңыз — поштаға кіру коды келеді. Сосын төлем, сосын толық қолжетімділік.",
   demoTag:"Демо",demoTap:"Суретті басыңыз — сөзді естисіз",demoClose:"✕ Шығу",
   demoEndHead:"Бұл — кішкене бөлігі ғана",demoEnd:"Ішінде 10 тақырып, 19 ойын, күн сайынғы жоспар, прогресс және Telegram-да апталық есеп.",
-  payHead:"Толық қолжетімділік",paySub:e=>`Сіз кірдіңіз: ${e}. Жоспарды таңдап, Kaspi арқылы төлеңіз.`,expired:"Жазылым мерзімі бітті. Жалғастыру үшін ұзартыңыз.",
+  payHead:"Толық қолжетімділік",paySub:e=>`Сіз кірдіңіз: ${e}. Kaspi арқылы бір рет төлеңіз — қолжетімділік біржола ашылады.`,expired:"Бұрынғы жазылым мерзімі бітті. Бір рет төлеп, біржола ашыңыз.",
   payQr:p=>`Kaspi QR-ды сканерлеп, ${p} төлеңіз`,noQr:"Kaspi QR жақында осында шығады.",saveQr:"QR-ды сақтау",sameHint:"Сайт осы телефонда ашық болса: QR-ды сақтаңыз, сосын Kaspi сканерінде галереядан ашыңыз.",paid:"Мен төледім",check:"Тексеру",out:"Шығу",
   sent:"Рақмет! Төлемді тексеріп жатырмыз — әдетте бірнеше сағат ішінде ашылады. Ашылғанда бұл бет өзі жаңарады.",
   payErr:"Жіберу мүмкін болмады. Интернетті тексеріп, қайталаңыз.",offline:"Қазір тексеру мүмкін емес: интернет жоқ."},
@@ -1271,8 +1271,8 @@ const GATE={
   inside:["10 тем: животные, транспорт, фрукты, одежда, кухня, ванная, прогулка, сон, цвета, числа",
    "19 игр: «Слушай», «Прятки», «Найди», «Кто говорит?», «Найди пару» и другие",
    "Для 4–6 лет: буквы, собери слово, счёт","Несколько детей — один аккаунт, на любом телефоне"],
-  priceHead:"Цена",month:"месяц",year:"год",yearNote:"2 месяца в подарок",
-  priceNote:"Оплата через Kaspi. Деньги не списываются автоматически — когда срок закончится, продлите сами.",
+  priceHead:"Цена",forever:"один раз",foreverNote:"Полный доступ навсегда",
+  priceNote:"Один платёж через Kaspi — платформа остаётся у вас навсегда. Никаких ежемесячных списаний.",
   faqHead:"Вопросы",
   faq:[["На каких устройствах работает?","Телефон, планшет, компьютер — через браузер. На телефон можно установить как приложение."],
    ["Сколько детей в одном аккаунте?","Несколько. У каждого свой профиль и прогресс."],
@@ -1281,7 +1281,7 @@ const GATE={
   regHead:"Регистрация",regSub:"Введите email — на почту придёт код для входа. Потом оплата, и сразу полный доступ.",
   demoTag:"Демо",demoTap:"Нажмите на картинку — услышите слово",demoClose:"✕ Выйти",
   demoEndHead:"Это только маленькая часть",demoEnd:"Внутри 10 тем, 19 игр, план на каждый день, прогресс и итоги недели в Telegram.",
-  payHead:"Полный доступ",paySub:e=>`Вы вошли: ${e}. Выберите тариф и оплатите через Kaspi.`,expired:"Срок подписки закончился. Продлите, чтобы продолжить.",
+  payHead:"Полный доступ",paySub:e=>`Вы вошли: ${e}. Оплатите один раз через Kaspi — доступ откроется навсегда.`,expired:"Срок прежней подписки закончился. Оплатите один раз — и доступ будет навсегда.",
   payQr:p=>`Отсканируйте Kaspi QR и оплатите ${p}`,noQr:"Kaspi QR скоро появится здесь.",saveQr:"Сохранить QR",sameHint:"Если сайт открыт на этом же телефоне: сохраните QR и откройте его в сканере Kaspi из галереи.",paid:"Я оплатил(а)",check:"Проверить",out:"Выйти",
   sent:"Спасибо! Проверяем оплату — обычно доступ открывается в течение нескольких часов. Эта страница обновится сама.",
   payErr:"Не получилось отправить. Проверьте интернет и попробуйте ещё раз.",offline:"Сейчас не проверить: нет интернета."}};
@@ -1320,7 +1320,7 @@ function intro(){gated(true);const G1=gx();
    <section class="reg" id="reg"><h2 class="sec">${G1.regHead}</h2><p class="sub">${G1.regSub}</p>${accountBlock()}</section></div>`;
   window.scrollTo(0,0);
   $("#gLang").onclick=()=>{gateLang();intro()};$("#gDemo").onclick=()=>demo(0);$("#gToReg").onclick=()=>$("#reg").scrollIntoView({behavior:"smooth"});bindAccount()}
-const prices=sel=>`<div class="prices">${["month","year"].map(p=>`<${sel?`button type="button" data-plan="${p}" aria-pressed="${p===sel}"`:"div"} class="price"><b>${PRICE[p]}</b><span>/ ${gx()[p]}</span>${p==="year"?`<em>${gx().yearNote}</em>`:""}</${sel?"button":"div"}>`).join("")}</div>`;
+const prices=sel=>`<div class="prices">${Object.keys(PRICE).map(p=>`<${sel?`button type="button" data-plan="${p}" aria-pressed="${p===sel}"`:"div"} class="price"><b>${PRICE[p]}</b><span>/ ${gx()[p]}</span><em>${gx().foreverNote}</em></${sel?"button":"div"}>`).join("")}</div>`;
 
 /* ---------- demo: three cards to tap, one "where is…?" round, then the invitation; nothing is saved ---------- */
 const DEMO_CARDS=["cat","rabbit","duck"].map(k=>THEME.animals.items.find(it=>it.key===k));
@@ -1347,7 +1347,7 @@ function demo(step){gated(true);const G1=gx(),n=DEMO_CARDS.length+1,head=`<div c
   window.scrollTo(0,0);$("#gClose").onclick=()=>intro()}
 
 /* ---------- paywall: signed in, not paid yet ---------- */
-function paywall(expired,note){gated(true);const G1=gx();let plan=store.get("plan","month");
+function paywall(expired,note){gated(true);const G1=gx();let plan="forever";
   view.innerHTML=`<div class="col intro">
    <div class="row gtop"><span class="spacer"></span><button class="pill" id="gLang">${G1.other}</button></div>
    <section class="today"><h1>${G1.payHead}</h1><p class="sub">${esc(G1.paySub(sbUser&&sbUser.email||""))}</p>
