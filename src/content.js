@@ -57,6 +57,8 @@ const THEMES=[
   ["rain","rain","жаңбыр","дождь","рейн"],["snow","snow","қар","снег","сноу"],["wind","wind","жел","ветер","уинд"],["cloud","cloud","бұлт","облако","клауд"],["rainbow","rainbow","кемпірқосақ","радуга","рейнбоу"],["snowman","snowman","аққала","снеговик","сноумэн"],["puddle","puddle","шалшық","лужа","падл"],["leaves","leaves","жапырақтар","листья","ливз",1]]},
  {id:"emotions",name:{"en": "Feelings", "kk": "Сезімдер", "ru": "Эмоции"},bare:1,life:"emotions",items:[
   ["happy","happy","көңілді","весёлая","хэппи"],["sad","sad","мұңды","грустная","сэд"],["angry","angry","ашулы","сердитая","энгри"],["scared","scared","қорыққан","испуганная","скэад"],["surprised","surprised","таңғалған","удивлённая","сэпрайзд"],["sleepy","sleepy","ұйқылы","сонная","слипи"],["shy","shy","ұялшақ","стеснительная","шай"],["hungry","hungry","аш","голодная","хангри"]]},
+ {id:"shapes",name:{"en": "Shapes", "kk": "Пішіндер", "ru": "Формы"},life:"shapes",items:[
+  ["s-circle","circle","дөңгелек","круг","сёкл"],["s-square","square","шаршы","квадрат","скуэа"],["s-triangle","triangle","үшбұрыш","треугольник","трайэнгл"],["s-star","star","жұлдыз","звезда","ста"],["s-heart","heart","жүрек","сердце","хат"],["s-oval","oval","сопақ","овал","оувл"],["s-rectangle","rectangle","тіктөртбұрыш","прямоугольник","рэктэнгл"],["s-diamond","diamond","ромб","ромб","даймэнд"]]},
  {id:"colors",name:{en:"Colours",kk:"Түстер",ru:"Цвета"},bare:1,items:[
   ["c-red","red","қызыл","красный","рэд"],["c-yellow","yellow","сары","жёлтый","йеллоу"],["c-blue","blue","көк","синий","блу"],
   ["c-green","green","жасыл","зелёный","грин"],["c-orange","orange","қызғылт сары","оранжевый","ориндж"],["c-purple","purple","күлгін","фиолетовый","пөпл"],
@@ -183,6 +185,14 @@ const ITEM_PHRASE={
  sleepy:{"en": "I'm sleepy.", "kk": "Ұйқым келді.", "ru": "Я хочу спать."},
  shy:{"en": "It's okay to be shy.", "kk": "Ұялуға болады.", "ru": "Стесняться — это нормально."},
  hungry:{"en": "I'm hungry!", "kk": "Қарным ашты!", "ru": "Я хочу кушать!"},
+ s-circle:{"en": "A circle is round like a ball.", "kk": "Дөңгелек доп сияқты.", "ru": "Круг круглый, как мячик."},
+ s-square:{"en": "A square has four sides.", "kk": "Шаршының төрт қабырғасы бар.", "ru": "У квадрата четыре стороны."},
+ s-triangle:{"en": "A triangle has three corners.", "kk": "Үшбұрыштың үш бұрышы бар.", "ru": "У треугольника три угла."},
+ s-star:{"en": "Twinkle, twinkle, star!", "kk": "Жымың-жымың, жұлдыз!", "ru": "Звёздочка блестит!"},
+ s-heart:{"en": "A heart for Mummy!", "kk": "Анама жүрек!", "ru": "Сердечко для мамы!"},
+ s-oval:{"en": "An oval looks like an egg.", "kk": "Сопақ жұмыртқаға ұқсайды.", "ru": "Овал похож на яйцо."},
+ s-rectangle:{"en": "A rectangle looks like a door.", "kk": "Тіктөртбұрыш есікке ұқсайды.", "ru": "Прямоугольник похож на дверь."},
+ s-diamond:{"en": "A diamond looks like a kite.", "kk": "Ромб батпыраққа ұқсайды.", "ru": "Ромб похож на воздушного змея."},
  yurt:{en:"This is a yurt, a Kazakh home.",kk:"Бұл — киіз үй, қазақтың үйі.",ru:"Это юрта — казахский дом."},
  dombyra:{en:"Let's play the dombra!",kk:"Домбыра тартайық!",ru:"Сыграем на домбре!"},
  shanyraq:{en:"Look up, the shanyrak!",kk:"Жоғары қара, шаңырақ!",ru:"Посмотри наверх — шанырак!"},
@@ -320,6 +330,17 @@ const LIFE={dress:{
   {"en": "Do you want a hug?", "kk": "Құшақтайын ба?", "ru": "Тебя обнять?", "when": {"kk": "Бала ренжігенде", "ru": "Когда ребёнок расстроен"}},
   {"en": "It's okay. I'm here.", "kk": "Бәрі жақсы. Мен қасыңдамын.", "ru": "Всё хорошо. Я рядом.", "when": {"kk": "Бала қорыққанда", "ru": "Когда ребёнок испугался"}},
   {"en": "Show me a happy face!", "kk": "Көңілді бетіңді көрсетші!", "ru": "Покажи весёлое лицо!", "when": {"kk": "Сезімдерді көрсету ойынында", "ru": "В игре «покажи чувство»"}}]},
+ shapes:{
+ title:{"kk": "Айналадағы пішіндер", "ru": "Формы вокруг нас"},
+ intro:{"kk": "Үйде және далада пішіндерді бірге іздеңіз: сағат — дөңгелек, терезе — шаршы.", "ru": "Ищите формы дома и на улице: часы — круг, окно — квадрат."},
+ phrases:[
+  {"en": "What shape is it?", "kk": "Бұл қандай пішін?", "ru": "Какая это форма?", "when": {"kk": "Кез келген затты көрсеткенде", "ru": "Показывая на любой предмет"}},
+  {"en": "Find something round.", "kk": "Дөңгелек нәрсе тап.", "ru": "Найди что-нибудь круглое.", "when": {"kk": "Үйде ойнағанда", "ru": "Играя дома"}},
+  {"en": "The clock is a circle.", "kk": "Сағат — дөңгелек.", "ru": "Часы — это круг.", "when": {"kk": "Сағатқа қарағанда", "ru": "Глядя на часы"}},
+  {"en": "The window is a square.", "kk": "Терезе — шаршы.", "ru": "Окно — квадрат.", "when": {"kk": "Терезеге қарағанда", "ru": "Глядя в окно"}},
+  {"en": "Let's draw a triangle.", "kk": "Үшбұрыш салайық.", "ru": "Давай нарисуем треугольник.", "when": {"kk": "Сурет салғанда", "ru": "Когда рисуете"}},
+  {"en": "Let's count the corners.", "kk": "Бұрыштарын санайық.", "ru": "Посчитаем уголки.", "when": {"kk": "Пішінді қарағанда", "ru": "Разглядывая фигуру"}},
+  {"en": "Let's cut out a star.", "kk": "Жұлдыз қиып алайық.", "ru": "Вырежем звёздочку.", "when": {"kk": "Қолөнер кезінде", "ru": "Во время поделок"}}]},
  guests:{
  title:{kk:"Қонақ келгенде айтатын фразалар",ru:"Фразы, когда приходят гости"},
  intro:{kk:"Қонақ келгенде немесе әже-атаға барғанда айтыңыз: бала салт-дәстүрді сөзбен бірге үйренеді.",
@@ -402,15 +423,15 @@ const T={
 /* levels by age */
 const LEVELS=[
  {id:"sabi",ages:[1],name:"Сәби",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","culture","toys","veg","home","weather"],games:["listen","peek","knock","bubbles","goodnight"],tip:1},
- {id:"balapan",ages:[2],name:"Балапан",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","culture","toys","veg","home","weather","emotions"],games:["find","who","pair","shadow","feed","dress","color"],tip:2},
- {id:"qulynshaq",ages:[3],name:"Құлыншақ",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture","toys","veg","home","weather","emotions"],games:["find","who","pair","shadow","feed","color","oddone","count","missing"],tip:3},
- {id:"batyr",ages:[4,5,6],name:"Батыр",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture","toys","veg","home","weather","emotions"],games:["letter","spell","count","wordpair","repeat","oddone","missing","pair","find","shadow","color","who"],tip:4}];
+ {id:"balapan",ages:[2],name:"Балапан",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","culture","toys","veg","home","weather","emotions","shapes"],games:["find","who","pair","shadow","feed","dress","color"],tip:2},
+ {id:"qulynshaq",ages:[3],name:"Құлыншақ",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture","toys","veg","home","weather","emotions","shapes"],games:["find","who","pair","shadow","feed","color","oddone","count","missing"],tip:3},
+ {id:"batyr",ages:[4,5,6],name:"Батыр",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture","toys","veg","home","weather","emotions","shapes"],games:["letter","spell","count","wordpair","repeat","oddone","missing","pair","find","shadow","color","who"],tip:4}];
 
 /* ---------- programme: 5 days per theme, order by level ---------- */
 const PROGRAM={sabi:["animals","family","body","kitchen","clothes","bath","transport","fruit","walk","sleep","culture","toys","veg","home","weather"],
-  balapan:["animals","family","body","kitchen","clothes","bath","transport","fruit","colors","walk","sleep","culture","toys","veg","home","weather","emotions"],
-  qulynshaq:["animals","family","body","kitchen","clothes","bath","transport","fruit","colors","numbers","walk","sleep","culture","toys","veg","home","weather","emotions"],
-  batyr:["animals","family","body","kitchen","clothes","bath","transport","fruit","colors","numbers","walk","sleep","culture","toys","veg","home","weather","emotions"]};
+  balapan:["animals","family","body","kitchen","clothes","bath","transport","fruit","colors","walk","sleep","culture","toys","veg","home","weather","emotions","shapes"],
+  qulynshaq:["animals","family","body","kitchen","clothes","bath","transport","fruit","colors","numbers","walk","sleep","culture","toys","veg","home","weather","emotions","shapes"],
+  batyr:["animals","family","body","kitchen","clothes","bath","transport","fruit","colors","numbers","walk","sleep","culture","toys","veg","home","weather","emotions","shapes"]};
 const MINUTES={sabi:5,balapan:10,qulynshaq:15,batyr:15};
 const DAY_KIND=["words","words2","game","life","review"];
 const P={
