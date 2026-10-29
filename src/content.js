@@ -49,6 +49,8 @@ const THEMES=[
   ["qazan","pot","қазан","казан","пот"],["baursak","baursaks","бауырсақ","баурсаки","баурсакс",1]]},
  {id:"toys",name:{"en": "Toys", "kk": "Ойыншықтар", "ru": "Игрушки"},life:"toys",items:[
   ["blocks","blocks","кубиктер","кубики","блокс",1],["doll","doll","қуыршақ","кукла","дол"],["pyramid","stacking rings","пирамида","пирамидка","стэкинг рингз",1],["top","spinning top","зырылдауық","юла","спиннинг топ"],["drum","drum","барабан","барабан","драм"],["balloon","balloon","әуе шары","шарик","бэлун"],["puzzle","puzzle","пазл","пазл","пазл"],["robot","robot","робот","робот","роубот"]]},
+ {id:"veg",name:{"en": "Vegetables", "kk": "Көкөністер", "ru": "Овощи"},life:"veg",items:[
+  ["carrot","carrot","сәбіз","морковка","кэрэт"],["potato","potatoes","картоп","картошка","потейтоуз",1],["tomato","tomato","қызанақ","помидор","томатоу"],["cucumber","cucumber","қияр","огурец","кьюкамбэ"],["onion","onion","пияз","лук","аньен"],["cabbage","cabbage","қырыққабат","капуста","кэбидж"],["pumpkin","pumpkin","асқабақ","тыква","пампкин"],["corn","corn","жүгері","кукуруза","корн"]]},
  {id:"colors",name:{en:"Colours",kk:"Түстер",ru:"Цвета"},bare:1,items:[
   ["c-red","red","қызыл","красный","рэд"],["c-yellow","yellow","сары","жёлтый","йеллоу"],["c-blue","blue","көк","синий","блу"],
   ["c-green","green","жасыл","зелёный","грин"],["c-orange","orange","қызғылт сары","оранжевый","ориндж"],["c-purple","purple","күлгін","фиолетовый","пөпл"],
@@ -143,6 +145,14 @@ const ITEM_PHRASE={
  balloon:{"en": "A big red balloon!", "kk": "Үлкен қызыл шар!", "ru": "Большой красный шарик!"},
  puzzle:{"en": "Where does this piece go?", "kk": "Бұл бөлік қайда барады?", "ru": "Куда эта деталька?"},
  robot:{"en": "Hello, robot!", "kk": "Сәлем, робот!", "ru": "Привет, робот!"},
+ carrot:{"en": "Crunch, crunch, a carrot!", "kk": "Қытыр-қытыр, сәбіз!", "ru": "Хрум-хрум, морковка!"},
+ potato:{"en": "Let's wash the potatoes.", "kk": "Картопты жуайық.", "ru": "Давай помоем картошку."},
+ tomato:{"en": "A red tomato.", "kk": "Қызыл қызанақ.", "ru": "Красный помидор."},
+ cucumber:{"en": "A green cucumber.", "kk": "Жасыл қияр.", "ru": "Зелёный огурчик."},
+ onion:{"en": "Onions make us cry!", "kk": "Пияз көзді ашытады!", "ru": "От лука плачут!"},
+ cabbage:{"en": "A big round cabbage.", "kk": "Үлкен дөңгелек қырыққабат.", "ru": "Большая круглая капуста."},
+ pumpkin:{"en": "What a big pumpkin!", "kk": "Қандай үлкен асқабақ!", "ru": "Какая большая тыква!"},
+ corn:{"en": "Yummy sweet corn.", "kk": "Тәтті жүгері.", "ru": "Сладкая кукуруза."},
  yurt:{en:"This is a yurt, a Kazakh home.",kk:"Бұл — киіз үй, қазақтың үйі.",ru:"Это юрта — казахский дом."},
  dombyra:{en:"Let's play the dombra!",kk:"Домбыра тартайық!",ru:"Сыграем на домбре!"},
  shanyraq:{en:"Look up, the shanyrak!",kk:"Жоғары қара, шаңырақ!",ru:"Посмотри наверх — шанырак!"},
@@ -236,6 +246,17 @@ const LIFE={dress:{
   {"en": "Share with your friend.", "kk": "Досыңмен бөліс.", "ru": "Поделись с другом.", "when": {"kk": "Басқа балалармен ойнағанда", "ru": "Когда играете с другими детьми"}},
   {"en": "Let's put the toys away.", "kk": "Ойыншықтарды жинайық.", "ru": "Давай уберём игрушки.", "when": {"kk": "Ойын біткенде", "ru": "Когда игра закончилась"}},
   {"en": "Good job, all tidy!", "kk": "Жарайсың, бәрі жиналды!", "ru": "Молодец, всё убрано!", "when": {"kk": "Жинап болғанда", "ru": "Когда всё убрали"}}]},
+ veg:{
+ title:{"kk": "Базарда және ас үйде айтатын фразалар", "ru": "Фразы на базаре и на кухне"},
+ intro:{"kk": "Көкөністерді бірге таңдап, жуып, турағанда атаңыз: бала сөзді қолмен ұстап үйренеді.", "ru": "Называйте овощи, когда вместе выбираете, моете и режете их: ребёнок запоминает слово руками."},
+ phrases:[
+  {"en": "Let's go to the bazaar.", "kk": "Базарға барайық.", "ru": "Пойдём на базар.", "when": {"kk": "Үйден шығар алдында", "ru": "Перед выходом из дома"}},
+  {"en": "Put it in the basket.", "kk": "Себетке сал.", "ru": "Положи в корзинку.", "when": {"kk": "Базарда, дүкенде", "ru": "На базаре или в магазине"}},
+  {"en": "What colour is the carrot?", "kk": "Сәбіз қандай түсті?", "ru": "Какого цвета морковка?", "when": {"kk": "Көкөніс таңдағанда", "ru": "Когда выбираете овощи"}},
+  {"en": "Wash the vegetables.", "kk": "Көкөністерді жу.", "ru": "Помой овощи.", "when": {"kk": "Тамақ әзірлегенде", "ru": "Когда готовите"}},
+  {"en": "Let's make a salad.", "kk": "Салат жасайық.", "ru": "Давай сделаем салат.", "when": {"kk": "Ас үйде бірге", "ru": "Вместе на кухне"}},
+  {"en": "Taste it, it's yummy.", "kk": "Дәмін татып көр, тәтті.", "ru": "Попробуй, вкусно.", "when": {"kk": "Тамақ кезінде", "ru": "Во время еды"}},
+  {"en": "Vegetables make you strong!", "kk": "Көкөніс күш береді!", "ru": "Овощи дают силу!", "when": {"kk": "Бала көкөніс жегенде", "ru": "Когда ребёнок ест овощи"}}]},
  guests:{
  title:{kk:"Қонақ келгенде айтатын фразалар",ru:"Фразы, когда приходят гости"},
  intro:{kk:"Қонақ келгенде немесе әже-атаға барғанда айтыңыз: бала салт-дәстүрді сөзбен бірге үйренеді.",
@@ -317,16 +338,16 @@ const T={
 
 /* levels by age */
 const LEVELS=[
- {id:"sabi",ages:[1],name:"Сәби",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","culture","toys"],games:["listen","peek","knock","bubbles","goodnight"],tip:1},
- {id:"balapan",ages:[2],name:"Балапан",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","culture","toys"],games:["find","who","pair","shadow","feed","dress","color"],tip:2},
- {id:"qulynshaq",ages:[3],name:"Құлыншақ",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture","toys"],games:["find","who","pair","shadow","feed","color","oddone","count","missing"],tip:3},
- {id:"batyr",ages:[4,5,6],name:"Батыр",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture","toys"],games:["letter","spell","count","wordpair","repeat","oddone","missing","pair","find","shadow","color","who"],tip:4}];
+ {id:"sabi",ages:[1],name:"Сәби",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","culture","toys","veg"],games:["listen","peek","knock","bubbles","goodnight"],tip:1},
+ {id:"balapan",ages:[2],name:"Балапан",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","culture","toys","veg"],games:["find","who","pair","shadow","feed","dress","color"],tip:2},
+ {id:"qulynshaq",ages:[3],name:"Құлыншақ",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture","toys","veg"],games:["find","who","pair","shadow","feed","color","oddone","count","missing"],tip:3},
+ {id:"batyr",ages:[4,5,6],name:"Батыр",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture","toys","veg"],games:["letter","spell","count","wordpair","repeat","oddone","missing","pair","find","shadow","color","who"],tip:4}];
 
 /* ---------- programme: 5 days per theme, order by level ---------- */
-const PROGRAM={sabi:["animals","family","body","kitchen","clothes","bath","transport","fruit","walk","sleep","culture","toys"],
-  balapan:["animals","family","body","kitchen","clothes","bath","transport","fruit","colors","walk","sleep","culture","toys"],
-  qulynshaq:["animals","family","body","kitchen","clothes","bath","transport","fruit","colors","numbers","walk","sleep","culture","toys"],
-  batyr:["animals","family","body","kitchen","clothes","bath","transport","fruit","colors","numbers","walk","sleep","culture","toys"]};
+const PROGRAM={sabi:["animals","family","body","kitchen","clothes","bath","transport","fruit","walk","sleep","culture","toys","veg"],
+  balapan:["animals","family","body","kitchen","clothes","bath","transport","fruit","colors","walk","sleep","culture","toys","veg"],
+  qulynshaq:["animals","family","body","kitchen","clothes","bath","transport","fruit","colors","numbers","walk","sleep","culture","toys","veg"],
+  batyr:["animals","family","body","kitchen","clothes","bath","transport","fruit","colors","numbers","walk","sleep","culture","toys","veg"]};
 const MINUTES={sabi:5,balapan:10,qulynshaq:15,batyr:15};
 const DAY_KIND=["words","words2","game","life","review"];
 const P={
