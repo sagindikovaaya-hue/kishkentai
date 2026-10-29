@@ -7,6 +7,10 @@ const THEMES=[
   ["giraffe","giraffe","керік","жираф","джираф"],["fox","fox","түлкі","лиса","фокс"],["cat","cat","мысық","кошка","кәт"],
   ["rabbit","rabbit","қоян","зайчик","рәбит"],["bear","bear","аю","медведь","беә"],["elephant","elephant","піл","слон","элифәнт"],
   ["sheep","sheep","қой","овечка","шип"],["horse","horse","жылқы","лошадка","хорс"],["owl","owl","үкі","сова","аул"],["duck","duck","үйрек","утка","дақ"]]},
+ {id:"family",name:{en:"Family",kk:"Отбасы",ru:"Семья"},life:"family",items:[
+  ["mama","mummy","ана","мама","мами"],["papa","daddy","әке","папа","дэди"],["aje","grandma","әже","бабушка","грэнма"],
+  ["ata","grandpa","ата","дедушка","грэнпа"],["sister","sister","әпке","сестрёнка","систэ"],["brother","brother","аға","братик","бразэ"],
+  ["baby","baby","бөпе","малыш","бейби"],["family","family","отбасы","семья","фэмили"]]},
  {id:"transport",name:{en:"Transport",kk:"Көлік",ru:"Транспорт"},items:[
   ["car","car","машина","машина","кар"],["bus","bus","автобус","автобус","бас"],["train","train","пойыз","поезд","трейн"],
   ["plane","plane","ұшақ","самолёт","плейн"],["boat","boat","қайық","лодка","боут"],["bike","bike","велосипед","велосипед","байк"],
@@ -109,6 +113,14 @@ const ITEM_PHRASE={
  moon:{en:"Look, the moon!",kk:"Қара, ай!",ru:"Смотри, луна!"},
  star:{en:"Twinkle, twinkle, little star.",kk:"Жұлдызшық, жылтыра.",ru:"Звёздочка, свети."},
  book:{en:"Let's read a book.",kk:"Кітап оқиық.",ru:"Давай почитаем книжку."},
+ mama:{en:"I love you, Mummy!",kk:"Анашым, сені жақсы көремін!",ru:"Мамочка, я тебя люблю!"},
+ papa:{en:"Daddy is home!",kk:"Әкем үйге келді!",ru:"Папа пришёл домой!"},
+ aje:{en:"Let's visit Grandma.",kk:"Әжеге барайық.",ru:"Поедем к бабушке."},
+ ata:{en:"Grandpa tells a story.",kk:"Ата ертегі айтады.",ru:"Дедушка рассказывает сказку."},
+ sister:{en:"My sister plays with me.",kk:"Әпкем менімен ойнайды.",ru:"Сестрёнка играет со мной."},
+ brother:{en:"Hello, brother!",kk:"Сәлем, аға!",ru:"Привет, братик!"},
+ baby:{en:"Shh, the baby is sleeping.",kk:"Тсс, бөпе ұйықтап жатыр.",ru:"Тсс, малыш спит."},
+ family:{en:"This is my family.",kk:"Бұл — менің отбасым.",ru:"Это моя семья."},
  yurt:{en:"This is a yurt, a Kazakh home.",kk:"Бұл — киіз үй, қазақтың үйі.",ru:"Это юрта — казахский дом."},
  dombyra:{en:"Let's play the dombra!",kk:"Домбыра тартайық!",ru:"Сыграем на домбре!"},
  shanyraq:{en:"Look up, the shanyrak!",kk:"Жоғары қара, шаңырақ!",ru:"Посмотри наверх — шанырак!"},
@@ -167,6 +179,18 @@ const LIFE={dress:{
   {en:"Wheee! Down the slide!",kk:"Уһ! Сырғанақпен сырғанаймыз!",ru:"Ух! Катимся с горки!",when:{kk:"Сырғанақта",ru:"На горке"}},
   {en:"Smell the flower.",kk:"Гүлдің иісін ал.",ru:"Понюхай цветочек.",when:{kk:"Гүл көргенде",ru:"Когда увидели цветок"}},
   {en:"Time to go home.",kk:"Үйге қайтатын уақыт.",ru:"Пора домой.",when:{kk:"Серуеннің соңында",ru:"В конце прогулки"}}]},
+ family:{
+ title:{kk:"Отбасында айтатын фразалар",ru:"Фразы для всей семьи"},
+ intro:{kk:"Отбасы мүшелерін атап, күн сайын қайталаңыз: фотосуреттерді бірге қарау да жақсы ойын.",
+        ru:"Называйте родных и повторяйте каждый день. Хорошая игра — вместе смотреть семейные фото."},
+ phrases:[
+  {en:"Good morning, Mummy!",kk:"Қайырлы таң, анашым!",ru:"Доброе утро, мамочка!",when:{kk:"Таңертең оянғанда",ru:"Утром, когда проснулись"}},
+  {en:"Give Daddy a hug.",kk:"Әкеңді құшақта.",ru:"Обними папу.",when:{kk:"Әкесі үйге келгенде",ru:"Когда папа пришёл домой"}},
+  {en:"Let's call Grandma.",kk:"Әжеңе қоңырау шалайық.",ru:"Давай позвоним бабушке.",when:{kk:"Әжеге қоңырау шалғанда",ru:"Перед звонком бабушке"}},
+  {en:"Who is this?",kk:"Бұл кім?",ru:"Кто это?",when:{kk:"Отбасылық суреттерді қарағанда",ru:"Когда смотрите семейные фото"}},
+  {en:"Let's eat together.",kk:"Бірге тамақтанайық.",ru:"Давайте поедим вместе.",when:{kk:"Отбасымен дастархан басында",ru:"За общим столом"}},
+  {en:"Be gentle with the baby.",kk:"Бөпеге ақырын.",ru:"Осторожно с малышом.",when:{kk:"Кішкентай бөпенің қасында",ru:"Рядом с младенцем"}},
+  {en:"I love you.",kk:"Сені жақсы көремін.",ru:"Я тебя люблю.",when:{kk:"Кез келген сәтте",ru:"В любой момент"}}]},
  guests:{
  title:{kk:"Қонақ келгенде айтатын фразалар",ru:"Фразы, когда приходят гости"},
  intro:{kk:"Қонақ келгенде немесе әже-атаға барғанда айтыңыз: бала салт-дәстүрді сөзбен бірге үйренеді.",
@@ -248,16 +272,16 @@ const T={
 
 /* levels by age */
 const LEVELS=[
- {id:"sabi",ages:[1],name:"Сәби",themes:["animals","transport","fruit","clothes","kitchen","bath","walk","sleep","culture"],games:["listen","peek","knock","bubbles","goodnight"],tip:1},
- {id:"balapan",ages:[2],name:"Балапан",themes:["animals","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","culture"],games:["find","who","pair","shadow","feed","dress","color"],tip:2},
- {id:"qulynshaq",ages:[3],name:"Құлыншақ",themes:["animals","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture"],games:["find","who","pair","shadow","feed","color","oddone","count","missing"],tip:3},
- {id:"batyr",ages:[4,5,6],name:"Батыр",themes:["animals","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture"],games:["letter","spell","count","wordpair","repeat","oddone","missing","pair","find","shadow","color","who"],tip:4}];
+ {id:"sabi",ages:[1],name:"Сәби",themes:["animals","family","transport","fruit","clothes","kitchen","bath","walk","sleep","culture"],games:["listen","peek","knock","bubbles","goodnight"],tip:1},
+ {id:"balapan",ages:[2],name:"Балапан",themes:["animals","family","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","culture"],games:["find","who","pair","shadow","feed","dress","color"],tip:2},
+ {id:"qulynshaq",ages:[3],name:"Құлыншақ",themes:["animals","family","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture"],games:["find","who","pair","shadow","feed","color","oddone","count","missing"],tip:3},
+ {id:"batyr",ages:[4,5,6],name:"Батыр",themes:["animals","family","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture"],games:["letter","spell","count","wordpair","repeat","oddone","missing","pair","find","shadow","color","who"],tip:4}];
 
 /* ---------- programme: 5 days per theme, order by level ---------- */
-const PROGRAM={sabi:["animals","kitchen","clothes","bath","transport","fruit","walk","sleep","culture"],
-  balapan:["animals","kitchen","clothes","bath","transport","fruit","colors","walk","sleep","culture"],
-  qulynshaq:["animals","kitchen","clothes","bath","transport","fruit","colors","numbers","walk","sleep","culture"],
-  batyr:["animals","kitchen","clothes","bath","transport","fruit","colors","numbers","walk","sleep","culture"]};
+const PROGRAM={sabi:["animals","family","kitchen","clothes","bath","transport","fruit","walk","sleep","culture"],
+  balapan:["animals","family","kitchen","clothes","bath","transport","fruit","colors","walk","sleep","culture"],
+  qulynshaq:["animals","family","kitchen","clothes","bath","transport","fruit","colors","numbers","walk","sleep","culture"],
+  batyr:["animals","family","kitchen","clothes","bath","transport","fruit","colors","numbers","walk","sleep","culture"]};
 const MINUTES={sabi:5,balapan:10,qulynshaq:15,batyr:15};
 const DAY_KIND=["words","words2","game","life","review"];
 const P={
