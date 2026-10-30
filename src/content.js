@@ -436,7 +436,7 @@ const SAY={
 /* interface text in the parent's language */
 const T={
  kk:{sub:"1–6 жас · үш тіл",hello:n=>`Сәлем, ${n}!`,back:"← Артқа",tr:"Аударма",again:"▶ Тағы тыңда",
-  themesHead:"Тақырыптар",gamesHead:"Ойындар",find:"Тауып ал",who:"Кім осылай дейді?",pair:"Жұбын тап",listen:"Тыңда",peek:"Жасырынбақ",
+  themesHead:"Тақырыптар",gamesHead:"Ойындар",lockMsg:n=>`Тағы ${n} жұлдыз жина — ойын ашылады!`,unlocked:g=>`🎉 Жаңа ойын ашылды: «${g}»!`,nextGame:(g,n)=>`Келесі ойын «${g}» — тағы ${n} ★`,find:"Тауып ал",who:"Кім осылай дейді?",pair:"Жұбын тап",listen:"Тыңда",peek:"Жасырынбақ",
   listenSub:"Суретті бас — сөзді естисің",peekSub:"Бұлтты бас — кім жасырынды?",tapHint:"Суретті бас",
   pairs:"жұп",parents:"Ата-аналарға",parentsSub:"Басып шығаруға карточкалар, күнделікті фразалар және чек-лист →",
   print:"Басып шығару",printNote:"Сайттан ашқанда жұмыс істейді",parentsIntro:"Тақырыпты таңдап, карточкаларды басып шығарыңыз да, қиып алыңыз. Баламен бірге ойнаңыз: сөзді айтасыз — бала карточканы көрсетеді.",
@@ -449,7 +449,7 @@ const T={
        3:"Сөздерді күнделікті өмірде қолданыңыз: киінгенде, тамақтанғанда, серуенде. «Ата-аналарға» бөлімінде дайын фразалар бар.",
        4:"4–6 жаста әріптер мен санау қосылады: «Бірінші әріп», «Сөз құра», «Санап көр». Әріпті бірге айтып, асықпаңыз — күніне 15 минут жеткілікті."}},
  ru:{sub:"1–6 лет · три языка",hello:n=>`Привет, ${n}!`,back:"← Назад",tr:"Перевод",again:"▶ Ещё раз",
-  themesHead:"Темы",gamesHead:"Игры",find:"Найди",who:"Кто так говорит?",pair:"Найди пару",listen:"Слушай",peek:"Прятки",
+  themesHead:"Темы",gamesHead:"Игры",lockMsg:n=>`Собери ещё ${n} ★ — и игра откроется!`,unlocked:g=>`🎉 Открылась новая игра: «${g}»!`,nextGame:(g,n)=>`Следующая игра «${g}» — ещё ${n} ★`,find:"Найди",who:"Кто так говорит?",pair:"Найди пару",listen:"Слушай",peek:"Прятки",
   listenSub:"Нажми на картинку — услышишь слово",peekSub:"Нажми на облачко — кто спрятался?",tapHint:"Нажми на картинку",
   pairs:"пары",parents:"Родителям",parentsSub:"Карточки для печати, фразы на каждый день и чек-лист →",
   print:"Распечатать",printNote:"Работает на сайте",parentsIntro:"Выберите тему, распечатайте карточки и вырежьте. Играйте вместе: вы называете слово — ребёнок показывает карточку.",
@@ -465,9 +465,9 @@ const T={
 /* levels by age */
 const LEVELS=[
  {id:"sabi",ages:[1],name:"Сәби",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","culture","toys","veg","home","weather","bugs"],games:["listen","peek","knock","bubbles","goodnight"],tip:1},
- {id:"balapan",ages:[2],name:"Балапан",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","culture","toys","veg","home","weather","emotions","shapes","bugs","jobs"],games:["find","who","pair","shadow","feed","dress","color","feel","wear"],tip:2},
- {id:"qulynshaq",ages:[3],name:"Құлыншақ",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture","toys","veg","home","weather","emotions","shapes","bugs","jobs"],games:["find","who","pair","shadow","feed","color","oddone","count","missing","feel","wear","shapeof","sort","tool","fly"],tip:3},
- {id:"batyr",ages:[4,5,6],name:"Батыр",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture","toys","veg","home","weather","emotions","shapes","bugs","jobs"],games:["letter","spell","count","wordpair","repeat","oddone","missing","shapeof","sort","tool","fly","feel","wear","pair","find","shadow","color","who"],tip:4}];
+ {id:"balapan",ages:[2],name:"Балапан",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","culture","toys","veg","home","weather","emotions","shapes","bugs","jobs"],games:["find","who","feel","pair","wear","shadow","feed","dress","color"],tip:2},
+ {id:"qulynshaq",ages:[3],name:"Құлыншақ",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture","toys","veg","home","weather","emotions","shapes","bugs","jobs"],games:["find","who","pair","feel","shadow","sort","wear","feed","oddone","fly","color","count","shapeof","missing","tool"],tip:3},
+ {id:"batyr",ages:[4,5,6],name:"Батыр",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture","toys","veg","home","weather","emotions","shapes","bugs","jobs"],games:["letter","spell","count","wordpair","shapeof","sort","repeat","tool","fly","oddone","missing","feel","wear","pair","find","shadow","color","who"],tip:4}];
 
 /* ---------- programme: 5 days per theme, order by level ---------- */
 const PROGRAM={sabi:["animals","family","body","kitchen","clothes","bath","transport","fruit","walk","sleep","culture","toys","veg","home","weather","bugs"],

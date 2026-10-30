@@ -20,7 +20,18 @@ const rand=n=>Math.floor(Math.random()*n);
 const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=rand(i+1);[a[i],a[j]]=[a[j],a[i]]}return a};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
-function addStar(){const k=kid();k.stars=(k.stars||0)+1;try{markPlayed()}catch(e){}if(!k.sample)saveKids();paintHeader()}
+/* games open as the child collects stars: the first OPEN_GAMES are free, each next one needs STAR_STEP more (age 1: all open) */
+const OPEN_GAMES=4,STAR_STEP=15;
+const needStars=(lv,i)=>lv.id==="sabi"||i<OPEN_GAMES?0:(i-OPEN_GAMES+1)*STAR_STEP;
+function gameTiles(lv,attr,sub){const st=kid().stars||0;return lv.games.map((g,i)=>{const n=needStars(lv,i),open=st>=n;
+  return `<button class="cat play${open?"":" locked"}" ${attr}="${g}" data-need="${n}"><img alt="" src="${PAINTED[GAME_ART[g]]}"><span class="en">${gameName(g)}</span>${open?(sub?sub(g):""):`<span class="need">🔒 ★ ${n}</span>`}</button>`}).join("")}
+function nextGameLine(lv){const st=kid().stars||0,i=lv.games.findIndex((g,i)=>needStars(lv,i)>st);return i<0?"":`<p class="nextgame">${t().nextGame(gameName(lv.games[i]),needStars(lv,i)-st)}</p>`}
+function bindGames(attr){view.querySelectorAll(`[${attr}]`).forEach(b=>b.onclick=()=>{const n=+b.dataset.need,st=kid().stars||0;
+  if(st>=n)return GAME_RUN[b.getAttribute(attr)]();b.classList.remove("wrong");void b.offsetWidth;b.classList.add("wrong");toast(t().lockMsg(n-st))})}
+function toast(msg){let el=$("#toast");if(!el){el=document.createElement("div");el.id="toast";el.className="toast";el.setAttribute("aria-live","polite");document.body.appendChild(el)}
+  el.textContent=msg;el.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove("on"),2800)}
+function addStar(){const k=kid();k.stars=(k.stars||0)+1;
+  try{const lv=level(),i=lv.games.findIndex((g,i)=>needStars(lv,i)===k.stars&&k.stars>0);if(i>=0)setTimeout(()=>toast(t().unlocked(gameName(lv.games[i]))),900)}catch(e){}try{markPlayed()}catch(e){}if(!k.sample)saveKids();paintHeader()}
 function paintHeader(){const k=kid();
   $("#kidBtn").innerHTML=k.sample?`<b>${t().addKid}</b>`:`<b>${esc(k.name)}</b><span>${t().ageWord(k.age)} · ${LANGS[k.learn]}</span>`;
   $("#stars").textContent="★ "+(k.stars||0);$("#stars").hidden=k.age<2;
@@ -152,7 +163,7 @@ function home(viewDay){if(typeof viewDay!=="number")viewDay=null;
     <div class="weekstrip" aria-label="${PT.week(p.week)}">${[0,1,2,3,4].map(i=>{const dd=wk0+i;return `<button data-day="${dd}" class="${pr.done[dd]?"ok":""}${dd===d?" cur":""}" aria-label="${PT.day(i+1)}">${i+1}</button>`}).join("")}</div>
    </section>
    <h2 class="sec">${tt.gamesHead}</h2>
-   <div class="cats games">${p.lv.games.map(g=>`<button class="cat play" data-hg="${g}"><img alt="" src="${PAINTED[GAME_ART[g]]}"><span class="en">${gameName(g)}</span></button>`).join("")}</div>
+   ${nextGameLine(p.lv)}<div class="cats games">${gameTiles(p.lv,"data-hg")}</div>
    <div class="cats two">
     <button class="cat play" id="lib"><img alt="" src="${PAINTED.owl}"><span class="en">${PT.library}</span></button>
     <button class="cat play" id="prog"><img alt="" src="${PAINTED.bear}"><span class="en">${PT.progress}</span><span class="kz">${PT.progressSub}</span></button>
@@ -164,7 +175,7 @@ function home(viewDay){if(typeof viewDay!=="number")viewDay=null;
   $("#done").onclick=()=>{pr.done[d]=true;if(d>=pr.day)pr.day=d+1;saveProg();addStar();sparkle($("#done"));setTimeout(()=>home(d),350)};
   view.querySelectorAll("[data-day]").forEach(b=>b.onclick=()=>home(+b.dataset.day));
   view.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{const it=p.th.items[+b.dataset.t];say(cardLine(it));b.classList.remove("lift");void b.offsetWidth;b.classList.add("lift")});
-  view.querySelectorAll("[data-hg]").forEach(b=>b.onclick=()=>GAME_RUN[b.dataset.hg]());
+  bindGames("data-hg");
   $("#lib").onclick=library;$("#prog").onclick=()=>progress();
   $("#parents").onclick=()=>parents(p.th.id);
   if($("#setup"))$("#setup").onclick=()=>profiles();
@@ -211,12 +222,12 @@ function library(){
   view.innerHTML=`<div class="col">
    ${topBar(P[H()].library)}${ageNote}
    <h2 class="sec">${tt.gamesHead}</h2>
-   <div class="cats">${lv.games.map(g=>`<button class="cat play" data-g="${g}"><img alt="" src="${PAINTED[GAME_ART[g]]}"><span class="en">${gameName(g)}</span>${g==="listen"||g==="peek"?`<span class="kz">${tt[g+"Sub"]}</span>`:""}</button>`).join("")}</div>
+   ${nextGameLine(lv)}<div class="cats">${gameTiles(lv,"data-g",g=>g==="listen"||g==="peek"?`<span class="kz">${tt[g+"Sub"]}</span>`:"")}</div>
    <h2 class="sec">${tt.themesHead}</h2>
    <div class="cats">${lv.themes.map(id=>{const th=THEME[id];return `<button class="cat" data-c="${id}"><img alt="" src="${art(th.items[0])}"><span class="en">${th.name[L()]}</span><span class="kz tr-opt">${th.name[H()]}</span></button>`}).join("")}</div>
    </div>`;bindBack();
   view.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>lv.id==="sabi"?listen(THEME[b.dataset.c],0):learn(THEME[b.dataset.c],0));
-  view.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>GAME_RUN[b.dataset.g]());
+  bindGames("data-g");
 }
 const navBtns=()=>"";
 const topBar=title=>`<div class="top">${navBtns()}${title?`<h1 class="h-sm">${title}</h1>`:""}</div>`;

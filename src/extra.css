@@ -187,3 +187,13 @@
 .choice .cl{display:block;text-align:center;font:800 1.05rem var(--f-ui,inherit);color:var(--ink);padding:4px 0 2px}
 .choices.two .choice{position:relative}
 .choices.two .cl{position:absolute;left:8px;right:8px;top:8px;background:rgba(255,253,248,.9);border-radius:12px;padding:4px 0}
+
+/* games that open for stars */
+.cat.locked img{filter:grayscale(.7) opacity(.55)}
+.cat.locked{background:var(--paper)}
+.cat .need{display:block;font-weight:800;font-size:.85rem;color:var(--sienna,#B9653B)}
+.cat.wrong{animation:shake .45s}
+.nextgame{margin:-4px 0 8px;font-weight:700;color:var(--soft)}
+.toast{position:fixed;left:50%;bottom:90px;transform:translate(-50%,20px);opacity:0;pointer-events:none;z-index:50;max-width:min(92vw,420px);
+  background:var(--ink,#4A382B);color:#fff;font-weight:700;padding:12px 18px;border-radius:16px;text-align:center;transition:.3s;box-shadow:0 14px 30px -14px rgba(0,0,0,.5)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
