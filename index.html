@@ -1012,7 +1012,7 @@ const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=rand(i+1);[a[i],a[j]]=[a
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
 /* games open day by day: the first OPEN_GAMES are free, then every finished day of the programme opens one more (age 1: all open) */
-const OPEN_GAMES=8,GAMES_PER_DAY=1;
+const OPEN_GAMES=8,GAMES_PER_DAY=2;
 const daysDone=()=>{try{return Object.keys(prog().done||{}).length}catch(e){return 0}};
 const needDays=(lv,i)=>lv.id==="sabi"||i<OPEN_GAMES?0:Math.ceil((i-OPEN_GAMES+1)/GAMES_PER_DAY);
 function gameTiles(lv,attr,sub){const dd=daysDone();return lv.games.map((g,i)=>{const n=needDays(lv,i),open=dd>=n;
