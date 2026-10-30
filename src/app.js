@@ -350,6 +350,7 @@ const homeRaw=home;home=nav(home);library=nav(library);profiles=nav(profiles);pa
 learn=nav(learn);listen=nav(listen);peek=nav(peek);find=nav(find);whoSays=nav(whoSays);memory=nav(memory);
 knock=nav(knock);bubbles=nav(bubbles);goodnight=nav(goodnight);shadow=nav(shadow);feed=nav(feed);dress=nav(dress);colorGame=nav(colorGame);
 oddone=nav(oddone);count=nav(count);missing=nav(missing);letter=nav(letter);spell=nav(spell);repeat=nav(repeat);wordpair=nav(wordpair);
+feel=nav(feel);wear=nav(wear);shapeOf=nav(shapeOf);sortGame=nav(sortGame);tool=nav(tool);fly=nav(fly);
 
 $("#nBack").onclick=navBack;$("#nFwd").onclick=navFwd;$("#nHome").onclick=()=>home();
 

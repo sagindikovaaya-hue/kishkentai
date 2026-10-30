@@ -9,16 +9,20 @@ const W=it=>cap(word(it));
 const GT={
  kk:{knock:"Тық-тық",bubbles:"Көпіршіктер",goodnight:"Қайырлы түн",shadow:"Кімнің көлеңкесі?",feed:"Тамақтандыр",dress:"Киіндір",color:"Қандай түс?",
   oddone:"Қайсысы артық?",count:"Санап көр",missing:"Не жоғалды?",letter:"Бірінші әріп",spell:"Сөз құра",repeat:"Қайтала",wordpair:"Сурет пен сөз",
+  feel:"Көңіл-күй",shapeof:"Қандай пішін?",wear:"Не киеміз?",sort:"Жеміс пе, көкөніс пе?",tool:"Кімге не керек?",fly:"Кім ұшады?",
   tapDoor:"Есікті бас",tapBubble:"Көпіршікті жар!",tapSleep:"Ойыншықты ұйықтат",ready:"Көрдім ✓",said:"Айтты ✓",again:"Тағы бір рет",next:"Келесі →"},
  ru:{knock:"Тук-тук",bubbles:"Пузырьки",goodnight:"Спокойной ночи",shadow:"Чья тень?",feed:"Покорми",dress:"Одень",color:"Какого цвета?",
   oddone:"Что лишнее?",count:"Посчитай",missing:"Что пропало?",letter:"Первая буква",spell:"Собери слово",repeat:"Повтори",wordpair:"Картинка и слово",
+  feel:"Какое настроение?",shapeof:"Какая форма?",wear:"Что надеть?",sort:"Фрукт или овощ?",tool:"Кому что нужно?",fly:"Кто летает?",
   tapDoor:"Нажми на дверь",tapBubble:"Лопай пузыри!",tapSleep:"Уложи игрушку спать",ready:"Запомнил ✓",said:"Сказал ✓",again:"Ещё раз",next:"Дальше →"}};
 const gt=()=>GT[H()];
 Object.assign(GAME_ART,{knock:"bear",bubbles:"bubbles",goodnight:"moon",shadow:"elephant",feed:"horse",dress:"hat",color:"c-red",
-  oddone:"giraffe",count:"cherry",missing:"teddy",letter:"apple",spell:"cat",repeat:"sheep",wordpair:"socks"});
+  oddone:"giraffe",count:"cherry",missing:"teddy",letter:"apple",spell:"cat",repeat:"sheep",wordpair:"socks",
+  feel:"happy",shapeof:"s-triangle",wear:"umbrella",sort:"carrot",tool:"chef",fly:"butterfly"});
 const GAME_RUN={find:()=>find(),who:()=>whoSays(),pair:()=>memory(3),listen:()=>listen(null,0),peek:()=>peek(null),
   knock:()=>knock(),bubbles:()=>bubbles(),goodnight:()=>goodnight(0),shadow:()=>shadow(),feed:()=>feed(),dress:()=>dress(),color:()=>colorGame(),
-  oddone:()=>oddone(),count:()=>count(),missing:()=>missing(),letter:()=>letter(),spell:()=>spell(),repeat:()=>repeat(),wordpair:()=>wordpair()};
+  oddone:()=>oddone(),count:()=>count(),missing:()=>missing(),letter:()=>letter(),spell:()=>spell(),repeat:()=>repeat(),wordpair:()=>wordpair(),
+  feel:()=>feel(),shapeof:()=>shapeOf(),wear:()=>wear(),sort:()=>sortGame(),tool:()=>tool(),fly:()=>fly()};
 const gameName=g=>t()[g]||gt()[g]||g;
 
 /* a three-choice round: right answer gets praise and a star, wrong one shakes and says its name */
@@ -173,3 +177,38 @@ function wordpair(){
     if(p===words[sel]){b.disabled=wb.disabled=true;b.classList.add("ok");wb.classList.add("ok");wb.classList.remove("sel");sel=null;sparkle(b);
       if(++found===picks.length){const pr=praise();$("#cheer").innerHTML=`<b>${pr.main}</b>${needTr()?`<span class="tr-opt">${pr.help}</span>`:""}`;say(pr.main);addStar();later(wordpair,2400)}}
     else{b.classList.remove("wrong");void b.offsetWidth;b.classList.add("wrong");say(W(p))}})}
+
+/* ===== games for the new themes ===== */
+const lineOf=it=>ITEM_PHRASE[it.key]?ITEM_PHRASE[it.key][L()]:W(it);
+/* 2+: three faces, find the feeling */
+function feel(){
+  const opts=pick(THEME.emotions.items,3),ans=opts[rand(3)];
+  choiceRound({title:gameName("feel"),q:G[L()].feel(word(ans)),qHelp:G[H()].feel(helpWord(ans)),opts,ans,onRight:()=>lineOf(ans),again:feel})}
+/* 2+: the weather picture, pick what to put on */
+function wear(){
+  const w=ITEMS[pick(Object.keys(WEAR),1)[0]],ans=ITEMS[WEAR[w.key]],others=pick([...new Set(Object.values(WEAR))].filter(k=>k!==ans.key),2).map(k=>ITEMS[k]);
+  choiceRound({title:gameName("wear"),q:G[L()].wearQ(lineOf(w)),qHelp:G[H()].wearQ(ITEM_PHRASE[w.key][H()]),
+    ask:`<div class="feedbox"><img alt="" src="${art(w)}"></div>`,opts:shuffle([ans,...others]),ans,onRight:()=>lineOf(ans),again:wear})}
+/* 3+: a thing from home, pick its shape */
+function shapeOf(){
+  const o=ITEMS[pick(Object.keys(SHAPE_OF),1)[0]],ans=ITEMS[SHAPE_OF[o.key]],others=pick(THEME.shapes.items.filter(x=>x!==ans),2);
+  choiceRound({title:gameName("shapeof"),q:G[L()].shapeQ(o),qHelp:G[H()].shapeQ(o),
+    ask:`<div class="feedbox"><img alt="" src="${art(o)}"></div>`,opts:shuffle([ans,...others]),ans,onRight:()=>G[L()].shapeA(word(o),word(ans)),again:shapeOf})}
+/* 3+: fruit or vegetable — two baskets */
+function sortGame(){
+  const isFruit=Math.random()<.5,it=pick((isFruit?THEME.fruit:THEME.veg).items,1)[0];
+  const cats=[{c:"fruit",img:ITEMS[it.key==="grapes"?"apple":"grapes"]},{c:"veg",img:ITEMS[it.key==="cabbage"?"carrot":"cabbage"]}],ans=cats[isFruit?0:1];
+  choiceRound({title:gameName("sort"),q:G[L()].sortQ(W(it)),qHelp:G[H()].sortQ(cap(helpWord(it))),
+    ask:`<div class="feedbox"><img alt="" src="${art(it)}"></div>`,opts:cats,ans,
+    show:c=>`<img alt="" src="${art(c.img)}"><span class="cl">${esc(G[L()][c.c])}</span>`,label:c=>G[L()][c.c],
+    onRight:()=>G[L()].sortA(W(it),G[L()][ans.c]),again:sortGame});
+  view.querySelector(".choices").classList.add("two")}
+/* 3+: a job, pick what they work with */
+function tool(){
+  const j=ITEMS[pick(Object.keys(TOOL_OF),1)[0]],ans=ITEMS[TOOL_OF[j.key]],others=pick(Object.values(TOOL_OF).filter(k=>k!==ans.key),2).map(k=>ITEMS[k]);
+  choiceRound({title:gameName("tool"),q:G[L()].toolQ(word(j)),qHelp:G[H()].toolQ(helpWord(j)),
+    ask:`<div class="feedbox"><img alt="" src="${art(j)}"></div>`,opts:shuffle([ans,...others]),ans,onRight:()=>lineOf(j),again:tool})}
+/* 3+: one flyer among crawlers */
+function fly(){
+  const ans=ITEMS[pick(FLYERS,1)[0]],opts=shuffle([ans,...pick(CRAWLERS,2).map(k=>ITEMS[k])]);
+  choiceRound({title:gameName("fly"),q:G[L()].flyQ,qHelp:G[H()].flyQ,opts,ans,onRight:()=>G[L()].flyA(word(ans)),again:fly})}

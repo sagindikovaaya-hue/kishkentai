@@ -312,6 +312,13 @@ h1{font-family:var(--f-word);font-weight:500;font-size:clamp(1.7rem,6vw,2.4rem);
 @media(max-width:420px){.stats.four{grid-template-columns:repeat(2,1fr)}}
 .acc .tg{align-self:flex-start;text-decoration:none}
 
+/* fruit-or-vegetable baskets */
+.choices.two{grid-template-columns:repeat(2,1fr)}
+.choices.two .choice img{aspect-ratio:1;object-fit:cover}
+.choice .cl{display:block;text-align:center;font:800 1.05rem var(--f-ui,inherit);color:var(--ink);padding:4px 0 2px}
+.choices.two .choice{position:relative}
+.choices.two .cl{position:absolute;left:8px;right:8px;top:8px;background:rgba(255,253,248,.9);border-radius:12px;padding:4px 0}
+
 /* gate screens: intro, demo, payment — the app's header controls and bottom bar stay hidden until the family is unlocked */
 body.gated #stars,body.gated #trBtn,body.gated #kidBtn,body.gated .bottomnav{display:none!important}
 .gtop{margin-bottom:-8px}
@@ -829,9 +836,9 @@ const T={
 /* levels by age */
 const LEVELS=[
  {id:"sabi",ages:[1],name:"Сәби",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","culture","toys","veg","home","weather","bugs"],games:["listen","peek","knock","bubbles","goodnight"],tip:1},
- {id:"balapan",ages:[2],name:"Балапан",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","culture","toys","veg","home","weather","emotions","shapes","bugs","jobs"],games:["find","who","pair","shadow","feed","dress","color"],tip:2},
- {id:"qulynshaq",ages:[3],name:"Құлыншақ",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture","toys","veg","home","weather","emotions","shapes","bugs","jobs"],games:["find","who","pair","shadow","feed","color","oddone","count","missing"],tip:3},
- {id:"batyr",ages:[4,5,6],name:"Батыр",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture","toys","veg","home","weather","emotions","shapes","bugs","jobs"],games:["letter","spell","count","wordpair","repeat","oddone","missing","pair","find","shadow","color","who"],tip:4}];
+ {id:"balapan",ages:[2],name:"Балапан",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","culture","toys","veg","home","weather","emotions","shapes","bugs","jobs"],games:["find","who","pair","shadow","feed","dress","color","feel","wear"],tip:2},
+ {id:"qulynshaq",ages:[3],name:"Құлыншақ",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture","toys","veg","home","weather","emotions","shapes","bugs","jobs"],games:["find","who","pair","shadow","feed","color","oddone","count","missing","feel","wear","shapeof","sort","tool","fly"],tip:3},
+ {id:"batyr",ages:[4,5,6],name:"Батыр",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture","toys","veg","home","weather","emotions","shapes","bugs","jobs"],games:["letter","spell","count","wordpair","repeat","oddone","missing","shapeof","sort","tool","fly","feel","wear","pair","find","shadow","color","who"],tip:4}];
 
 /* ---------- programme: 5 days per theme, order by level ---------- */
 const PROGRAM={sabi:["animals","family","body","kitchen","clothes","bath","transport","fruit","walk","sleep","culture","toys","veg","home","weather","bugs"],
@@ -875,20 +882,35 @@ const G={
   shadow:"Whose shadow is this?",hungry:a=>`The ${a} is hungry! What does the ${a} want?`,yum:(a,f)=>`Yummy! The ${a} likes the ${f}!`,
   dress:it=>it.pl?`Let's put on the ${it.en}!`:`Let's put on the ${it.en}!`,colorQ:c=>`Find something ${c}!`,
   odd:"Which one is different?",count:p=>`How many ${p}?`,look:"Look carefully!",missing:"What is missing?",
-  letterQ:w=>`${w} starts with…?`,letterA:(w,l)=>`${w} starts with ${l}!`,spell:"Make the word!",sayWith:w=>`Say it with me: ${w}!`,match:"Find the picture for each word!"},
+  letterQ:w=>`${w} starts with…?`,letterA:(w,l)=>`${w} starts with ${l}!`,spell:"Make the word!",sayWith:w=>`Say it with me: ${w}!`,match:"Find the picture for each word!",
+  feel:w=>`Show me: ${w}!`,shapeQ:it=>it.pl?`What shape are the ${it.en}?`:`What shape is the ${it.en}?`,shapeA:(o,sh)=>`Yes! It's ${/^[aeiou]/.test(sh)?"an":"a"} ${sh}!`,
+  wearQ:ph=>`${ph} What do we need?`,sortQ:w=>`Is it a fruit or a vegetable? ${w}!`,fruit:"Fruit",veg:"Vegetable",sortA:(w,c)=>`Yes! It's a ${c.toLowerCase()}!`,
+  toolQ:j=>`What does the ${j} need?`,flyQ:"Who can fly?",flyA:w=>`Yes! The ${w} can fly!`},
  kk:{knock:"Тық-тық! Кім бар?",night:w=>`Қайырлы түн, ${w}!`,dreams:"Тәтті түс көр!",
   shadow:"Бұл кімнің көлеңкесі?",hungry:a=>`${a} қарны ашты! Оған не береміз?`,yum:(a,f)=>`Дәмді! Рахмет!`,
   dress:it=>`${cap(it.kk)} киейік!`,colorQ:c=>`${cap(c)} түсті тап!`,
   odd:"Қайсысы артық?",count:()=>`Неше? Санап көр!`,look:"Мұқият қара!",missing:"Не жоғалды?",
-  letterQ:w=>`«${w}» қай әріптен басталады?`,letterA:(w,l)=>`«${w}» — «${l}» әрпінен басталады!`,spell:"Сөзді құра!",sayWith:w=>`Менімен бірге айт: ${w}!`,match:"Әр сөздің суретін тап!"},
+  letterQ:w=>`«${w}» қай әріптен басталады?`,letterA:(w,l)=>`«${w}» — «${l}» әрпінен басталады!`,spell:"Сөзді құра!",sayWith:w=>`Менімен бірге айт: ${w}!`,match:"Әр сөздің суретін тап!",
+  feel:w=>`${cap(w)} — қайсысы? Көрсет!`,shapeQ:it=>`${cap(it.kk)} қандай пішін?`,shapeA:(o,sh)=>`Иә! ${cap(o)} — ${sh}!`,
+  wearQ:ph=>`${ph} Не керек?`,sortQ:w=>`${w} — жеміс пе, көкөніс пе?`,fruit:"Жеміс",veg:"Көкөніс",sortA:(w,c)=>`Иә! ${w} — ${c.toLowerCase()}!`,
+  toolQ:j=>`${cap(j)} немен жұмыс істейді?`,flyQ:"Кім ұшады?",flyA:w=>`Иә! ${cap(w)} ұшады!`},
  ru:{knock:"Тук-тук! Кто там?",night:w=>`Спокойной ночи, ${w}!`,dreams:"Сладких снов!",
   shadow:"Чья это тень?",hungry:a=>`${a} хочет кушать! Что дать?`,yum:()=>`Ням-ням! Спасибо!`,
   dress:it=>`Надеваем: ${it.ru}!`,colorQ:c=>`Найди ${c}!`,
   odd:"Что лишнее?",count:()=>`Сколько? Посчитай!`,look:"Смотри внимательно!",missing:"Что пропало?",
-  letterQ:w=>`На какую букву «${w}»?`,letterA:(w,l)=>`«${w}» начинается на «${l}»!`,spell:"Собери слово!",sayWith:w=>`Скажи со мной: ${w}!`,match:"Найди картинку к каждому слову!"}};
+  letterQ:w=>`На какую букву «${w}»?`,letterA:(w,l)=>`«${w}» начинается на «${l}»!`,spell:"Собери слово!",sayWith:w=>`Скажи со мной: ${w}!`,match:"Найди картинку к каждому слову!",
+  feel:w=>`Покажи, где она ${w}!`,shapeQ:it=>`Какой формы ${it.ru}?`,shapeA:(o,sh)=>`Да! ${cap(o)} — ${sh}!`,
+  wearQ:ph=>`${ph} Что нужно?`,sortQ:w=>`${w} — фрукт или овощ?`,fruit:"Фрукт",veg:"Овощ",sortA:(w,c)=>`Да! ${w} — ${c.toLowerCase()}!`,
+  toolQ:j=>`Чем работает ${j}?`,flyQ:"Кто летает?",flyA:w=>`Да! ${cap(w)} летает!`}};
 const FEED={cat:"milk",duck:"bread",elephant:"banana",horse:"apple",bear:"strawberry",rabbit:"pear",fox:"grapes",sheep:"water"};
 const COLOR_OF={apple:"red",strawberry:"red",cherry:"red",banana:"yellow",lemon:"yellow",pear:"green",orange:"orange",fox:"orange",bear:"brown",bread:"brown",horse:"brown",milk:"white",sheep:"white",grapes:"purple"};
 const RU_NEUT={red:"красное",yellow:"жёлтое",green:"зелёное",orange:"оранжевое",brown:"коричневое",white:"белое",purple:"фиолетовое"};
+/* new-theme games: what shape is it, what to wear in this weather, what each job uses, who can fly */
+const SHAPE_OF={clock:"s-circle",ball:"s-circle",orange:"s-circle",tomato:"s-circle",window:"s-square",blocks:"s-square",
+  door:"s-rectangle",tv:"s-rectangle",book:"s-rectangle",star:"s-star",potato:"s-oval"};
+const WEAR={rain:"umbrella",puddle:"boots",snow:"mittens",wind:"scarf",leaves:"coat"};
+const TOOL_OF={chef:"spoon",farmer:"carrot",driver:"bus",teacher:"book",firefighter:"water",police:"car",builder:"blocks"};
+const FLYERS=["butterfly","bee","dragonfly","ladybird"],CRAWLERS=["snail","ant","caterpillar"];
 const COUNTABLE={duck:"ducks",cat:"cats",apple:"apples",cherry:"cherries",ball:"balls",star:"stars",car:"cars",fox:"foxes",bear:"bears",strawberry:"strawberries",flower:"flowers",sheep:"sheep"};
 
 /* ---------- parent account: email code sign-in, family sync (Supabase) ---------- */
@@ -1288,6 +1310,7 @@ const homeRaw=home;home=nav(home);library=nav(library);profiles=nav(profiles);pa
 learn=nav(learn);listen=nav(listen);peek=nav(peek);find=nav(find);whoSays=nav(whoSays);memory=nav(memory);
 knock=nav(knock);bubbles=nav(bubbles);goodnight=nav(goodnight);shadow=nav(shadow);feed=nav(feed);dress=nav(dress);colorGame=nav(colorGame);
 oddone=nav(oddone);count=nav(count);missing=nav(missing);letter=nav(letter);spell=nav(spell);repeat=nav(repeat);wordpair=nav(wordpair);
+feel=nav(feel);wear=nav(wear);shapeOf=nav(shapeOf);sortGame=nav(sortGame);tool=nav(tool);fly=nav(fly);
 
 $("#nBack").onclick=navBack;$("#nFwd").onclick=navFwd;$("#nHome").onclick=()=>home();
 
@@ -1304,16 +1327,20 @@ const W=it=>cap(word(it));
 const GT={
  kk:{knock:"Тық-тық",bubbles:"Көпіршіктер",goodnight:"Қайырлы түн",shadow:"Кімнің көлеңкесі?",feed:"Тамақтандыр",dress:"Киіндір",color:"Қандай түс?",
   oddone:"Қайсысы артық?",count:"Санап көр",missing:"Не жоғалды?",letter:"Бірінші әріп",spell:"Сөз құра",repeat:"Қайтала",wordpair:"Сурет пен сөз",
+  feel:"Көңіл-күй",shapeof:"Қандай пішін?",wear:"Не киеміз?",sort:"Жеміс пе, көкөніс пе?",tool:"Кімге не керек?",fly:"Кім ұшады?",
   tapDoor:"Есікті бас",tapBubble:"Көпіршікті жар!",tapSleep:"Ойыншықты ұйықтат",ready:"Көрдім ✓",said:"Айтты ✓",again:"Тағы бір рет",next:"Келесі →"},
  ru:{knock:"Тук-тук",bubbles:"Пузырьки",goodnight:"Спокойной ночи",shadow:"Чья тень?",feed:"Покорми",dress:"Одень",color:"Какого цвета?",
   oddone:"Что лишнее?",count:"Посчитай",missing:"Что пропало?",letter:"Первая буква",spell:"Собери слово",repeat:"Повтори",wordpair:"Картинка и слово",
+  feel:"Какое настроение?",shapeof:"Какая форма?",wear:"Что надеть?",sort:"Фрукт или овощ?",tool:"Кому что нужно?",fly:"Кто летает?",
   tapDoor:"Нажми на дверь",tapBubble:"Лопай пузыри!",tapSleep:"Уложи игрушку спать",ready:"Запомнил ✓",said:"Сказал ✓",again:"Ещё раз",next:"Дальше →"}};
 const gt=()=>GT[H()];
 Object.assign(GAME_ART,{knock:"bear",bubbles:"bubbles",goodnight:"moon",shadow:"elephant",feed:"horse",dress:"hat",color:"c-red",
-  oddone:"giraffe",count:"cherry",missing:"teddy",letter:"apple",spell:"cat",repeat:"sheep",wordpair:"socks"});
+  oddone:"giraffe",count:"cherry",missing:"teddy",letter:"apple",spell:"cat",repeat:"sheep",wordpair:"socks",
+  feel:"happy",shapeof:"s-triangle",wear:"umbrella",sort:"carrot",tool:"chef",fly:"butterfly"});
 const GAME_RUN={find:()=>find(),who:()=>whoSays(),pair:()=>memory(3),listen:()=>listen(null,0),peek:()=>peek(null),
   knock:()=>knock(),bubbles:()=>bubbles(),goodnight:()=>goodnight(0),shadow:()=>shadow(),feed:()=>feed(),dress:()=>dress(),color:()=>colorGame(),
-  oddone:()=>oddone(),count:()=>count(),missing:()=>missing(),letter:()=>letter(),spell:()=>spell(),repeat:()=>repeat(),wordpair:()=>wordpair()};
+  oddone:()=>oddone(),count:()=>count(),missing:()=>missing(),letter:()=>letter(),spell:()=>spell(),repeat:()=>repeat(),wordpair:()=>wordpair(),
+  feel:()=>feel(),shapeof:()=>shapeOf(),wear:()=>wear(),sort:()=>sortGame(),tool:()=>tool(),fly:()=>fly()};
 const gameName=g=>t()[g]||gt()[g]||g;
 
 /* a three-choice round: right answer gets praise and a star, wrong one shakes and says its name */
@@ -1468,6 +1495,41 @@ function wordpair(){
     if(p===words[sel]){b.disabled=wb.disabled=true;b.classList.add("ok");wb.classList.add("ok");wb.classList.remove("sel");sel=null;sparkle(b);
       if(++found===picks.length){const pr=praise();$("#cheer").innerHTML=`<b>${pr.main}</b>${needTr()?`<span class="tr-opt">${pr.help}</span>`:""}`;say(pr.main);addStar();later(wordpair,2400)}}
     else{b.classList.remove("wrong");void b.offsetWidth;b.classList.add("wrong");say(W(p))}})}
+
+/* ===== games for the new themes ===== */
+const lineOf=it=>ITEM_PHRASE[it.key]?ITEM_PHRASE[it.key][L()]:W(it);
+/* 2+: three faces, find the feeling */
+function feel(){
+  const opts=pick(THEME.emotions.items,3),ans=opts[rand(3)];
+  choiceRound({title:gameName("feel"),q:G[L()].feel(word(ans)),qHelp:G[H()].feel(helpWord(ans)),opts,ans,onRight:()=>lineOf(ans),again:feel})}
+/* 2+: the weather picture, pick what to put on */
+function wear(){
+  const w=ITEMS[pick(Object.keys(WEAR),1)[0]],ans=ITEMS[WEAR[w.key]],others=pick([...new Set(Object.values(WEAR))].filter(k=>k!==ans.key),2).map(k=>ITEMS[k]);
+  choiceRound({title:gameName("wear"),q:G[L()].wearQ(lineOf(w)),qHelp:G[H()].wearQ(ITEM_PHRASE[w.key][H()]),
+    ask:`<div class="feedbox"><img alt="" src="${art(w)}"></div>`,opts:shuffle([ans,...others]),ans,onRight:()=>lineOf(ans),again:wear})}
+/* 3+: a thing from home, pick its shape */
+function shapeOf(){
+  const o=ITEMS[pick(Object.keys(SHAPE_OF),1)[0]],ans=ITEMS[SHAPE_OF[o.key]],others=pick(THEME.shapes.items.filter(x=>x!==ans),2);
+  choiceRound({title:gameName("shapeof"),q:G[L()].shapeQ(o),qHelp:G[H()].shapeQ(o),
+    ask:`<div class="feedbox"><img alt="" src="${art(o)}"></div>`,opts:shuffle([ans,...others]),ans,onRight:()=>G[L()].shapeA(word(o),word(ans)),again:shapeOf})}
+/* 3+: fruit or vegetable — two baskets */
+function sortGame(){
+  const isFruit=Math.random()<.5,it=pick((isFruit?THEME.fruit:THEME.veg).items,1)[0];
+  const cats=[{c:"fruit",img:ITEMS[it.key==="grapes"?"apple":"grapes"]},{c:"veg",img:ITEMS[it.key==="cabbage"?"carrot":"cabbage"]}],ans=cats[isFruit?0:1];
+  choiceRound({title:gameName("sort"),q:G[L()].sortQ(W(it)),qHelp:G[H()].sortQ(cap(helpWord(it))),
+    ask:`<div class="feedbox"><img alt="" src="${art(it)}"></div>`,opts:cats,ans,
+    show:c=>`<img alt="" src="${art(c.img)}"><span class="cl">${esc(G[L()][c.c])}</span>`,label:c=>G[L()][c.c],
+    onRight:()=>G[L()].sortA(W(it),G[L()][ans.c]),again:sortGame});
+  view.querySelector(".choices").classList.add("two")}
+/* 3+: a job, pick what they work with */
+function tool(){
+  const j=ITEMS[pick(Object.keys(TOOL_OF),1)[0]],ans=ITEMS[TOOL_OF[j.key]],others=pick(Object.values(TOOL_OF).filter(k=>k!==ans.key),2).map(k=>ITEMS[k]);
+  choiceRound({title:gameName("tool"),q:G[L()].toolQ(word(j)),qHelp:G[H()].toolQ(helpWord(j)),
+    ask:`<div class="feedbox"><img alt="" src="${art(j)}"></div>`,opts:shuffle([ans,...others]),ans,onRight:()=>lineOf(j),again:tool})}
+/* 3+: one flyer among crawlers */
+function fly(){
+  const ans=ITEMS[pick(FLYERS,1)[0]],opts=shuffle([ans,...pick(CRAWLERS,2).map(k=>ITEMS[k])]);
+  choiceRound({title:gameName("fly"),q:G[L()].flyQ,qHelp:G[H()].flyQ,opts,ans,onRight:()=>G[L()].flyA(word(ans)),again:fly})}
 
 /* ---------- gate: intro page + short demo for everyone, the app itself only for a signed-in parent with a paid plan ---------- */
 const PRICE={forever:"6 990 ₸"};   /* one payment, access for good */

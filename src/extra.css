@@ -180,3 +180,10 @@
 .share a{text-decoration:none;display:inline-flex;align-items:center}
 @media(max-width:420px){.stats.four{grid-template-columns:repeat(2,1fr)}}
 .acc .tg{align-self:flex-start;text-decoration:none}
+
+/* fruit-or-vegetable baskets */
+.choices.two{grid-template-columns:repeat(2,1fr)}
+.choices.two .choice img{aspect-ratio:1;object-fit:cover}
+.choice .cl{display:block;text-align:center;font:800 1.05rem var(--f-ui,inherit);color:var(--ink);padding:4px 0 2px}
+.choices.two .choice{position:relative}
+.choices.two .cl{position:absolute;left:8px;right:8px;top:8px;background:rgba(255,253,248,.9);border-radius:12px;padding:4px 0}

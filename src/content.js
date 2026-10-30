@@ -465,9 +465,9 @@ const T={
 /* levels by age */
 const LEVELS=[
  {id:"sabi",ages:[1],name:"Сәби",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","culture","toys","veg","home","weather","bugs"],games:["listen","peek","knock","bubbles","goodnight"],tip:1},
- {id:"balapan",ages:[2],name:"Балапан",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","culture","toys","veg","home","weather","emotions","shapes","bugs","jobs"],games:["find","who","pair","shadow","feed","dress","color"],tip:2},
- {id:"qulynshaq",ages:[3],name:"Құлыншақ",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture","toys","veg","home","weather","emotions","shapes","bugs","jobs"],games:["find","who","pair","shadow","feed","color","oddone","count","missing"],tip:3},
- {id:"batyr",ages:[4,5,6],name:"Батыр",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture","toys","veg","home","weather","emotions","shapes","bugs","jobs"],games:["letter","spell","count","wordpair","repeat","oddone","missing","pair","find","shadow","color","who"],tip:4}];
+ {id:"balapan",ages:[2],name:"Балапан",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","culture","toys","veg","home","weather","emotions","shapes","bugs","jobs"],games:["find","who","pair","shadow","feed","dress","color","feel","wear"],tip:2},
+ {id:"qulynshaq",ages:[3],name:"Құлыншақ",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture","toys","veg","home","weather","emotions","shapes","bugs","jobs"],games:["find","who","pair","shadow","feed","color","oddone","count","missing","feel","wear","shapeof","sort","tool","fly"],tip:3},
+ {id:"batyr",ages:[4,5,6],name:"Батыр",themes:["animals","family","body","transport","fruit","clothes","kitchen","bath","walk","sleep","colors","numbers","culture","toys","veg","home","weather","emotions","shapes","bugs","jobs"],games:["letter","spell","count","wordpair","repeat","oddone","missing","shapeof","sort","tool","fly","feel","wear","pair","find","shadow","color","who"],tip:4}];
 
 /* ---------- programme: 5 days per theme, order by level ---------- */
 const PROGRAM={sabi:["animals","family","body","kitchen","clothes","bath","transport","fruit","walk","sleep","culture","toys","veg","home","weather","bugs"],
@@ -511,18 +511,33 @@ const G={
   shadow:"Whose shadow is this?",hungry:a=>`The ${a} is hungry! What does the ${a} want?`,yum:(a,f)=>`Yummy! The ${a} likes the ${f}!`,
   dress:it=>it.pl?`Let's put on the ${it.en}!`:`Let's put on the ${it.en}!`,colorQ:c=>`Find something ${c}!`,
   odd:"Which one is different?",count:p=>`How many ${p}?`,look:"Look carefully!",missing:"What is missing?",
-  letterQ:w=>`${w} starts with…?`,letterA:(w,l)=>`${w} starts with ${l}!`,spell:"Make the word!",sayWith:w=>`Say it with me: ${w}!`,match:"Find the picture for each word!"},
+  letterQ:w=>`${w} starts with…?`,letterA:(w,l)=>`${w} starts with ${l}!`,spell:"Make the word!",sayWith:w=>`Say it with me: ${w}!`,match:"Find the picture for each word!",
+  feel:w=>`Show me: ${w}!`,shapeQ:it=>it.pl?`What shape are the ${it.en}?`:`What shape is the ${it.en}?`,shapeA:(o,sh)=>`Yes! It's ${/^[aeiou]/.test(sh)?"an":"a"} ${sh}!`,
+  wearQ:ph=>`${ph} What do we need?`,sortQ:w=>`Is it a fruit or a vegetable? ${w}!`,fruit:"Fruit",veg:"Vegetable",sortA:(w,c)=>`Yes! It's a ${c.toLowerCase()}!`,
+  toolQ:j=>`What does the ${j} need?`,flyQ:"Who can fly?",flyA:w=>`Yes! The ${w} can fly!`},
  kk:{knock:"Тық-тық! Кім бар?",night:w=>`Қайырлы түн, ${w}!`,dreams:"Тәтті түс көр!",
   shadow:"Бұл кімнің көлеңкесі?",hungry:a=>`${a} қарны ашты! Оған не береміз?`,yum:(a,f)=>`Дәмді! Рахмет!`,
   dress:it=>`${cap(it.kk)} киейік!`,colorQ:c=>`${cap(c)} түсті тап!`,
   odd:"Қайсысы артық?",count:()=>`Неше? Санап көр!`,look:"Мұқият қара!",missing:"Не жоғалды?",
-  letterQ:w=>`«${w}» қай әріптен басталады?`,letterA:(w,l)=>`«${w}» — «${l}» әрпінен басталады!`,spell:"Сөзді құра!",sayWith:w=>`Менімен бірге айт: ${w}!`,match:"Әр сөздің суретін тап!"},
+  letterQ:w=>`«${w}» қай әріптен басталады?`,letterA:(w,l)=>`«${w}» — «${l}» әрпінен басталады!`,spell:"Сөзді құра!",sayWith:w=>`Менімен бірге айт: ${w}!`,match:"Әр сөздің суретін тап!",
+  feel:w=>`${cap(w)} — қайсысы? Көрсет!`,shapeQ:it=>`${cap(it.kk)} қандай пішін?`,shapeA:(o,sh)=>`Иә! ${cap(o)} — ${sh}!`,
+  wearQ:ph=>`${ph} Не керек?`,sortQ:w=>`${w} — жеміс пе, көкөніс пе?`,fruit:"Жеміс",veg:"Көкөніс",sortA:(w,c)=>`Иә! ${w} — ${c.toLowerCase()}!`,
+  toolQ:j=>`${cap(j)} немен жұмыс істейді?`,flyQ:"Кім ұшады?",flyA:w=>`Иә! ${cap(w)} ұшады!`},
  ru:{knock:"Тук-тук! Кто там?",night:w=>`Спокойной ночи, ${w}!`,dreams:"Сладких снов!",
   shadow:"Чья это тень?",hungry:a=>`${a} хочет кушать! Что дать?`,yum:()=>`Ням-ням! Спасибо!`,
   dress:it=>`Надеваем: ${it.ru}!`,colorQ:c=>`Найди ${c}!`,
   odd:"Что лишнее?",count:()=>`Сколько? Посчитай!`,look:"Смотри внимательно!",missing:"Что пропало?",
-  letterQ:w=>`На какую букву «${w}»?`,letterA:(w,l)=>`«${w}» начинается на «${l}»!`,spell:"Собери слово!",sayWith:w=>`Скажи со мной: ${w}!`,match:"Найди картинку к каждому слову!"}};
+  letterQ:w=>`На какую букву «${w}»?`,letterA:(w,l)=>`«${w}» начинается на «${l}»!`,spell:"Собери слово!",sayWith:w=>`Скажи со мной: ${w}!`,match:"Найди картинку к каждому слову!",
+  feel:w=>`Покажи, где она ${w}!`,shapeQ:it=>`Какой формы ${it.ru}?`,shapeA:(o,sh)=>`Да! ${cap(o)} — ${sh}!`,
+  wearQ:ph=>`${ph} Что нужно?`,sortQ:w=>`${w} — фрукт или овощ?`,fruit:"Фрукт",veg:"Овощ",sortA:(w,c)=>`Да! ${w} — ${c.toLowerCase()}!`,
+  toolQ:j=>`Чем работает ${j}?`,flyQ:"Кто летает?",flyA:w=>`Да! ${cap(w)} летает!`}};
 const FEED={cat:"milk",duck:"bread",elephant:"banana",horse:"apple",bear:"strawberry",rabbit:"pear",fox:"grapes",sheep:"water"};
 const COLOR_OF={apple:"red",strawberry:"red",cherry:"red",banana:"yellow",lemon:"yellow",pear:"green",orange:"orange",fox:"orange",bear:"brown",bread:"brown",horse:"brown",milk:"white",sheep:"white",grapes:"purple"};
 const RU_NEUT={red:"красное",yellow:"жёлтое",green:"зелёное",orange:"оранжевое",brown:"коричневое",white:"белое",purple:"фиолетовое"};
+/* new-theme games: what shape is it, what to wear in this weather, what each job uses, who can fly */
+const SHAPE_OF={clock:"s-circle",ball:"s-circle",orange:"s-circle",tomato:"s-circle",window:"s-square",blocks:"s-square",
+  door:"s-rectangle",tv:"s-rectangle",book:"s-rectangle",star:"s-star",potato:"s-oval"};
+const WEAR={rain:"umbrella",puddle:"boots",snow:"mittens",wind:"scarf",leaves:"coat"};
+const TOOL_OF={chef:"spoon",farmer:"carrot",driver:"bus",teacher:"book",firefighter:"water",police:"car",builder:"blocks"};
+const FLYERS=["butterfly","bee","dragonfly","ladybird"],CRAWLERS=["snail","ant","caterpillar"];
 const COUNTABLE={duck:"ducks",cat:"cats",apple:"apples",cherry:"cherries",ball:"balls",star:"stars",car:"cars",fox:"foxes",bear:"bears",strawberry:"strawberries",flower:"flowers",sheep:"sheep"};
