@@ -21,9 +21,9 @@ const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=rand(i+1);[a[i],a[j]]=[a
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
 /* games open day by day: the first OPEN_GAMES are free, then every finished day of the programme opens one more (age 1: all open) */
-const OPEN_GAMES=4;
+const OPEN_GAMES=8,GAMES_PER_DAY=1;
 const daysDone=()=>{try{return Object.keys(prog().done||{}).length}catch(e){return 0}};
-const needDays=(lv,i)=>lv.id==="sabi"||i<OPEN_GAMES?0:i-OPEN_GAMES+1;
+const needDays=(lv,i)=>lv.id==="sabi"||i<OPEN_GAMES?0:Math.ceil((i-OPEN_GAMES+1)/GAMES_PER_DAY);
 function gameTiles(lv,attr,sub){const dd=daysDone();return lv.games.map((g,i)=>{const n=needDays(lv,i),open=dd>=n;
   return `<button class="cat play${open?"":" locked"}" ${attr}="${g}" data-need="${n}"><img alt="" src="${PAINTED[GAME_ART[g]]}"><span class="en">${gameName(g)}</span>${open?(sub?sub(g):""):`<span class="need">🔒 ${t().dayN(n)}</span>`}</button>`}).join("")}
 function nextGameLine(lv){const dd=daysDone(),i=lv.games.findIndex((g,i)=>needDays(lv,i)>dd);return i<0?"":`<p class="nextgame">${t().nextGame(gameName(lv.games[i]),needDays(lv,i)-dd)}</p>`}
