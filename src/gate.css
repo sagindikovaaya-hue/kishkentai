@@ -25,3 +25,24 @@ button.price[aria-pressed="true"]{border-color:var(--sienna)}
 .qr img{width:min(240px,62vw);height:auto;background:#fff;border-radius:16px;padding:10px}
 @media (max-width:560px){.feats{grid-template-columns:1fr}.hero-art{grid-template-columns:repeat(3,1fr)}}
 .qr .pill{text-decoration:none}.qrhint{text-align:center;font-size:.9rem}
+
+/* catalog of everything inside, locked */
+.lk-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(min-width:620px){.lk-grid{grid-template-columns:repeat(3,1fr)}.lk-grid.games{grid-template-columns:repeat(4,1fr)}}
+.lk{position:relative;border:0;background:var(--card);border-radius:20px;padding:8px 8px 12px;display:flex;flex-direction:column;gap:4px;
+  text-align:left;font:inherit;color:var(--ink);cursor:pointer;box-shadow:0 10px 24px -18px rgba(74,56,43,.45)}
+.lk b{font-family:var(--f-word);font-weight:500;font-size:1.08rem;line-height:1.2;padding:2px 4px 0}
+.lk-sub{font-size:.8rem;color:var(--soft);padding:0 4px}
+.lk-pics{display:grid;grid-template-columns:repeat(2,1fr);gap:3px;border-radius:14px;overflow:hidden;background:var(--paper)}
+.lk-pics img,.lk-game img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;mix-blend-mode:multiply}
+.lk-game img{border-radius:14px;background:var(--paper)}
+.lk-lock{position:absolute;top:12px;right:12px;font-style:normal;font-size:.95rem;background:rgba(255,253,248,.92);border-radius:999px;
+  width:30px;height:30px;display:grid;place-items:center;box-shadow:0 4px 10px -6px rgba(74,56,43,.5)}
+.lk.wrong{animation:shake .45s}
+.lk-note{text-align:center;font-weight:700;min-height:1.3em}
+.lk-grid.games{grid-template-columns:repeat(3,1fr);gap:8px}
+@media(min-width:620px){.lk-grid.games{grid-template-columns:repeat(5,1fr)}}
+.lk-game{padding:6px 6px 10px;border-radius:16px}
+.lk-game img{aspect-ratio:1}
+.lk-game b{font-size:.92rem}
+.lk-game .lk-lock{top:9px;right:9px;width:24px;height:24px;font-size:.75rem}

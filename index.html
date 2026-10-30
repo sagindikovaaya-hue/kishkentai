@@ -346,6 +346,27 @@ button.price[aria-pressed="true"]{border-color:var(--sienna)}
 .qr img{width:min(240px,62vw);height:auto;background:#fff;border-radius:16px;padding:10px}
 @media (max-width:560px){.feats{grid-template-columns:1fr}.hero-art{grid-template-columns:repeat(3,1fr)}}
 .qr .pill{text-decoration:none}.qrhint{text-align:center;font-size:.9rem}
+
+/* catalog of everything inside, locked */
+.lk-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(min-width:620px){.lk-grid{grid-template-columns:repeat(3,1fr)}.lk-grid.games{grid-template-columns:repeat(4,1fr)}}
+.lk{position:relative;border:0;background:var(--card);border-radius:20px;padding:8px 8px 12px;display:flex;flex-direction:column;gap:4px;
+  text-align:left;font:inherit;color:var(--ink);cursor:pointer;box-shadow:0 10px 24px -18px rgba(74,56,43,.45)}
+.lk b{font-family:var(--f-word);font-weight:500;font-size:1.08rem;line-height:1.2;padding:2px 4px 0}
+.lk-sub{font-size:.8rem;color:var(--soft);padding:0 4px}
+.lk-pics{display:grid;grid-template-columns:repeat(2,1fr);gap:3px;border-radius:14px;overflow:hidden;background:var(--paper)}
+.lk-pics img,.lk-game img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;mix-blend-mode:multiply}
+.lk-game img{border-radius:14px;background:var(--paper)}
+.lk-lock{position:absolute;top:12px;right:12px;font-style:normal;font-size:.95rem;background:rgba(255,253,248,.92);border-radius:999px;
+  width:30px;height:30px;display:grid;place-items:center;box-shadow:0 4px 10px -6px rgba(74,56,43,.5)}
+.lk.wrong{animation:shake .45s}
+.lk-note{text-align:center;font-weight:700;min-height:1.3em}
+.lk-grid.games{grid-template-columns:repeat(3,1fr);gap:8px}
+@media(min-width:620px){.lk-grid.games{grid-template-columns:repeat(5,1fr)}}
+.lk-game{padding:6px 6px 10px;border-radius:16px}
+.lk-game img{aspect-ratio:1}
+.lk-game b{font-size:.92rem}
+.lk-game .lk-lock{top:9px;right:9px;width:24px;height:24px;font-size:.75rem}
 </style>
 </head>
 <body>
@@ -1544,9 +1565,11 @@ const GATE={
    ["Жанды дауыс","Әр сөзді тыңдауға болады. Ата-анаға аудармасы мен айтылуы жазылған."],
    ["Ата-анаға","Баланың прогресі, басып шығаратын карточкалар, үйде айтатын фразалар, Telegram-да апталық есеп."]],
   insideHead:"Ішінде не бар",
-  inside:["10 тақырып: жануарлар, көлік, жемістер, киім, ас үй, жуыну, серуен, ұйқы, түстер, сандар",
-   "19 ойын: «Тыңда», «Жасырынбақ», «Тауып бер», «Кім айтады?», «Жұбын тап» және басқалар",
+  inside:["21 тақырып, әрқайсысында 8–10 сурет-карточка, сөздер үш тілде",
+   "25 ойын: «Тыңда», «Жасырынбақ», «Тауып бер», «Кім айтады?», «Жұбын тап», «Көңіл-күй», «Не киеміз?» және басқалар",
    "4–6 жасқа: әріптер, сөз құрастыру, санау","Бірнеше бала — бір аккаунт, кез келген телефонда"],
+  catHead:"Барлық тақырыптар",catSub:"Төлегеннен кейін бәрі ашылады. Әзірге тек қарауға болады.",gamesHead:"Барлық ойындар",
+  words:"сурет",age:a=>`${a}+ жас`,locked:"🔒 Тіркеліп, төлегеннен кейін ашылады",
   priceHead:"Бағасы",forever:"бір рет",foreverNote:"Толық қолжетімділік мерзімсіз",
   priceNote:"Бір рет Kaspi арқылы төлейсіз — платформа сізде біржола қалады. Ай сайынғы төлем жоқ.",
   faqHead:"Сұрақтар",
@@ -1556,7 +1579,7 @@ const GATE={
    ["Қалай төлеймін?","Тіркелгеннен кейін Kaspi QR шығады. Төлегеннен кейін бірнеше сағат ішінде толық қолжетімділік ашылады."]],
   regHead:"Тіркелу",regSub:"Email жазыңыз — поштаға кіру коды келеді. Сосын төлем, сосын толық қолжетімділік.",
   demoTag:"Демо",demoTap:"Суретті басыңыз — сөзді естисіз",demoClose:"✕ Шығу",
-  demoEndHead:"Бұл — кішкене бөлігі ғана",demoEnd:"Ішінде 10 тақырып, 19 ойын, күн сайынғы жоспар, прогресс және Telegram-да апталық есеп.",
+  demoEndHead:"Бұл — кішкене бөлігі ғана",demoEnd:"Ішінде 21 тақырып, 25 ойын, күн сайынғы жоспар, прогресс және Telegram-да апталық есеп.",
   payHead:"Толық қолжетімділік",paySub:e=>`Сіз кірдіңіз: ${e}. Kaspi арқылы бір рет төлеңіз — қолжетімділік біржола ашылады.`,expired:"Бұрынғы жазылым мерзімі бітті. Бір рет төлеп, біржола ашыңыз.",
   payQr:p=>`Kaspi QR-ды сканерлеп, ${p} төлеңіз`,noQr:"Kaspi QR жақында осында шығады.",saveQr:"QR-ды сақтау",sameHint:"Сайт осы телефонда ашық болса: QR-ды сақтаңыз, сосын Kaspi сканерінде галереядан ашыңыз.",paid:"Мен төледім",check:"Тексеру",out:"Шығу",
   sent:"Рақмет! Төлемді тексеріп жатырмыз — әдетте бірнеше сағат ішінде ашылады. Ашылғанда бұл бет өзі жаңарады.",
@@ -1570,9 +1593,11 @@ const GATE={
    ["Живой голос","Каждое слово можно послушать. Для родителей — перевод и как произносить."],
    ["Для родителей","Прогресс ребёнка, карточки для печати, фразы для дома, итоги недели в Telegram."]],
   insideHead:"Что внутри",
-  inside:["10 тем: животные, транспорт, фрукты, одежда, кухня, ванная, прогулка, сон, цвета, числа",
-   "19 игр: «Слушай», «Прятки», «Найди», «Кто говорит?», «Найди пару» и другие",
+  inside:["21 тема, в каждой 8–10 карточек-картинок, слова на трёх языках",
+   "25 игр: «Слушай», «Прятки», «Найди», «Кто говорит?», «Найди пару», «Какое настроение?», «Что надеть?» и другие",
    "Для 4–6 лет: буквы, собери слово, счёт","Несколько детей — один аккаунт, на любом телефоне"],
+  catHead:"Все темы",catSub:"После оплаты откроется всё. Пока можно только посмотреть.",gamesHead:"Все игры",
+  words:"карточек",age:a=>`${a}+ лет`,locked:"🔒 Откроется после регистрации и оплаты",
   priceHead:"Цена",forever:"один раз",foreverNote:"Полный доступ навсегда",
   priceNote:"Один платёж через Kaspi — платформа остаётся у вас навсегда. Никаких ежемесячных списаний.",
   faqHead:"Вопросы",
@@ -1582,7 +1607,7 @@ const GATE={
    ["Как оплатить?","После регистрации появится Kaspi QR. После оплаты полный доступ откроется в течение нескольких часов."]],
   regHead:"Регистрация",regSub:"Введите email — на почту придёт код для входа. Потом оплата, и сразу полный доступ.",
   demoTag:"Демо",demoTap:"Нажмите на картинку — услышите слово",demoClose:"✕ Выйти",
-  demoEndHead:"Это только маленькая часть",demoEnd:"Внутри 10 тем, 19 игр, план на каждый день, прогресс и итоги недели в Telegram.",
+  demoEndHead:"Это только маленькая часть",demoEnd:"Внутри 21 тема, 25 игр, план на каждый день, прогресс и итоги недели в Telegram.",
   payHead:"Полный доступ",paySub:e=>`Вы вошли: ${e}. Оплатите один раз через Kaspi — доступ откроется навсегда.`,expired:"Срок прежней подписки закончился. Оплатите один раз — и доступ будет навсегда.",
   payQr:p=>`Отсканируйте Kaspi QR и оплатите ${p}`,noQr:"Kaspi QR скоро появится здесь.",saveQr:"Сохранить QR",sameHint:"Если сайт открыт на этом же телефоне: сохраните QR и откройте его в сканере Kaspi из галереи.",paid:"Я оплатил(а)",check:"Проверить",out:"Выйти",
   sent:"Спасибо! Проверяем оплату — обычно доступ открывается в течение нескольких часов. Эта страница обновится сама.",
@@ -1616,12 +1641,27 @@ function intro(){gated(true);const G1=gx();
    <div class="feats">${G1.how.map(([h,p])=>`<div class="feat"><b>${h}</b><p class="sub">${p}</p></div>`).join("")}</div>
    <h2 class="sec">${G1.insideHead}</h2>
    <ul class="inside">${G1.inside.map(x=>`<li>${x}</li>`).join("")}</ul>
+   ${catalog()}
    <h2 class="sec">${G1.priceHead}</h2>${prices()}<p class="sub">${G1.priceNote}</p>
    <h2 class="sec">${G1.faqHead}</h2>
    <div class="faq">${G1.faq.map(([q,a])=>`<details><summary>${q}</summary><p class="sub">${a}</p></details>`).join("")}</div>
    <section class="reg" id="reg"><h2 class="sec">${G1.regHead}</h2><p class="sub">${G1.regSub}</p>${accountBlock()}</section></div>`;
   window.scrollTo(0,0);
-  $("#gLang").onclick=()=>{gateLang();intro()};$("#gDemo").onclick=()=>demo(0);$("#gToReg").onclick=()=>$("#reg").scrollIntoView({behavior:"smooth"});bindAccount()}
+  bindCatalog(()=>$("#reg").scrollIntoView({behavior:"smooth"}));$("#gLang").onclick=()=>{gateLang();intro()};$("#gDemo").onclick=()=>demo(0);$("#gToReg").onclick=()=>$("#reg").scrollIntoView({behavior:"smooth"});bindAccount()}
+/* ---------- catalog: every theme and game, shown in full but locked ---------- */
+function catalog(){const G1=gx(),pic=it=>art(it)||PAINTED["d-#B9653B"];
+  const ages={};for(const lv of LEVELS)for(const g of lv.games)ages[g]=Math.min(ages[g]??9,lv.ages[0]);
+  const games=Object.keys(ages);
+  return `<h2 class="sec">${G1.catHead}</h2><p class="sub">${G1.catSub}</p>
+   <div class="lk-grid">${THEMES.map(th=>`<button type="button" class="lk lk-theme" data-lock>
+     <span class="lk-pics">${th.items.slice(0,4).map(it=>`<img alt="" loading="lazy" src="${pic(it)}">`).join("")}</span>
+     <b>${esc(th.name[GL])}</b><span class="lk-sub">${esc(th.name.en)} · ${th.items.length} ${G1.words}</span><i class="lk-lock" aria-hidden="true">🔒</i></button>`).join("")}</div>
+   <h2 class="sec">${G1.gamesHead}</h2>
+   <div class="lk-grid games">${games.map(g=>`<button type="button" class="lk lk-game" data-lock>
+     <img alt="" loading="lazy" src="${PAINTED[GAME_ART[g]]}"><b>${esc(gameName(g))}</b><span class="lk-sub">${G1.age(ages[g])}</span><i class="lk-lock" aria-hidden="true">🔒</i></button>`).join("")}</div>
+   <p class="sub lk-note" id="lkNote" aria-live="polite"></p>`}
+function bindCatalog(go){view.querySelectorAll("[data-lock]").forEach(b=>b.onclick=()=>{b.classList.remove("wrong");void b.offsetWidth;b.classList.add("wrong");
+  const n=$("#lkNote");if(n){n.textContent=gx().locked}if(go)later(go,700)})}
 const prices=sel=>`<div class="prices">${Object.keys(PRICE).map(p=>`<${sel?`button type="button" data-plan="${p}" aria-pressed="${p===sel}"`:"div"} class="price"><b>${PRICE[p]}</b><span>/ ${gx()[p]}</span><em>${gx().foreverNote}</em></${sel?"button":"div"}>`).join("")}</div>`;
 
 /* ---------- demo: three cards to tap, one "where is…?" round, then the invitation; nothing is saved ---------- */
@@ -1657,10 +1697,12 @@ function paywall(expired,note){gated(true);const G1=gx();let plan="forever";
     <div id="gPrices">${prices(plan)}</div>
     <div class="qr">${PAY_QR?`<img alt="Kaspi QR" src="${PAY_QR}"><p class="sub" id="gQrNote"></p><a class="pill" href="${PAY_QR}" download="kishkentai-kaspi-qr.png">${G1.saveQr}</a><p class="sub qrhint">${G1.sameHint}</p>`:`<p class="note">${G1.noQr}</p>`}</div>
     <div class="row"><button class="go" id="gPaid">${G1.paid}</button><button class="pill" id="gCheck">${G1.check}</button><button class="pill" id="gOut">${G1.out}</button></div>
-    <p class="sub" id="gMsg" aria-live="polite">${note||""}</p></section></div>`;
+    <p class="sub" id="gMsg" aria-live="polite">${note||""}</p></section>
+   ${catalog()}</div>`;
   window.scrollTo(0,0);
   const qrNote=()=>{const e=$("#gQrNote");if(e)e.textContent=G1.payQr(PRICE[plan])};qrNote();
   const bindPlans=()=>view.querySelectorAll("[data-plan]").forEach(b=>b.onclick=()=>{plan=b.dataset.plan;store.set("plan",plan);$("#gPrices").innerHTML=prices(plan);bindPlans();qrNote()});bindPlans();
+  bindCatalog(()=>window.scrollTo({top:0,behavior:"smooth"}));
   const msg=t=>{$("#gMsg").textContent=t};
   const poll=()=>{clearInterval(payPoll);payPoll=setInterval(()=>{if(!document.hidden)gate()},60000)};
   $("#gLang").onclick=()=>{gateLang();paywall(expired,note)};
